@@ -1,18 +1,14 @@
-import {
-  Dumbbell,
-  Edit3Icon,
-  FileText,
-  Pill,
-  QrCode,
-  Send,
-  Share2Icon,
-  Users,
-} from "lucide-react";
+import React from 'react'
+import { Dumbbell, Edit3Icon, FileText, Pill, QrCode,  Send,  Share2Icon, Users } from 'lucide-react';
+import { ArrowRight, HeartPlus, NotepadText, Video } from "lucide-react";
+import RightSideProfile from "../components/RightSideProfile";
+import { AnimatePresence, motion } from "motion/react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Appointments from "../components/Appointments";
 
-function Dashboard() {
-  const timelineEvents = [
+
+function Dashboard({ showProfile, toggleProfileFunction }) {
+    const timelineEvents = [
     {
       time: "10:20 - 11:29",
       title: "Consultation",
@@ -21,7 +17,6 @@ function Dashboard() {
     { time: "12:00 - 12:30", title: "X-Ray", location: "Floor 1, Room 5" },
     { time: "13:00 - 13:45", title: "Checkup", location: "Room 12" },
   ];
-
   return (
     <div className="relative flex flex-col md:flex-row gap-4 items-center md:items-start justify-around w-full mt-1 md:p-4">
       {/* Left Section */}
@@ -136,6 +131,23 @@ function Dashboard() {
               </div>
             ))}
           </div>
+              {/* Profile Section */}
+      <AnimatePresence mode="wait">
+        {showProfile && (
+          <motion.div
+            className=" absolute inset-0 z-[3]  w-full h-full bg-black/50"
+            onClick={() => toggleProfileFunction(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <RightSideProfile
+              show={showProfile}
+              toggleProfileFunction={toggleProfileFunction}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
           {/* Below cards Section */}
           <div className="w-full grid grid-cols-2 gap-4 mt-6">
@@ -165,6 +177,7 @@ function Dashboard() {
         </div>
       </div>
     </div>
+  );
   );
 }
 
