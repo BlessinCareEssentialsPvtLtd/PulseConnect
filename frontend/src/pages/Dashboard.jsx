@@ -140,20 +140,77 @@ function Dashboard() {
                 <p>Floor 2, Room 32</p>
               </div>
             </div>
-            <div className="flex w-full mb-4">
-              <div className="flex w-[20%] flex-col items-center p-4 bg-gray-400 rounded-l-md">
-                <span className="ml-2 text-xl">10:20</span>
-                <span className="ml-2 text-xl">-</span>
-                <span className="ml-2 text-xl">11:29</span>
+          </div>
+
+          {/* Below cards Section */}
+          <div className="w-full grid grid-cols-2 gap-4 mt-6">
+            {/* Card 1 */}
+            <div className="w-full flex flex-col bg-gray-300 rounded-md p-4">
+              <div className="flex">
+                <div className="w-12 h-12 m-4 bg-red-500"></div>
+                <div className="p-3 ml-3">
+                  <div className="text-2xl font-semibold">Records</div>
+                  <div>History</div>
+                </div>
               </div>
-              <div className="flex flex-col justify-center w-[80%] p-2 pl-[5%] bg-gray-200 rounded-r-md">
-                <h2 className="text-2xl">Consultation</h2>
-                <p>Floor 2, Room 32</p>
+              <div className="text-xl ml-3">3 New doctors added</div>
+            </div>
+            {/* Card 2 */}
+            <div className="w-full flex flex-col bg-gray-300 rounded-md p-4">
+              <div className="flex">
+                <div className="w-12 h-12 m-4 bg-red-500"></div>
+                <div className="p-3 ml-3">
+                  <div className="text-2xl font-semibold">Prescription</div>
+                  <div>History</div>
+                </div>
               </div>
+              <div className="text-xl ml-3">3 New doctors added</div>
+            </div>
+            {/* Card 3 */}
+            <div className="w-full flex flex-col bg-gray-300 rounded-md p-4">
+              <div className="flex">
+                <div className="w-12 h-12 m-4 bg-red-500"></div>
+                <div className="p-3 ml-3">
+                  <div className="text-2xl font-semibold">Family</div>
+                  <div>History</div>
+                </div>
+              </div>
+              <div className="text-xl ml-3">3 New doctors added</div>
+            </div>
+            {/* Card 4 */}
+            <div className="w-full flex flex-col bg-gray-300 rounded-md p-4">
+              <div className="flex">
+                <div className="w-12 h-12 m-4 bg-red-500"></div>
+                <div className="p-3 ml-3">
+                  <div className="text-2xl font-semibold">Fitness</div>
+                  <div>History</div>
+                </div>
+              </div>
+              <div className="text-xl ml-3">3 New doctors added</div>
+            </div>
+            {/* Card 3 */}
+            <div className="w-full flex flex-col bg-gray-300 rounded-md p-4">
+              <div className="flex">
+                <div className="w-12 h-12 m-4 bg-red-500"></div>
+                <div className="p-3 ml-3">
+                  <div className="text-2xl font-semibold">Family</div>
+                  <div>History</div>
+                </div>
+              </div>
+              <div className="text-xl ml-3">3 New doctors added</div>
+            </div>
+            {/* Card 4 */}
+            <div className="w-full flex flex-col bg-gray-300 rounded-md p-4">
+              <div className="flex">
+                <div className="w-12 h-12 m-4 bg-red-500"></div>
+                <div className="p-3 ml-3">
+                  <div className="text-2xl font-semibold">Fitness</div>
+                  <div>History</div>
+                </div>
+              </div>
+              <div className="text-xl ml-3">3 New doctors added</div>
             </div>
           </div>
-          <div></div>
-          <div></div>
         </div>
       </div>
       {/* <div className=" flex items-center justify-center w-[20vw] bg-gray-200 rounded-md">
