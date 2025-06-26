@@ -10,7 +10,7 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       {/* Main content: Sidebar + Dashboard */}
-      <div className="relative flex flex-1 overflow-hidden">
+      <div className=" flex flex-1 w-full ">
         <Sidebar />
         <Dashboard />
       </div>
