@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const localizer = momentLocalizer(moment);
 
 const CustomToolbar = ({ label, onNavigate }) => {
   return (
     <div className="flex justify-between items-center px-2 mb-2">
-      <button onClick={() => onNavigate('PREV')} className="p-2 rounded hover:bg-gray-200">
+      <button
+        onClick={() => onNavigate("PREV")}
+        className="p-2 rounded hover:bg-gray-200"
+      >
         <ChevronLeft size={20} />
       </button>
       <h2 className="text-lg font-medium text-center">{label}</h2>
-      <button onClick={() => onNavigate('NEXT')} className="p-2 rounded hover:bg-gray-200">
+      <button
+        onClick={() => onNavigate("NEXT")}
+        className="p-2 rounded hover:bg-gray-200"
+      >
         <ChevronRight size={20} />
       </button>
     </div>
@@ -23,20 +29,20 @@ const CustomToolbar = ({ label, onNavigate }) => {
 function Appointments() {
   const [events, setEvents] = useState([
     {
-      title: 'Doctor Appointment',
+      title: "Doctor Appointment",
       start: new Date(2025, 5, 28, 10, 0),
       end: new Date(2025, 5, 28, 11, 0),
-      description: 'Dr. Sharma at ABC Clinic',
+      description: "Dr. Sharma at ABC Clinic",
     },
   ]);
 
   const [showForm, setShowForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    startTime: '',
-    endTime: '',
+    title: "",
+    description: "",
+    startTime: "",
+    endTime: "",
   });
 
   const handleSelectSlot = (slotInfo) => {
@@ -55,8 +61,8 @@ function Appointments() {
     const start = new Date(selectedDate);
     const end = new Date(selectedDate);
 
-    const [startHour, startMin] = startTime.split(':');
-    const [endHour, endMin] = endTime.split(':');
+    const [startHour, startMin] = startTime.split(":");
+    const [endHour, endMin] = endTime.split(":");
 
     start.setHours(+startHour, +startMin);
     end.setHours(+endHour, +endMin);
@@ -70,7 +76,7 @@ function Appointments() {
 
     setEvents([...events, newEvent]);
     setShowForm(false);
-    setFormData({ title: '', description: '', startTime: '', endTime: '' });
+    setFormData({ title: "", description: "", startTime: "", endTime: "" });
   };
 
   const handleEventClick = (event) => {
@@ -78,33 +84,37 @@ function Appointments() {
   };
 
   return (
-    <section className="p-4 w-full md:w-[60%]">
-      <div className="bg-white rounded-xl shadow-md p-4 md:p-6 max-w-full md:max-w-[90%]  mx-auto">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Appointments</h2>
-        <div className='h-60'>
+    <section className="mt-4 w-full">
+      <div className="bg-gray-100 rounded-xl shadow-xl p-4 md:p-6 max-w-full  mx-auto">
+        <h2 className="text-xl sm:text-2xl font-medium font-sans my-4 ml-3">
+          Appointments
+        </h2>
+        <div className="h-100">
           <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          selectable={true}
-          onSelectSlot={handleSelectSlot}
-          onSelectEvent={handleEventClick}
-          defaultView="month"
-          style={{ height: '100%' }}
-          components={{
-            toolbar: CustomToolbar,
-          }}
-          popup
-          longPressThreshold={1}
-        />
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            selectable={true}
+            onSelectSlot={handleSelectSlot}
+            onSelectEvent={handleEventClick}
+            defaultView="month"
+            style={{ height: "100%" }}
+            components={{
+              toolbar: CustomToolbar,
+            }}
+            popup
+            longPressThreshold={1}
+          />
         </div>
       </div>
 
       {showForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
           <div className="bg-white p-8 rounded-lg shadow-xl w-[90%] md:w-[36rem] max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">New Appointment</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+              New Appointment
+            </h2>
             <form onSubmit={handleFormSubmit} className="flex flex-col gap-5">
               <div className="flex flex-col">
                 <label className="mb-1 font-medium text-gray-700">Title</label>
@@ -119,7 +129,9 @@ function Appointments() {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="mb-1 font-medium text-gray-700">Description</label>
+                <label className="mb-1 font-medium text-gray-700">
+                  Description
+                </label>
                 <textarea
                   name="description"
                   placeholder="Optional notes or location"
@@ -131,7 +143,9 @@ function Appointments() {
               </div>
               <div className="flex gap-4">
                 <div className="flex-1 flex flex-col">
-                  <label className="mb-1 font-medium text-gray-700">Start Time</label>
+                  <label className="mb-1 font-medium text-gray-700">
+                    Start Time
+                  </label>
                   <input
                     type="time"
                     name="startTime"
@@ -142,7 +156,9 @@ function Appointments() {
                   />
                 </div>
                 <div className="flex-1 flex flex-col">
-                  <label className="mb-1 font-medium text-gray-700">End Time</label>
+                  <label className="mb-1 font-medium text-gray-700">
+                    End Time
+                  </label>
                   <input
                     type="time"
                     name="endTime"
