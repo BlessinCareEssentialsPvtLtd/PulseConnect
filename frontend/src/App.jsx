@@ -14,8 +14,8 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      {/* Main content: Sidebar + Dashboard */}
-      <div className="relative flex flex-1 overflow-hidden">
+      <div className="flex p-4 min-w-full bg-[#e9f8ff]">
+        {/* Main content: Sidebar + Dashboard */}
         <Sidebar toggleProfileFunction={toggleProfileComponent} />
         <Dashboard
           showProfile={showProfileComponent}

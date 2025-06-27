@@ -19,7 +19,7 @@ import { motion, AnimatePresence } from "motion/react";
 function Sidebar({ toggleProfileFunction }) {
   const [showSubMenu, setShowSubMenu] = useState(null);
   return (
-    <div className="w-[25vw] h-screen p-4 bg-stone-200 shadow-lg">
+    <div className="max-[1000px]:absolute max-[1000px]:left-[-1000px] w-[25vw] h-screen p-4 bg-stone-200 shadow-lg">
       <div className="flex flex-col h-full items-center gap-8">
         {/* Profile Card */}
         <div
