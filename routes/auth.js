@@ -110,7 +110,7 @@ router.post("/verify", async (req, res) => {
     console.log("✅ Unique ID email sent to:", email);
 
     delete otps[email];
-    res.status(200).json({ message: "Verified successfully", uniqueId });
+    res.status(200).json({ message: "Verified successfully", uniqueId});
   } catch (err) {
     console.error("❌ Error saving user:", err);
     res.status(500).json({ message: "Error saving to database" });
