@@ -9,4 +9,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+    base: './',
+  preview: {
+    host: '0.0.0.0',
+    port: 4173, // or use process.env.PORT if needed
+    allowedHosts: ['pulseconnect-2jrn.onrender.com']
+  }
 })
+
+
