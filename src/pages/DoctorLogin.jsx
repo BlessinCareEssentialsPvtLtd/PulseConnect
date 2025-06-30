@@ -21,11 +21,12 @@ const DoctorLogin = () => {
         password,
         method: loginMethod,
       });
+    
       toast.success(`Welcome Dr. ${res.data.name}`);
       // Store doctor data locally or redirect
       navigate("/dashboard/doctor"); // Create this route later
     } catch (err) {
-      toast.error(err.response.data.message || "Login failed");
+      toast.error(err.response.data.message,"Login failed");
     }
   };
 

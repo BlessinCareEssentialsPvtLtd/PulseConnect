@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
     const navigate = useNavigate();
+   
 
     const goToLogin = () => {
         navigate("/login/doctor");
