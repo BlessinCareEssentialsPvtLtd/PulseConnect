@@ -50,8 +50,8 @@ function Appointments( {events}) {
 
 
   return (
-    <section className="mt-4 w-full">
-      <div className="bg-white rounded-xl shadow-xl p-4 max-w-full mx-auto">
+    <section className="mt-4 w-full z-[1] relative">
+      <div className="bg-gray-100 rounded-xl shadow-xl p-4 md:p-6 max-w-full  mx-auto">
         <h2 className="text-xl sm:text-2xl font-medium font-sans my-4 ml-3">
           Appointments
         </h2>
@@ -66,7 +66,7 @@ function Appointments( {events}) {
             defaultView="month"
             date={currentDate}
             onNavigate={(date) => setCurrentDate(date)}
-            style={{ height: "100%" }}
+            style={{ height: "100%", zIndex: 4 }}
             components={{
               toolbar: CustomToolbar,
             }}

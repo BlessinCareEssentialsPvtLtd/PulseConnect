@@ -9,9 +9,12 @@ import {
   Share2,
   Users,
 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import Appointments from "../components/Appointments";
+import { ArrowRight, HeartPlus, NotepadText, Video } from "lucide-react";
 import RightSideProfile from "../components/RightSideProfile";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import Layout from "../components/layout";
+import Appointments from "../components/Appointments";
+import { AnimatePresence, motion } from "motion/react";
 
 /* ───────────────────────── constants ───────────────────────── */
 
@@ -46,7 +49,7 @@ const timelineEvents = [
 const historyTiles = [
   { title: "Records", subtitle: "History", desc: "3 new doctors added" },
   {
-    title: "Prescription",
+    title: "Medicines",
     subtitle: "Know Medicines",
     desc: "2 prescriptions saved",
   },
@@ -192,24 +195,26 @@ const HistoryCards = () => (
 
 function Dashboard({ showProfile, toggleProfileFunction }) {
   return (
-    <>
+    <Layout>
       {/*By flex*/}
-    <div className="overflow-hidden  flex-1 max-h-full overflow-y-auto grid md:grid-cols-2 gap-6 p-6 w-[90%] bg-gray-200 grid-cols-1 mx-auto">
-
-      <div className="w-full">
-        <PulseCard />
+      <div className="flex flex-col w-[90%] bg-[#e9f8ff] p-2">
+        <div className="flex w-full max-[780px]:flex-col mt-4">
+          <div className="w-full ml-4">
+            <PulseCard />
+          </div>
+          <div className="w-full ml-4 mt-4 md:mt-0">
+            <Timeline />
+          </div>
+        </div>
+        <div className="flex w-full max-[780px]:flex-col mt-4">
+          <div className="w-full ml-4">
+            <Appointments />
+          </div>
+          <div className="w-full ml-4 mt-4 md:mt-0">
+            <HistoryCards />
+          </div>
+        </div>
       </div>
-      <div className="w-full">
-        <Timeline />
-      </div>
-      <div className="w-full">
-        <Appointments events={events} />
-      </div>
-      <div className="w-full">
-        <HistoryCards />
-      </div>
-    </div>
-
       {/*By flex*/}
 
       {/* profile overlay */}
@@ -229,7 +234,7 @@ function Dashboard({ showProfile, toggleProfileFunction }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </Layout>
   );
 }
 
