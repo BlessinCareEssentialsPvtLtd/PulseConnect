@@ -2,12 +2,12 @@ import React from "react";
 import { ArrowRight, HeartPlus, NotepadText, Video } from "lucide-react";
 import { motion } from "motion/react";
 
-const RightSideProfile = ({ show }) => {
+const RightSideProfile = () => {
   return (
     <motion.div
-      className=" w-[25%] rounded-lg shadow-lg border-blue-800 border p-4 bg-white fixed top-2.5 right-2.5 transition-all duration-300 z-[4] min-w-[240px]"
+      className=" w-[25%] h-[80vh] rounded-lg shadow-lg border-blue-800 border p-4 bg-white fixed top-20 right-2.5 transition-all duration-300 z-[5] min-w-[240px] overflow-y-scroll overflow-x-hidden"
       initial={{ opacity: 0, x: 400 }}
-      animate={{ opacity: 1, x: 0 }}
+      animate={{ opacity: 1, x: 36 }}
       exit={{ opacity: 0, x: 400 }}
       transition={{
         duration: 0.2,

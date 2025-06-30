@@ -84,7 +84,7 @@ function Appointments() {
   };
 
   return (
-    <section className="mt-4 w-full">
+    <section className="mt-4 w-full z-[1] relative">
       <div className="bg-gray-100 rounded-xl shadow-xl p-4 md:p-6 max-w-full  mx-auto">
         <h2 className="text-xl sm:text-2xl font-medium font-sans my-4 ml-3">
           Appointments
@@ -99,7 +99,7 @@ function Appointments() {
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleEventClick}
             defaultView="month"
-            style={{ height: "100%" }}
+            style={{ height: "100%", zIndex: 4 }}
             components={{
               toolbar: CustomToolbar,
             }}
