@@ -10,11 +10,12 @@ import {
   Share2,
   Users,
 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import Appointments from "../components/Appointments";
+import { ArrowRight, HeartPlus, NotepadText, Video } from "lucide-react";
 import RightSideProfile from "../components/RightSideProfile";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Layout from "../components/layout";
+import Appointments from "../components/Appointments";
+import { AnimatePresence, motion } from "motion/react";
 
 /* ───────────────────────── constants ───────────────────────── */
 
@@ -187,7 +188,7 @@ function Dashboard({ showProfile, toggleProfileFunction }) {
           <div className="w-full ml-4">
             <PulseCard />
           </div>
-          <div className="w-full ml-4 mt-4">
+          <div className="w-full ml-4 mt-4 md:mt-0">
             <Timeline />
           </div>
         </div>
@@ -195,7 +196,7 @@ function Dashboard({ showProfile, toggleProfileFunction }) {
           <div className="w-full ml-4">
             <Appointments />
           </div>
-          <div className="w-full ml-4 mt-4">
+          <div className="w-full ml-4 mt-4 md:mt-0">
             <HistoryCards />
           </div>
         </div>

@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 
 const AppRouter = () => {
-  const [isUser, setIsUser] = useState(false); // you can toggle this somehow in real app
+  const [isUser, setIsUser] = useState(true); // you can toggle this somehow in real app
 
   const router = createBrowserRouter([
     {

@@ -89,7 +89,7 @@ function Appointments() {
         <h2 className="text-xl sm:text-2xl font-medium font-sans my-4 ml-3">
           Appointments
         </h2>
-        <div className="h-100">
+        <div className="h-80 sm:h-67 md:min-h-70 min-[650px]:min-h-80 min-[1700px]:min-h-90">
           <Calendar
             localizer={localizer}
             events={events}
