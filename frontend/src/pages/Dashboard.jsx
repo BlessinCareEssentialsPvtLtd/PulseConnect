@@ -5,7 +5,6 @@ import {
   Edit3,
   FileText,
   Pill,
-  QrCode,
   Send,
   Share2,
   Users,
@@ -13,7 +12,6 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import Appointments from "../components/Appointments";
 import RightSideProfile from "../components/RightSideProfile";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 
 /* ───────────────────────── constants ───────────────────────── */
 
@@ -56,6 +54,21 @@ const historyTiles = [
   { title: "Fitness", subtitle: "Get Diet", desc: "Workout goal updated" },
   { title: "Fitness", subtitle: "Get Diet", desc: "Workout goal updated" },
 ];
+
+const events =[
+    {
+      title: "Doctor Appointment",
+      start: new Date(2025, 5, 28, 10, 0),
+      end: new Date(2025, 5, 28, 11, 0),
+      description: "Dr. Sharma at ABC Clinic",
+    },
+    {
+      title: "Meeting with Designer",
+      start: new Date(2025, 5, 28, 14, 0),
+      end: new Date(2025, 5, 28, 15, 0),
+      description: "UI design discussion",
+    },
+  ]
 
 /* ───────────────────────── sub-components ───────────────────────── */
 
@@ -181,24 +194,22 @@ function Dashboard({ showProfile, toggleProfileFunction }) {
   return (
     <>
       {/*By flex*/}
-      <div className="flex flex-col w-[90%] bg-[#e9f8ff]">
-        <div className="flex w-full max-[780px]:flex-col mt-4">
-          <div className="w-full ml-4">
-            <PulseCard />
-          </div>
-          <div className="w-full ml-4 mt-4">
-            <Timeline />
-          </div>
-        </div>
-        <div className="flex w-full max-[780px]:flex-col mt-4">
-          <div className="w-full ml-4">
-            <Appointments />
-          </div>
-          <div className="w-full ml-4 mt-4">
-            <HistoryCards />
-          </div>
-        </div>
+    <div className="overflow-hidden  flex-1 max-h-full overflow-y-auto grid md:grid-cols-2 gap-6 p-6 w-[90%] bg-gray-200 grid-cols-1 mx-auto">
+
+      <div className="w-full">
+        <PulseCard />
       </div>
+      <div className="w-full">
+        <Timeline />
+      </div>
+      <div className="w-full">
+        <Appointments events={events} />
+      </div>
+      <div className="w-full">
+        <HistoryCards />
+      </div>
+    </div>
+
       {/*By flex*/}
 
       {/* profile overlay */}
