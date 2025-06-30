@@ -2,12 +2,14 @@
 @import "tailwindcss";
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 
+
 .space-grotesk {
   font-family: "Space Grotesk", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
 }
+
 
 @theme {
   --color-primary: #4a90e2;

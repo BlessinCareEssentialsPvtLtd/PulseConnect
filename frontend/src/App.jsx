@@ -21,7 +21,7 @@ function App() {
       <div className="flex flex-1 min-w-full bg-[#e9f8ff] h-[calc(100vh-64px)]">
         {/* Sidebar and Fitness components taking full height */}
         <Sidebar toggleProfileFunction={toggleProfileComponent} />
-        <Fitness />
+        {/* <Fitness /> */}
         <Dashboard
           showProfile={showProfileComponent}
           toggleProfileFunction={toggleProfileComponent}
