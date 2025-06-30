@@ -4,6 +4,8 @@ import { sendOTP, sendUniqueID } from "../utils/sendOtp.js";
 import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
 import slugify from "slugify";
+import bcrypt from "bcrypt";
+
 
 const router = express.Router();
 
@@ -11,21 +13,31 @@ const otps = {}; // temp memory
 
 // === Doctor Signup ===
 router.post("/signup/doctor", async (req, res) => {
-  const { name, email, gender, specialization, dob, drId, password } = req.body;
+  const { name, email, gender, specialization, dob, drId, password, place, city, taluka, district, state, nation } = req.body;
+
+  try {
+    const existing = await Doctor.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
   const otp = Math.floor(100000 + Math.random() * 900000);
 
-  otps[email] = { otp, data: { name, email, gender, specialization, dob, drId, password } };
+  otps[email] = { otp, data: { name, email, gender, specialization, dob, drId, password, place, city, taluka, district, state, nation } };
 
   await sendOTP(email, otp);
   res.status(200).json({ message: "OTP sent to doctor email" });
+}catch (err) {
+    res.status(500).json({ message: "Server error" });
+  } 
 });
 
 // === Patient Signup ===
 router.post("/signup/patient", async (req, res) => {
-  const { name, email, phone, gender, dob, password } = req.body;
+  const { name, email, phone, gender, dob, password,place, nation, state,district, taluka, city } = req.body;
   const otp = Math.floor(100000 + Math.random() * 900000);
 
-  otps[email] = { otp, data: { name, email, phone, gender, dob, password } };
+  otps[email] = { otp, data: { name, email, phone, gender, dob, password,place, nation, state,district, taluka, city } };
 
   await sendOTP(email, otp);
   res.status(200).json({ message: "OTP sent to patient email" });
@@ -99,10 +111,12 @@ router.post("/verify", async (req, res) => {
     let username;
     if (type === "doctor") {
       username = await generateUniqueUsername(name, dob);
-      const doctor = new Doctor({ ...userData, username });
+      const hashedPassword = await bcrypt.hash(stored.data.password, 10);
+      const doctor = new Doctor({ ...userData, password: hashedPassword, username });
       await doctor.save();
     } else if (type === "patient") {
-      const patient = new Patient(userData);
+      const hashedPassword = await bcrypt.hash(stored.data.password, 10);
+      const patient = new Patient({userData,  password: hashedPassword });
       await patient.save();
     }
 
@@ -138,7 +152,7 @@ router.post("/login/doctor", async (req, res) => {
       return res.status(401).json({ message: "Doctor not found" });
     }
 
-    if (doctor.password !== password) {
+    if (!(await bcrypt.compare(password, doctor.password))) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -155,6 +169,15 @@ router.post("/login/doctor", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+router.post("/check-email", async (req, res) => {
+  const { email } = req.body;
+  const doctor = await Doctor.findOne({ email });
+  res.json({ exists: !!doctor });
+});
+
+
 
 
 export default router;
