@@ -16,7 +16,9 @@
     "motion": "^12.19.1",
     "react": "^19.1.0",
     "react-big-calendar": "^1.19.4",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.5.2",
     "react-router": "^7.6.3",
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.1.10"
