@@ -21,7 +21,11 @@ const VerifyOTP = () => {
       });
       console.log(res.data.uniqueId);
       toast.success("Verification successful! Check your email for your unique ID.");
-      navigate("/login/doctor");
+      if(state.type === "patient") {
+        navigate("/login/patient");
+      } else {
+        navigate("/login/doctor");
+      }
     } catch (err) {
       toast.error("Invalid OTP");
     }finally {

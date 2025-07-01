@@ -13,6 +13,13 @@ const HomePage = () => {
         navigate("singup/doctor");
     }
 
+    const goToSignupPatient = () =>{
+        navigate("/signup/patient");
+    }
+    const goToLoginPatient = () =>{
+        navigate("/login/patient");
+    }
+
   return (
    <div className="max-w-md mx-auto mt-10 p-6 shadow-lg rounded-xl bg-white text-center">
     <h2 className="text-2xl font-bold mb-4 text-blue-800">This is Home Pages</h2>
@@ -28,6 +35,18 @@ const HomePage = () => {
             className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800"
         >
             Signup Doctor
+        </button>
+        <button
+            onClick={goToSignupPatient}
+            className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800"
+        >
+            Signup Patient
+        </button>
+        <button
+            onClick={goToLoginPatient}
+            className="bg-blue-700 text-white py-2 rounded hover:bg-blue-800"
+        >
+            Login Patient
         </button>
     </div>
    </div>
