@@ -162,8 +162,20 @@ router.post("/login/doctor", async (req, res) => {
 
     res.status(200).json({
       message: "Login successful",
-      name: doctor.name,
-      uniqueId: doctor.uniqueId,
+      doctor: {
+        name: doctor.name,
+        uniqueId: doctor.uniqueId,
+        email: doctor.email,
+        gender: doctor.gender,
+        specialization: doctor.specialization,
+        dob: doctor.dob,
+        place: doctor.place,
+        city: doctor.city,
+        taluka: doctor.taluka,
+        district: doctor.district,
+        state: doctor.state,
+        nation: doctor.nation,
+    },
     });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
