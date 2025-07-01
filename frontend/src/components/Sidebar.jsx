@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   LayoutDashboard,
   HeartPulse,
@@ -14,12 +14,47 @@ import {
   CalendarClock,
   Clock,
   ActivityIcon,
+  CircleFadingPlus,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import RightSideProfile from "./RightSideProfile";
+import { useLocation } from "react-router";
+import { showProfileContext } from "../context/showProfileContext";
 
-function Sidebar({ toggleProfileFunction }) {
+function Sidebar() {
   const [showSubMenu, setShowSubMenu] = useState(null);
   const [currentSelected, setCurrentSelected] = useState("Dashboard");
+  const { showProfileComponent, setShowProfileComponent } =
+    useContext(showProfileContext);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Set the current selected item based on the current path
+    const path = location.pathname.split("/")[1]; // Get the first segment of the path
+    switch (path) {
+      case "dashboard":
+        setCurrentSelected("Dashboard");
+        break;
+      case "healthline":
+        setCurrentSelected("Healthline");
+        break;
+      case "medical-records":
+        setCurrentSelected("Medical Records");
+        break;
+      case "appointment":
+        setCurrentSelected("Appointment");
+        break;
+      case "family":
+        setCurrentSelected("Family");
+        break;
+      case "fitness":
+        setCurrentSelected("Fitness");
+        break;
+      default:
+        setCurrentSelected("Dashboard");
+    }
+  }, [location.pathname]);
 
   const navItems = [
     {
@@ -60,10 +95,15 @@ function Sidebar({ toggleProfileFunction }) {
       icon: Dumbbell,
       subMenu: null,
     },
+    {
+      label: "Insurance",
+      icon: CircleFadingPlus,
+      subMenu: null,
+    },
   ];
 
   return (
-    <div className="w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-gray-200 shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto border-r border-blue-800">
+    <div className="w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-gray-200 shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto border-r border-blue-800 hidden md:block">
       <div className="flex flex-col h-full items-center justify-center gap-8 lg:justify-start">
         {/* Left Section: Logo */}
         <div className="flex lg:items-center justify-center text-blue-800 gap-3 w-full h-20 items-start lg:h-auto">
@@ -77,7 +117,11 @@ function Sidebar({ toggleProfileFunction }) {
         <div
           className="w-full lg:bg-white rounded-xl flex items-center gap-4 lg:p-3 hover:bg-gray-100 transition-all duration-200 ease-in-out cursor-pointer lg:shadow-sm justify-center lg:justify-start"
           id="profile"
-          onClick={() => toggleProfileFunction((prev) => !prev)}
+          onClick={() => {
+            showProfileComponent === true
+              ? setShowProfileComponent(false)
+              : setShowProfileComponent(true);
+          }}
         >
           <img
             src="https://img.freepik.com/free-photo/portrait-father-his-backyard_23-2149489567.jpg?semt=ais_hybrid&w=740"
@@ -104,7 +148,6 @@ function Sidebar({ toggleProfileFunction }) {
                   ? " bg-blue-800 hover:bg-blue-700"
                   : "hover:bg-gray-300"
               }`}
-              onClick={() => setCurrentSelected(item.label)}
             >
               <div
                 className={`flex items-center justify-center lg:justify-start gap-2 w-full ${

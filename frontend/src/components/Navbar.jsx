@@ -5,7 +5,10 @@ const Navbar = () => {
   return (
     <nav className="flex max-w-full h-14 md:h-16 fixed z-[5] w-screen bg-white border-b border-blue-800">
       {/* Left Section: Placeholder */}
-      <div className="w-[48px] md:w-[80px] lg:w-[20vw]" id="emptyPlaceholder" />
+      <div
+        className="w-[48px] md:w-[80px] lg:w-[20vw] hidden md:block"
+        id="emptyPlaceholder"
+      />
 
       {/* Middle Section: Search Bar */}
       <div className="flex-[3] flex items-center justify-center space-x-6 p-2">
