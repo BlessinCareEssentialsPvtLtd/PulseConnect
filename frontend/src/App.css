@@ -1,11 +1,39 @@
-@import "tailwindcss";
-@import 'react-big-calendar/lib/css/react-big-calendar.css';
+@charset "UTF-8";
 
 @theme {
   --color-primary: #4a90e2;
 }
 
 
-/* .primary-color {
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+@import "tailwindcss";
+@import "react-big-calendar/lib/css/react-big-calendar.css";
+
+
+.space-grotesk {
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+
+ .primary-color {
   background-color:#4a90e2 ;
-} */
+} 
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 100vh;
+} 
+
+ .scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #193cb8; /* blue-800 */
+  border-radius: 100vh;
+  border: 2px solid #f1f1f1;
+} 

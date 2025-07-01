@@ -1,0 +1,44 @@
+[
+  {
+    "userId": 1,
+    "PatientName": "John Smith",
+    "CheckUpType": "General Checkup",
+    "Time": "10:00 AM"
+  },
+  {
+    "userId": 2,
+    "PatientName": "Jane Doe",
+    "CheckUpType": "Dental Checkup",
+    "Time": "11:00 AM"
+  },
+  {
+    "userId": 3,
+    "PatientName": "Michael Brown",
+    "CheckUpType": "Eye Examination",
+    "Time": "12:00 PM"
+  },
+  {
+    "userId": 4,
+    "PatientName": "Emily Davis",
+    "CheckUpType": "Cardiology Consultation",
+    "Time": "1:00 PM"
+  },
+  {
+    "userId": 5,
+    "PatientName": "Chris Wilson",
+    "CheckUpType": "Orthopedic Checkup",
+    "Time": "2:00 PM"
+  },
+  {
+    "userId": 6,
+    "PatientName": "Sophia Johnson",
+    "CheckUpType": "Pediatric Checkup",
+    "Time": "3:00 PM"
+  },
+  {
+    "userId": 7,
+    "PatientName": "Daniel Martinez",
+    "CheckUpType": "Dermatology Consultation",
+    "Time": "4:00 PM"
+  }
+]
