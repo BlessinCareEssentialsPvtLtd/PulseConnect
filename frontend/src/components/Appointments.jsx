@@ -1,116 +1,105 @@
 import React, { useState } from "react";
-import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarCheck, CalendarX2 } from "lucide-react";
+
 
 const localizer = momentLocalizer(moment);
 
-const CustomToolbar = ({ label, onNavigate }) => {
-
-  return (
-    <div className="flex justify-between items-center px-2 mb-2">
-      <button
-        onClick={() => onNavigate(Navigate.PREVIOUS)}
-        className="p-2 rounded hover:bg-gray-200"
-      >
-        <ChevronLeft size={20} />
-      </button>
-      <h2 className="text-lg font-medium text-center">{label}</h2>
-      <button
-        onClick={() => onNavigate(Navigate.NEXT)}
-        className="p-2 rounded hover:bg-gray-200"
-      >
-        <ChevronRight size={20} />
-      </button>
-    </div>
-  );
-};
-
-function Appointments( {events}) {
-
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedDayEvents, setSelectedDayEvents] = useState([]);
+const Appointments = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleSelectSlot = (slotInfo) => {
-    const clickedDate = moment(slotInfo.start).startOf("day");
-    const dayEvents = events.filter((event) =>
-      moment(event.start).isSame(clickedDate, "day")
-    );
+  const events = [
+    {
+      title: "Demo Appointment with John",
+      start: new Date(2025, 6, 3, 14, 0),
+      end: new Date(2025, 6, 3, 15, 0),
+    },
+    {
+      title: "Client Onboarding",
+      start: new Date(2025, 6, 4),
+      end: new Date(2025, 6, 4),
+      allDay: true,
+    },
+  ];
 
-    if (dayEvents.length > 0) {
-      setSelectedDate(slotInfo.start);
-      setSelectedDayEvents(dayEvents);
-    } else {
-      setSelectedDate(null);
-      setSelectedDayEvents([]);
-    }
+  const getEventsForDate = (date) =>
+    events.filter((event) => moment(event.start).isSame(moment(date), "day"));
+
+  const handleCellClick = (slotInfo) => {
+    setSelectedDate(slotInfo.start);
   };
 
+  const selectedEvents = getEventsForDate(selectedDate);
 
   return (
-    <section className="mt-4 w-full z-[1] relative">
-      <div className="bg-gray-100 rounded-xl shadow-xl p-4 md:p-6 max-w-full  mx-auto">
-        <h2 className="text-xl sm:text-2xl font-medium font-sans my-4 ml-3">
-          Appointments
-        </h2>
-        <div className="h-80 sm:h-67 md:min-h-70 min-[650px]:min-h-80 min-[1700px]:min-h-90">
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            selectable
-            onSelectSlot={handleSelectSlot}
-            defaultView="month"
-            date={currentDate}
-            onNavigate={(date) => setCurrentDate(date)}
-            style={{ height: "100%", zIndex: 4 }}
-            components={{
-              toolbar: CustomToolbar,
-            }}
-            popup
-            longPressThreshold={1}
-          />
-        </div>
-      </div>
+    <div className="flex justify-evenly gap-4 ">
+      {/* Calendar */}
+      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff] shadow p-2">
+        <Calendar
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          defaultView={Views.MONTH}
+          views={{ month: true }}
+          toolbar={false}
+          selectable={true}
+          onSelectSlot={handleCellClick}
+          onSelectEvent={(event) => setSelectedDate(event.start)}
+          date={currentDate}
+          onNavigate={setCurrentDate}
+          style={{ height: "100%", fontSize: "10px" }}
+          dayPropGetter={(date) => {
+            const hasEvent = events.some((e) => moment(e.start).isSame(date, "day"));
+            return {
+              style: {
+                backgroundColor: hasEvent ? "#bfdbfe" : "transparent",
+              },
+            };
+          }}
+          // className="compact-calendar"
+        />
+      </section>
 
-      {/* Popup for day appointments */}
-      {selectedDate && selectedDayEvents.length > 0 && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-[90%] max-w-md">
-            <h3 className="text-lg font-bold mb-4">
-              Appointments on {moment(selectedDate).format("MMMM Do YYYY")}
-            </h3>
-            <ul className="space-y-3">
-              {selectedDayEvents.map((event, index) => (
-                <li key={index} className="border-b pb-2">
-                  <p className="font-semibold">{event.title}</p>
-                  <p className="text-sm text-gray-600">{event.description}</p>
-                  <p className="text-sm text-gray-500">
-                    {moment(event.start).format("hh:mm A")} -{" "}
-                    {moment(event.end).format("hh:mm A")}
-                  </p>
+      {/* Appointments */}
+      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff] shadow p-3 overflow-y-auto text-[13px]">
+        <h1 className="font-semibold text-lg flex items-center gap-1">
+          <CalendarCheck size={14} />
+          Appointments
+        </h1>
+        <h2 className="font-semibold mt-1 mb-2 text-[14px]">
+          {moment(selectedDate).format("MMMM D, YYYY")}
+        </h2>
+
+        {selectedEvents.length > 0 ? (
+            <ul className="space-y-2">
+              {selectedEvents.map((event, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-center gap-2 bg-white p-2 rounded shadow-sm"
+                >
+                  <CalendarCheck size={16} className="text-blue-600 mt-1" />
+                  <p className="text-sm font-medium text-gray-800">{event.title}</p>
                 </li>
               ))}
             </ul>
-            <div className="mt-5 text-right">
-              <button
-                onClick={() => {
-                  setSelectedDate(null);
-                  setSelectedDayEvents([]);
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Close
-              </button>
+          ) : (
+            <div className="flex items-start gap-2 text-gray-600 bg-gray-100 p-3 rounded shadow-sm">
+              <CalendarX2 size={18} className="mt-1 text-gray-500" />
+              <p className="text-sm">
+                No appointments on{" "}
+                <span className="font-semibold text-gray-700">
+                  {moment(selectedDate).format("MMMM D, YYYY")}
+                </span>
+              </p>
             </div>
-          </div>
-        </div>
-      )}
-    </section>
+          )}
+      </section>
+    </div>
   );
-}
+};
 
 export default Appointments;

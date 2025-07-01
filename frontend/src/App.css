@@ -33,3 +33,32 @@
   border-radius: 100vh;
   border: 2px solid #f1f1f1;
 }
+
+/* Optional: reduce header and day cell height */
+.compact-calendar .rbc-month-row {
+  min-height: 15px;
+}
+
+.compact-calendar .rbc-header {
+  padding: 2px 0;
+  font-size: 9px;
+}
+
+.compact-calendar .rbc-date-cell {
+  padding: 0 !important;
+  height: 20px;
+  font-size: 8px;
+  text-align: center;
+}
+
+.compact-calendar .rbc-event {
+  display: none !important; /* hide event names */
+}
+
+.compact-calendar .rbc-toolbar {
+  margin-bottom: 4px;
+}
+
+.compact-calendar .rbc-month-view {
+  border: none;
+}
