@@ -60,7 +60,7 @@ const Appointments = () => {
               },
             };
           }}
-          // className="compact-calendar"
+          className="compact-calendar"
         />
       </section>
 

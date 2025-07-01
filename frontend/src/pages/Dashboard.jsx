@@ -26,7 +26,7 @@ const quickLinks = [
   { icon: FileText, label: "Records" },
   { icon: Users, label: "Family" },
   { icon: Dumbbell, label: "Fitness" },
-  { icon: Pill, label: "Prescriptions" },
+  { icon: Pill, label: "Medicine" },
 ];
 
 const timelineEvents = [
@@ -64,73 +64,79 @@ const historyTiles = [
 /* ───────────────────────── sub-components ───────────────────────── */
 
 const PulseCard = () => (
-  <div className="rounded-xl bg-white p-2 w-full">
-    <h1 className="text-xl font-medium mb-1">Pulse Card</h1>
+  <div className="rounded-xl h-full w-full">
+    <div className="flex items-center justify-between bg-transparent h-full w-full mb-1">
+      <div className="w-[80%] h-full bg-white pl-8 p-2 rounded-lg ">
+        <h1 className="text-lg font-medium mb-2">Pulse Card</h1>
+        <div className="flex justify-start items-end w-full mb-2">
+          {/* Left: user info */}
+          <div className=" h-[40%] w-[80%] ">
+            <div className="border-2  border-blue-700 rounded-t-2xl h-6" />
+            <div className="border-2  border-blue-700 rounded-b-2xl p-3 flex gap-3">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-400 rounded-full flex-shrink-0" />
 
-    <div className="flex justify-center items-center w-full">
-      {/* Left: user info */}
-      <div className="w-full max-w-md">
-        <div className="border-2 border-blue-700 rounded-t-2xl h-6" />
-        <div className="border-2 border-blue-700 rounded-b-2xl p-3 flex gap-3">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-400 rounded-full flex-shrink-0" />
-
-          <div className="text-xs sm:text-sm flex-1">
-            <h2 className="font-semibold text-sm sm:text-base">John Doe</h2>
-            <p className="font-semibold">
-              ID: <span className="text-blue-700">JEKvkajb78w92r</span>
-            </p>
-            <div className="mt-1 text-gray-600 leading-snug space-y-1">
-              <p>DOB: 24 | 06 | 1999</p>
-              <p>Gender: M</p>
-              <p className="break-words">
-                Address: Name. Address. New York, NY 10003, USA. 2nd Street Dorm.
-              </p>
+              <div className="text-xs sm:text-sm flex-1">
+                <h2 className="font-semibold text-sm">John Doe</h2>
+                <p className="font-semibold text-xs">
+                  ID: <span className="text-blue-700">JEKvkajb78w92r</span>
+                </p>
+                <div className="mt-1 text-gray-600 text-sm leading-snug">
+                  <p className=" text-xs">DOB: 24 | 06 | 1999</p>
+                  <p className=" text-xs">Gender: M</p>
+                  <p className="break-words text-xs">
+                    Address: Name. Address. New York, NY 10003, USA. 2nd Street Dorm.
+                  </p>
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Right: icons */}
+          <div className="flex flex-col items-center gap-2 ml-3">
+            <Edit3 size={20} />
+            <Send size={20} />
+            <Share2 size={20} />
           </div>
         </div>
       </div>
+      {/* Quick links */}
+      <div className="h-full w-[15%] bg-white rounded-xl">
+      <div className="flex flex-col justify-evenly items-center gap-4 my-2 h-full ">
+        {quickLinks.map(({ icon: Icon, label }) => (
+          <button key={label} className="flex flex-col items-center">
+            <Icon size={20} />
+            <span className="text-xs font-medium mt-1">{label}</span>
+          </button>
+        ))}
+      </div>
 
-      {/* Right: icons */}
-      <div className="flex flex-col items-center gap-2 ml-3">
-        <Edit3 size={20} />
-        <Send size={20} />
-        <Share2 size={20} />
       </div>
     </div>
 
-    {/* Quick links */}
-    <div className="flex justify-evenly mt-4">
-      {quickLinks.map(({ icon: Icon, label }) => (
-        <button key={label} className="flex flex-col items-center">
-          <Icon size={24} />
-          <span className="text-xs font-medium mt-1">{label}</span>
-        </button>
-      ))}
-    </div>
   </div>
 );
 
 const Timeline = () => (
-  <div className="rounded-xl bg-white p-2 w-full">
-    <h2 className="text-xl font-semibold mb-3">Timeline</h2>
+  <div className="rounded-lg bg-white p-2 w-full">
+    <h2 className="text-lg font-semibold mb-2">Timeline</h2>
 
-    <div className="space-y-3">
+    <div className="space-y-2">
       {timelineEvents.map(({ strTime, endTime, title, location }) => (
         <div
           key={`${title}-${strTime}`}
-          className="flex items-start gap-3 border border-gray-100 rounded-lg p-2 bg-[#f5fbff]"
+          className="flex items-start gap-2 border border-gray-200 rounded-md p-2 bg-[#f7fbfe]"
         >
           {/* Time Badge with Icon */}
-          <div className="flex items-center gap-1 text-sm font-medium text-blue-700 whitespace-nowrap">
-            <Clock size={16} />
+          <div className="flex items-center gap-1 text-xs font-medium text-blue-700 whitespace-nowrap min-w-[100px]">
+            <Clock size={14} />
             {strTime} - {endTime}
           </div>
 
           {/* Timeline Details */}
           <div className="flex-1">
-            <h3 className="text-base font-semibold text-gray-800">{title}</h3>
-            <div className="flex items-center text-sm text-gray-600 mt-1">
-              <MapPin size={14} className="mr-1" />
+            <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+            <div className="flex items-center text-xs text-gray-600 mt-0.5">
+              <MapPin size={12} className="mr-1" />
               {location}
             </div>
           </div>
@@ -171,11 +177,11 @@ const HistoryCards = () => (
 export default function Dashboard({ showProfile, toggleProfileFunction }) {
   return (
     <Layout>
-      <div className="w-[90%] p-2 grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-2 h-[calc(100vh-70px)]">
-        <div className="bg-white rounded-xl p-2 h-full w-full">
+      <div className="w-[90%] p-6 grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-6 h-[calc(100vh-70px)]">
+        <div className="rounded-xl h-full w-full border-1 border-gray-300">
           <PulseCard />
         </div>
-        <div className="bg-white rounded-xl p-2 h-full w-full">
+        <div className="bg-white rounded-xl h-full w-full">
           <Timeline />
         </div>
         <div className="bg-white grid place-items-center rounded-xl p-2 h-full w-full">
