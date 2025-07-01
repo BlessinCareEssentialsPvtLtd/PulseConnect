@@ -11,24 +11,37 @@ const DoctorLogin = () => {
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!identifier || !password) {
-      return toast.error("Please enter all fields.");
-    }
-    try {
-      const res = await axios.post("http://localhost:5000/api/auth/login/doctor", {
-        identifier,
-        password,
-        method: loginMethod,
+  e.preventDefault();
+
+  if (!identifier || !password) {
+    return toast.error("Please enter all fields.");
+  }
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/auth/login/doctor", {
+      identifier,
+      password,
+      method: loginMethod,
+    });
+
+    // ✅ Check if res.data and res.data.doctor exist before using them
+    if (res.data?.doctor) {
+      toast.success(`Welcome Dr. ${res.data.doctor.name}`);
+      navigate("/dashboard/doctor", {
+        state: {
+          doctor: res.data.doctor,
+        },
       });
-    
-      toast.success(`Welcome Dr. ${res.data.name}`);
-      // Store doctor data locally or redirect
-      navigate("/dashboard/doctor"); // Create this route later
-    } catch (err) {
-      toast.error(err.response.data.message,"Login failed");
+    } else {
+      toast.error("Login response was invalid.");
     }
-  };
+  } catch (err) {
+    console.error("Login error:", err);
+    const errorMessage = err.response?.data?.message || "Login failed";
+    toast.error(errorMessage);
+  }
+};
+
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 shadow-lg rounded-xl bg-white">
