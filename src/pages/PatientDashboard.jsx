@@ -1,44 +1,37 @@
+// src/pages/PatientDashboard.jsx
+import DashboardLayout from "../layout/DashboardLayout";
+import PulseCard from "../components/PulseCard";
+import Timeline from "../components/Timeline";
+import Appointments from "../components/Appointments";
+import HistoryTiles from "../components/HistoryTiles";
+
 import { useLocation } from "react-router-dom";
 
 const PatientDashboard = () => {
   const location = useLocation();
-  const { patient } = location.state || {};
+  const patient = {
+    name: location.state.patient.name,
+    uniqueId: location.state.patient.uniqueId,
+    email: location.state.patient.email,
+    phone: location.state.patient.phone,
+    userName: location.state.patient.username,
+    dob: location.state.patient.dob,
+    gender: location.state.patient.gender,
+    place: `${location.state.patient.place}, ${location.state.patient.city},${location.state.patient.district}, ${location.state.patient.state}, ${location.state.patient.nation}`,
+    photo: location.state.patient.photo,
+  };
 
-  if (!patient) {
-    return (
-      <div className="text-center mt-10 text-red-500">
-        No patient data found. Please login again.
-      </div>
-    );
-  }
-
-  const fieldOrder = [
-    "name",
-    "email",
-    "phone",
-    "gender",
-    "dob",
-    "uniqueId",
-    "place",
-    "city",
-    "taluka",
-    "district",
-    "state",
-    "nation"
-  ];
-
+  console.log("Full Patient Data:", location.state.patient);
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-8 shadow-lg rounded-xl bg-green-50">
-      <h1 className="text-2xl font-bold mb-6 text-green-800 text-center">Patient Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {fieldOrder.map((field) => (
-          <div key={field} className="bg-white p-4 rounded shadow text-gray-700">
-            <strong className="text-green-700 capitalize">{field}:</strong>{" "}
-            <span>{patient[field]}</span>
-          </div>
-        ))}
+    <DashboardLayout  patient={patient}>
+     
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
+        <PulseCard patient={patient} />
+        <Timeline />
+        <Appointments />
+        <HistoryTiles />
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

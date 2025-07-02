@@ -29,6 +29,7 @@ const PatientSignup = () => {
     district: "",
     state: "",
     nation: "India",
+     photo: "",
   });
 
   const [districtOptions, setDistrictOptions] = useState([]);
@@ -127,6 +128,29 @@ const PatientSignup = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         {step === 1 && (
           <>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setFormData((prev) => ({ ...prev, photo: reader.result }));
+                  };
+                  reader.readAsDataURL(file); // Convert to Base64
+                }
+              }}
+              className="w-full p-2 border border-blue-300 rounded bg-white"
+            />
+
+            {formData.photo && (
+              <img
+                src={formData.photo}
+                alt="Preview"
+                className="w-20 h-20 rounded-full object-cover mt-2 mx-auto border border-blue-400"
+            />)}
+
             <input
               type="text"
               name="name"
