@@ -199,24 +199,28 @@ router.post("/login/patient", async (req, res) => {
       return res.status(403).json({ message: "Account not verified" });
     }
 
+    // ✅ Return full safe patient info, including `username` and `photo`
     res.status(200).json({
       message: "Login successful",
-      patient: {
-        name: patient.name,
-        email: patient.email,
-        uniqueId: patient.uniqueId,
-        phone: patient.phone,
-        gender: patient.gender,
-        dob: patient.dob,
-        place: patient.place,
-        city: patient.city,
-        taluka: patient.taluka,
-        district: patient.district,
-        state: patient.state,
-        nation: patient.nation,
-      },
-    });
+       patient: {
+          name: patient.name,
+          username: patient.username,   // <-- ADD THIS
+          email: patient.email,
+          uniqueId: patient.uniqueId,
+          phone: patient.phone,
+          gender: patient.gender,
+          dob: patient.dob,
+          place: patient.place,
+          city: patient.city,
+          taluka: patient.taluka,
+          district: patient.district,
+          state: patient.state,
+          nation: patient.nation,
+          photo: patient.photo,         // <-- AND THIS
+        },
+      });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });

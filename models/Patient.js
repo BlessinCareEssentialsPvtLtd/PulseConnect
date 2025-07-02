@@ -19,6 +19,7 @@ const patientSchema = new mongoose.Schema({
   district: String,
   state: String,
   nation: String,
+  photo: { type: String }, 
 });
 
 export default mongoose.model("Patient", patientSchema);
