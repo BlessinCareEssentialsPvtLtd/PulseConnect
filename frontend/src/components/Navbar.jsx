@@ -3,13 +3,13 @@ import React from "react";
 
 const Navbar = () => {
   return (
-    <nav className="flex max-w-full h-14 md:h-16 fixed z-[5] w-screen bg-white border-b border-blue-800">
+    <nav className="flex max-w-full h-14 md:h-20 fixed z-[5] w-screen bg-white">
       {/* Left Section: Placeholder */}
       <div className="w-[48px] md:w-[80px] lg:w-[20vw]" id="emptyPlaceholder" />
 
       {/* Middle Section: Search Bar */}
-      <div className="flex-[3] flex items-center justify-center space-x-6 p-2">
-        <div className="w-full bg-white h-4/5 rounded-lg shadow-md flex items-center border border-blue-800">
+      <div className="flex-[3] flex items-center justify-center space-x-6 ml-1 p-2">
+        <div className="w-[95%] bg-white h-4/5 rounded-lg shadow-md flex items-center">
           <input
             className="w-full h-full text-left placeholder:text-gray-400 px-4 text-sm md:text-base rounded-full focus:outline-none"
             type="text"

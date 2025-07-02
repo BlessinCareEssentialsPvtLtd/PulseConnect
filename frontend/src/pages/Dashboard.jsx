@@ -13,6 +13,7 @@ import {
   Video,
   NotebookPen
 } from "lucide-react";
+
 import { MapPin, Clock } from "lucide-react";
 import RightSideProfile from "../components/RightSideProfile";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -65,12 +66,12 @@ const historyTiles = [
 
 const PulseCard = () => (
   <div className="rounded-xl h-full w-full">
-    <div className="flex items-center justify-between bg-transparent h-full w-full mb-1">
-      <div className="w-[80%] h-full bg-white pl-8 p-2 rounded-lg ">
-        <h1 className="text-lg font-medium mb-2">Pulse Card</h1>
-        <div className="flex justify-start items-end w-full mb-2">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-transparent h-full w-full mb-1">
+      <div className="relative w-full md:w-[80%] h-full bg-white pl-8 p-2 rounded-lg shadow-lg ">
+        <h1 className="text-xl font-bold text-primary mb-2">Pulse Card</h1>
+        <div className="flex flex-1 justify-start items-end w-full md:mb-[10%] md:absolute bottom-0">
           {/* Left: user info */}
-          <div className=" h-[40%] w-[80%] ">
+          <div className="w-full md:h-[40%] md:w-[80%] ">
             <div className="border-2  border-blue-700 rounded-t-2xl h-6" />
             <div className="border-2  border-blue-700 rounded-b-2xl p-3 flex gap-3">
               <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-400 rounded-full flex-shrink-0" />
@@ -100,8 +101,8 @@ const PulseCard = () => (
         </div>
       </div>
       {/* Quick links */}
-      <div className="h-full w-[15%] bg-white rounded-xl">
-      <div className="flex flex-col justify-evenly items-center gap-4 my-2 h-full ">
+      <div className="h-full w-fill md:w-[15%] bg-white rounded-xl p-2 shadow-lg">
+      <div className="flex md:flex-col flex-row justify-evenly items-center gap-4 my-2 h-full ">
         {quickLinks.map(({ icon: Icon, label }) => (
           <button key={label} className="flex flex-col items-center">
             <Icon size={20} />
@@ -116,27 +117,34 @@ const PulseCard = () => (
   </div>
 );
 
-const Timeline = () => (
-  <div className="rounded-lg bg-white p-2 w-full">
-    <h2 className="text-lg font-semibold mb-2">Timeline</h2>
 
-    <div className="space-y-2">
+const Timeline = () => (
+  <div className="rounded-md bg-white p-2 w-full">
+    <h2 className="text-xl font-bold mb-1 text-primary">Timeline</h2>
+
+    <div className="flex flex-col gap-2 w-[95%] mx-auto my-2">
       {timelineEvents.map(({ strTime, endTime, title, location }) => (
         <div
           key={`${title}-${strTime}`}
-          className="flex items-start gap-2 border border-gray-200 rounded-md p-2 bg-[#f7fbfe]"
+          className="flex items-start gap- border border-[#e6f0ff] rounded-md p-2 bg-[#f7fbfe]"
         >
           {/* Time Badge with Icon */}
-          <div className="flex items-center gap-1 text-xs font-medium text-blue-700 whitespace-nowrap min-w-[100px]">
-            <Clock size={14} />
-            {strTime} - {endTime}
+          <div className="flex flex-col items-center gap-1 text-[11px] font-medium text-blue-700 min-w-[90px]">
+            <span className="flex gap-1 items-center">
+            <Clock size={12} />
+            {strTime}
+            </span>
+            <span className="flex gap-1 items-center">
+            <Clock size={12} />
+            {endTime}
+            </span>
           </div>
 
           {/* Timeline Details */}
           <div className="flex-1">
-            <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
-            <div className="flex items-center text-xs text-gray-600 mt-0.5">
-              <MapPin size={12} className="mr-1" />
+            <h3 className="text-sm font-medium text-gray-800 leading-tight">{title}</h3>
+            <div className="flex items-center text-[11px] text-gray-600 mt-0.5">
+              <MapPin size={10} className="mr-1" />
               {location}
             </div>
           </div>
@@ -145,6 +153,7 @@ const Timeline = () => (
     </div>
   </div>
 );
+
 
 const HistoryCards = () => (
   <div className="mt-4 rounded-xl bg-white p-4 flex flex-wrap gap-3">
@@ -155,7 +164,7 @@ const HistoryCards = () => (
       >
         <div className="flex items-start gap-3 w-full">
           {/* Icon or visual */}
-          <div className="w-10 h-10 bg-red-500 rounded-md flex items-center justify-center text-white">
+          <div className="w-10 h-10 bg-[#0260c8] rounded-md flex items-center justify-center text-white">
             <NotebookPen size={18} />
           </div>
 
@@ -177,17 +186,17 @@ const HistoryCards = () => (
 export default function Dashboard({ showProfile, toggleProfileFunction }) {
   return (
     <Layout>
-      <div className="w-[90%] p-6 grid grid-cols-1 md:grid-cols-2 grid-rows-4 md:grid-rows-2 gap-6 h-[calc(100vh-70px)]">
-        <div className="rounded-xl h-full w-full border-1 border-gray-300">
+      <div className="w-[90%] p-6 grid grid-cols-1 md:grid-cols-2  md:grid-rows-2 gap-6 md:h-[calc(100vh-70px)]">
+        <div className="rounded-xl h-max md:h-full w-full">
           <PulseCard />
         </div>
-        <div className="bg-white rounded-xl h-full w-full">
+        <div className="bg-white rounded-xl h-max md:h-full w-full shadow-lg p-2">
           <Timeline />
         </div>
-        <div className="bg-white grid place-items-center rounded-xl p-2 h-full w-full">
+        <div className="bg-white grid place-items-center rounded-xl shadow-lg p-2 h-max md:h-full w-full">
           <Appointments />
         </div>
-        <div className="bg-white rounded-xl p-2 h-full w-full">
+        <div className="bg-white rounded-xl p-2 h-max md:h-full w-full shadow-lg ">
           <HistoryCards />
         </div>
       </div>

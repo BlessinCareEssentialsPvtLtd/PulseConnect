@@ -11,6 +11,8 @@ const Appointments = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  
+
   const events = [
     {
       title: "Demo Appointment with John",
@@ -35,9 +37,9 @@ const Appointments = () => {
   const selectedEvents = getEventsForDate(selectedDate);
 
   return (
-    <div className="flex justify-evenly gap-4 ">
+    <div className="flex flex-wrap justify-evenly gap-4 ">
       {/* Calendar */}
-      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff] shadow p-2">
+      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff] p-2 ">
         <Calendar
           localizer={localizer}
           events={events}
@@ -65,12 +67,12 @@ const Appointments = () => {
       </section>
 
       {/* Appointments */}
-      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff] shadow p-3 overflow-y-auto text-[13px]">
-        <h1 className="font-semibold text-lg flex items-center gap-1">
+      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff]  p-3 overflow-y-auto text-[13px]">
+        <h1 className="font-semibold text-base flex items-center gap-1">
           <CalendarCheck size={14} />
           Appointments
         </h1>
-        <h2 className="font-semibold mt-1 mb-2 text-[14px]">
+        <h2 className="font-semibold mt-1 mb-2 text-xs">
           {moment(selectedDate).format("MMMM D, YYYY")}
         </h2>
 
@@ -82,14 +84,14 @@ const Appointments = () => {
                   className="flex items-center gap-2 bg-white p-2 rounded shadow-sm"
                 >
                   <CalendarCheck size={16} className="text-blue-600 mt-1" />
-                  <p className="text-sm font-medium text-gray-800">{event.title}</p>
+                  <p className="text-xs font-medium text-gray-800">{event.title}</p>
                 </li>
               ))}
             </ul>
           ) : (
             <div className="flex items-start gap-2 text-gray-600 bg-gray-100 p-3 rounded shadow-sm">
               <CalendarX2 size={18} className="mt-1 text-gray-500" />
-              <p className="text-sm">
+              <p className="text-xs">
                 No appointments on{" "}
                 <span className="font-semibold text-gray-700">
                   {moment(selectedDate).format("MMMM D, YYYY")}

@@ -63,7 +63,7 @@ function Sidebar({ toggleProfileFunction }) {
   ];
 
   return (
-    <div className="w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-gray-200 shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto border-r border-blue-800">
+    <div className="w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-[#99bbff] shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto ">
       <div className="flex flex-col h-full items-center justify-center gap-8 lg:justify-start">
         {/* Left Section: Logo */}
         <div className="flex lg:items-center justify-center text-blue-800 gap-3 w-full h-20 items-start lg:h-auto">
@@ -97,12 +97,12 @@ function Sidebar({ toggleProfileFunction }) {
           {navItems.map((item, index) => (
             <li
               key={index}
-              className={`flex flex-col  gap-2 p-2 rounded-lg  transition cursor-pointer border border-blue-800 lg:border-transparent  ${
+              className={`flex flex-col gap-2 p-2 rounded-lg transition cursor-pointer lg:border-transparent ${
                 item.subMenu ? "overflow-hidden " : ""
               } ${
                 item.label === currentSelected
                   ? " bg-blue-800 hover:bg-blue-700"
-                  : "hover:bg-gray-300"
+                  : "hover:bg-[#b3ccff]"
               }`}
               onClick={() => setCurrentSelected(item.label)}
             >
@@ -151,10 +151,10 @@ function Sidebar({ toggleProfileFunction }) {
                       {item.subMenu.map((subItem, subIndex) => (
                         <li
                           key={subIndex}
-                          className={`flex items-center gap-2  p-2 rounded-lg cursor-pointer ${
+                          className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer ${
                             item.label === currentSelected
                               ? " text-white hover:bg-blue-500"
-                              : "hover:bg-gray-200"
+                              : "hover:bg-[#aac4ff]"
                           }`}
                         >
                           <subItem.icon

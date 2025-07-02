@@ -18,7 +18,7 @@ const DoctorDashboard = () => {
   return (
     <Layout>
       <div
-        className="bg-white flex lg:flex-row flex-col p-4 gap-4 rounded-lg border border-gray-200 w-[83%] sm:w-[92%] lg:w-[78%] shadow-lg"
+        className="bg-white flex lg:flex-row flex-col p-4 gap-4 rounded-lg border border-[#e6f0ff] w-[83%] sm:w-[92%] lg:w-[78%] shadow-lg"
         id="mainDashboard"
       >
         <div className="  w-full h-[70%] lg:w-[70%] lg:h-full flex flex-col gap-4">
@@ -41,7 +41,7 @@ const DoctorDashboard = () => {
                     type="text"
                     placeholder="Enter username"
                     className="rounded-lg px-4 py-2 w-48 text-sm text-blue-800 font-bold 
-                        bg-gray-200 placeholder-blue-500 border border-white/30 
+                        bg-[#e6f0ff] placeholder-blue-500 border border-white/30 
                           shadow-sm focus:ring-2 focus:ring-white/70 focus:outline-none 
                           transition duration-200"
                   />
@@ -214,7 +214,7 @@ const DoctorDashboard = () => {
           </div>
         </div>
         <div
-          className="bg-gray-50 w-full h-[30%] lg:w-[30%] lg:h-full rounded-lg p-4 border border-gray-200 shadow-md"
+          className="bg-gray-50 w-full h-[30%] lg:w-[30%] lg:h-full rounded-lg p-4 border border-[#e6f0ff] shadow-md"
           id="calendarDiv"
         >
           <h3 className="text-lg font-bold mb-4">Calendar</h3>

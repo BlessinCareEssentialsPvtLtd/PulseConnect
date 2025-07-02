@@ -1,6 +1,127 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 @import "react-big-calendar/lib/css/react-big-calendar.css";
+
+*{
+  font-family:"Open Sans",;
+}
+
+/* Fonts */
+
+
+.open-sans {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
 
 
 .space-grotesk {
@@ -34,7 +155,7 @@
   border: 2px solid #f1f1f1;
 }
 
-/* Optional: reduce header and day cell height */
+/* Compact calendar adjustments */
 .compact-calendar .rbc-month-row {
   min-height: 15px;
 }
@@ -46,19 +167,37 @@
 
 .compact-calendar .rbc-date-cell {
   padding: 0 !important;
-  height: 20px;
-  font-size: 8px;
+  height: 30px; /* Increased height for better spacing */
+  font-size: 12px; /* Increased font size for day numbers */
   text-align: center;
+  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Hide event names inside calendar cells */
 .compact-calendar .rbc-event {
-  display: none !important; /* hide event names */
+  display: none !important;
 }
 
+/* Toolbar spacing (though toolbar is disabled in your code) */
 .compact-calendar .rbc-toolbar {
   margin-bottom: 4px;
 }
 
-.compact-calendar .rbc-month-view {
-  border: none;
+/* Remove all borders */
+.compact-calendar .rbc-calendar,
+.compact-calendar .rbc-month-view,
+.compact-calendar .rbc-month-row,
+.compact-calendar .rbc-day-bg,
+.compact-calendar .rbc-date-cell {
+  border: none !important;
 }
+
+/* Optional: Remove focus outline */
+.compact-calendar .rbc-day-slot:focus,
+.compact-calendar .rbc-date-cell:focus {
+  outline: none;
+}
+
