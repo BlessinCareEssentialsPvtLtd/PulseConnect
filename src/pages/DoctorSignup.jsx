@@ -28,6 +28,7 @@ const DoctorSignup = () => {
     district: "",
     state: "",
     nation: "India",
+    photo: "", 
   });
 
   const [districtOptions, setDistrictOptions] = useState([]);
@@ -45,7 +46,7 @@ useEffect(() => {
   }
   const timeout = setTimeout(async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/check-email", {
+      const res = await axios.post("/api/auth/check-email", {
         email: formData.email,
         type: "doctor", // ✅ important
       });
@@ -56,6 +57,15 @@ useEffect(() => {
   }, 500);
   setTypingTimeout(timeout);
 }, [formData.email]);
+
+
+const convertToBase64 = (file, callback) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => callback(reader.result);
+  reader.onerror = (error) => console.error("Base64 conversion error:", error);
+};
+
 
 
   const handleChange = (e) => {
@@ -72,7 +82,7 @@ useEffect(() => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/signup/doctor", formData);
+      await axios.post("/api/auth/signup/doctor", formData);
       toast.success("OTP sent to your email");
       setTimeout(() => {
         navigate("/verify-otp", {
@@ -284,6 +294,29 @@ useEffect(() => {
             </select>
 
             <div className="flex justify-between">
+              <div>
+  <label className="block mb-1 text-sm text-blue-800 font-medium">Upload Photo</label>
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const maxSizeInBytes = 1 * 1024 * 1024; // 1MB
+    if (file.size > maxSizeInBytes) {
+      toast.error("File size must be less than 1MB");
+      return;
+    }
+
+    convertToBase64(file, (base64) => {
+      setFormData((prev) => ({ ...prev, photo: base64 }));
+    });
+  }
+}}
+    className="w-full px-4 py-2 border border-blue-300 rounded bg-white"
+  />
+</div>
+
               <button
                 type="button"
                 onClick={() => setStep(1)}
