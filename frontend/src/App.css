@@ -174,6 +174,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  line-height: 1;
 }
 
 /* Hide event names inside calendar cells */
@@ -201,3 +202,21 @@
   outline: none;
 }
 
+/* ======================== */
+/* Responsive Adjustments   */
+/* ======================== */
+
+@media (max-width: 480px) {
+  .compact-calendar .rbc-date-cell {
+    font-size: 9px;     /* Smaller font on small devices */
+    height: 24px;       /* Reduced cell height */
+  }
+
+  .compact-calendar .rbc-header {
+    font-size: 8px;     /* Smaller weekday labels */
+  }
+
+  .compact-calendar .rbc-month-row {
+    min-height: 10px;   /* Adjust row height */
+  }
+}

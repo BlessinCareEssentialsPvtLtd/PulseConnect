@@ -40,7 +40,7 @@ const Appointments = () => {
     <div className="flex flex-col md:flex-row justify-evenly gap-4 ">
       {/* Calendar */}
       <div className="flex md:inline justify-center w-full md:w-max">
-      <section className="md:w-[250px] w-[80%] h-[40vw] md:h-[250px] rounded-lg bg-[#f5fbff] p-2 ">
+      <section className="md:w-[250px] w-full h-[40vw] md:h-[250px] rounded-lg bg-[#f5fbff] p-2 ">
         <Calendar
           localizer={localizer}
           events={events}
@@ -50,7 +50,9 @@ const Appointments = () => {
           views={{ month: true }}
           toolbar={false}
           selectable={true}
+          popup
           onSelectSlot={handleCellClick}
+          onDrillDown={(date) => handleCellClick({ start: date })}
           onSelectEvent={(event) => setSelectedDate(event.start)}
           date={currentDate}
           onNavigate={setCurrentDate}

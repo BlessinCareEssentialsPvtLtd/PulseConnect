@@ -189,18 +189,18 @@ export default function Dashboard({ showProfile, toggleProfileFunction }) {
       {/*By flex*/}
       <div className="flex flex-col w-[90%] bg-[#e9f8ff] p-2">
         <div className="flex w-full max-[780px]:flex-col mt-4">
-          <div className="w-full md:w-[48%] ml-4">
+          <div className="w-full md:w-[48%] md:ml-4">
             <PulseCard />
           </div>
-          <div className="w-full md:w-[48%] ml-4 mt-4 md:mt-0">
+          <div className="w-full md:w-[48%] md:ml-4 mt-4 md:mt-0">
             <Timeline />
           </div>
         </div>
         <div className="flex w-full max-[780px]:flex-col mt-4">
-          <div className="w-full md:w-[48%] ml-4">
+          <div className="w-full md:w-[48%] md:ml-4">
             <Appointments />
           </div>
-          <div className="w-full md:w-[48%] ml-4 mt-4 md:mt-0">
+          <div className="w-full md:w-[48%] md:ml-4 mt-4 md:mt-0">
             <HistoryCards />
           </div>
         </div>
