@@ -63,7 +63,7 @@ function Sidebar({ toggleProfileFunction }) {
   ];
 
   return (
-    <div className="w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-gray-200 shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto border-r border-blue-800">
+    <div className="hidden md:inline w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-gray-200 shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto border-r border-blue-800">
       <div className="flex flex-col h-full items-center justify-center gap-8 lg:justify-start">
         {/* Left Section: Logo */}
         <div className="flex lg:items-center justify-center text-blue-800 gap-3 w-full h-20 items-start lg:h-auto">

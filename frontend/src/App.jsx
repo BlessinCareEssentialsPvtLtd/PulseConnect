@@ -12,6 +12,7 @@ import "./App.css";
 import { AnimatePresence, motion } from "framer-motion"; // fixed incorrect import
 import LandingPage from "./pages/LandingPage";
 import CompleteProfile from "./pages/CompleteProfile";
+import FamilyCorner from "./pages/FamilyCorner";
 
 function App() {
   const [showProfileComponent, setShowProfileComponent] = useState(false);
@@ -91,6 +92,7 @@ function App() {
         <Route path="/login" element={<PLogin />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
+        <Route path="/family-corner" element={<FamilyCorner />} />
       </Routes>
     </Router>
   );
