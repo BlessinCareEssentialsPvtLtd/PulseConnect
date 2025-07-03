@@ -58,20 +58,20 @@ const historyTiles = [
   { title: "Fitness", subtitle: "Get Diet", desc: "Workout goal updated" },
 ];
 
-const events =[
-    {
-      title: "Doctor Appointment",
-      start: new Date(2025, 5, 28, 10, 0),
-      end: new Date(2025, 5, 28, 11, 0),
-      description: "Dr. Sharma at ABC Clinic",
-    },
-    {
-      title: "Meeting with Designer",
-      start: new Date(2025, 5, 28, 14, 0),
-      end: new Date(2025, 5, 28, 15, 0),
-      description: "UI design discussion",
-    },
-  ]
+const events = [
+  {
+    title: "Doctor Appointment",
+    start: new Date(2025, 5, 28, 10, 0),
+    end: new Date(2025, 5, 28, 11, 0),
+    description: "Dr. Sharma at ABC Clinic",
+  },
+  {
+    title: "Meeting with Designer",
+    start: new Date(2025, 5, 28, 14, 0),
+    end: new Date(2025, 5, 28, 15, 0),
+    description: "UI design discussion",
+  },
+];
 
 /* ───────────────────────── sub-components ───────────────────────── */
 

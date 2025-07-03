@@ -7,7 +7,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const localizer = momentLocalizer(moment);
 
 const CustomToolbar = ({ label, onNavigate }) => {
-
   return (
     <div className="flex justify-between items-center px-2 mb-2">
       <button
@@ -27,8 +26,7 @@ const CustomToolbar = ({ label, onNavigate }) => {
   );
 };
 
-function Appointments( {events}) {
-
+function Appointments({ events }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDayEvents, setSelectedDayEvents] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -47,7 +45,6 @@ function Appointments( {events}) {
       setSelectedDayEvents([]);
     }
   };
-
 
   return (
     <section className="mt-4 w-full z-[1] relative">

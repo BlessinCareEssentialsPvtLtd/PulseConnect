@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import statesAndDistrictsData from "../data/statesAndDistricts.json";
 
-const steps = ["Personal", "Medical", "Other"];
+const steps = ["Personal", "Medical"];
 
 function CompleteProfile() {
   const [step, setStep] = useState(0);
@@ -19,6 +19,10 @@ function CompleteProfile() {
     bloodGroup: "",
     height: "",
     weight: "",
+    pastDiseases: "",
+    chronicDiseases: "",
+    familyMedHistory: "",
+    lifestyleHabits: "",
     allergies: "",
     conditions: "",
     occupation: "",
@@ -28,6 +32,16 @@ function CompleteProfile() {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [statesAndDistricts, setStatesAndDistricts] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    if (errorMsg) {
+      const timer = setTimeout(() => {
+        setErrorMsg("");
+      }, 2000); // 2 seconds
+
+      return () => clearTimeout(timer); // Cleanup if errorMsg changes before timeout ends
+    }
+  }, [errorMsg]);
 
   useEffect(() => {
     setStatesAndDistricts(statesAndDistrictsData);
@@ -48,18 +62,17 @@ function CompleteProfile() {
     const requiredFieldsByStep = {
       0: [
         "fullName",
+        "dateOfBirth",
+        "gender",
         "contactNumber",
+        "emergencyContact",
         "email",
         "state",
         "district",
-        "address",
         "pinCode",
-        "dateOfBirth",
-        "emergencyContact",
-        "gender",
+        "address",
       ],
-      1: ["bloodGroup", "allergies", "conditions"],
-      2: ["occupation", "notes", "emergencyContact"],
+      1: ["bloodGroup", "height", "weight", "lifestyleHabits"],
     };
 
     const fields = requiredFieldsByStep[step];
@@ -234,6 +247,8 @@ function CompleteProfile() {
               </label>
               <select
                 name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={handleChange}
                 id="bloodGroup"
                 className="w-full px-4 py-2 border rounded-xl"
               >
@@ -275,10 +290,43 @@ function CompleteProfile() {
             </div>
             <div>
               <label className="block mb-1 text-sm font-medium">
-                Allergies
+                Past Diseases
               </label>
               <input
-                name="allergies"
+                name="pastDiseases"
+                value={formData.pastDiseases}
+                placeholder="Enter Past Diseases"
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-xl"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium">
+                Lifestyle Habits
+              </label>
+              <select
+                name="lifestyleHabits"
+                value={formData.lifestyleHabits}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-xl"
+              >
+                <option value="">Select an option</option>
+                <option value="Non-smoker / Non-drinker">
+                  Non-smoker / Non-drinker
+                </option>
+                <option value="Smoker">Smoker</option>
+                <option value="Drinker">Drinker</option>
+                <option value="Smoker and Drinker">Smoker and Drinker</option>
+              </select>
+            </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium">
+                Chronic Diseases
+              </label>
+              <input
+                name="chronicDiseases"
+                value={formData.chronicDiseases}
+                placeholder="Chronic Diseases"
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-xl"
               />
@@ -289,6 +337,7 @@ function CompleteProfile() {
               </label>
               <input
                 name="allergies"
+                placeholder="Allergies"
                 value={formData.allergies}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-xl"
@@ -296,50 +345,13 @@ function CompleteProfile() {
             </div>
             <div className="md:col-span-2">
               <label className="block mb-1 text-sm font-medium">
-                Previous Conditions
+                Family Medical History
               </label>
               <textarea
-                name="conditions"
+                name="familyMedHistory"
+                placeholder="Family Medical History"
                 rows={3}
-                value={formData.conditions}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-xl"
-              />
-            </div>
-          </div>
-        );
-
-      case 2:
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1 text-sm font-medium">
-                Occupation
-              </label>
-              <input
-                name="occupation"
-                value={formData.occupation}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-xl"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">
-                Emergency Contact
-              </label>
-              <input
-                name="emergencyContact"
-                value={formData.emergencyContact}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-xl"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block mb-1 text-sm font-medium">Notes</label>
-              <textarea
-                name="notes"
-                rows={3}
-                value={formData.notes}
+                value={formData.familyMedHistory}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-xl"
               />
@@ -354,16 +366,12 @@ function CompleteProfile() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
-      {errorMsg && (
-        <div className="bg-red-100 text-red-700 px-4 py-2 mb-4 rounded-lg border border-red-300 w-full max-w-2xl text-sm">
-          {errorMsg}
-        </div>
-      )}
-
       <div className="relative mb-8 w-full max-w-2xl">
         <div
-          className="absolute top-[45%] left-[22%] h-1 w-full bg-green-500 z-20 transition-all duration-300"
-          style={{ width: `${(step / (steps.length - 1)) * 60}%` }}
+          className="absolute top-[45%] left-[25%] h-1 w-full bg-green-500 z-20 transition-all duration-300 cursor-pointer rounded-3xl"
+          style={{
+            width: step === 0 ? "5%" : `${(step / (steps.length - 1)) * 50}%`,
+          }}
         />
         <div className="flex justify-between items-center w-full bg-white px-8 p-4 rounded-xl shadow-xl relative">
           {steps.map((s, i) => (
@@ -388,13 +396,19 @@ function CompleteProfile() {
         </div>
       </div>
 
+      {errorMsg && (
+        <div className="bg-red-100 text-red-700 px-4 py-2 mb-4 rounded-lg border border-red-300 w-full max-w-2xl text-sm transition-opacity duration-500 ease-in-out sticky z-22 top-[10vh]">
+          {errorMsg}
+        </div>
+      )}
+
       <div className="bg-white w-full max-w-2xl rounded-2xl shadow-xl p-8 space-y-6">
         <form className="space-y-6">{renderStep()}</form>
         <div className="flex justify-between">
           <button
             onClick={prevStep}
             disabled={step === 0}
-            className="px-6 py-2 rounded-xl bg-gray-300 text-gray-700 hover:bg-gray-400 disabled:opacity-50"
+            className="px-6 py-2 rounded-xl bg-gray-300 text-gray-700 hover:bg-gray-400 disabled:opacity-50 cursor-pointer"
           >
             Previous
           </button>
@@ -402,7 +416,7 @@ function CompleteProfile() {
           {step < steps.length - 1 ? (
             <button
               onClick={nextStep}
-              className="px-6 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700"
+              className="px-6 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer"
             >
               Next
             </button>
@@ -411,7 +425,7 @@ function CompleteProfile() {
               onClick={() => {
                 if (validateStep()) console.log("Submit:", formData);
               }}
-              className="px-6 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700"
+              className="px-6 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 cursor-pointer"
             >
               Submit
             </button>
