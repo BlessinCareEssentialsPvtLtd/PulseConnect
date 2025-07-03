@@ -256,5 +256,38 @@ router.post("/check-username", async (req, res) => {
 });
 
 
+// === Doctor Search by Name ===
+router.get("/doctors", async (req, res) => {
+  const { search } = req.query;
+
+  if (!search) {
+    return res.status(400).json({ message: "Search query is required" });
+  }
+
+  try {
+    const doctors = await Doctor.find({
+      name: { $regex: search, $options: "i" }, // case-insensitive match
+    }).limit(10); // optional: limit results
+
+  // Return only safe public data
+  const result = doctors.map((doc) => ({
+      _id: doc._id,
+      name: doc.name,
+      specialization: doc.specialization,
+      uniqueId: doc.uniqueId,
+      photo: doc.photo,
+      place: `${doc.place}, ${doc.city}, ${doc.district}, ${doc.state}, ${doc.nation}`, // 👈 full address
+  }));
+
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Doctor search error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
 
 export default router;

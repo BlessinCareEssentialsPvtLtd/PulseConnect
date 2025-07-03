@@ -20,7 +20,8 @@ const doctorSchema = new mongoose.Schema({
   taluka: String,
   district: String,
   state: String,
-  nation: String
+  nation: String,
+  photo: { type: String }, 
 });
 
 export default mongoose.model("Doctor", doctorSchema);
