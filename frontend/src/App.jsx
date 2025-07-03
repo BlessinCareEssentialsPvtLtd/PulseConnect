@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import RightSideProfile from "./components/RightSideProfile";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import Fitness from "./components/Fitness";
+import Records from "./pages/Records";
 
 function App() {
   const [showProfileComponent, setShowProfileComponent] = useState(false);
@@ -20,14 +21,16 @@ function App() {
       <Navbar />
       <div className="flex flex-1 min-w-full bg-[#e9f8ff] h-[calc(100vh-64px)]">
         {/* Sidebar and Fitness components taking full height */}
-        <Sidebar toggleProfileFunction={toggleProfileComponent} />
+        <Sidebar  toggleProfileFunction={toggleProfileComponent} />
+        {/* <Records/> */}
         {/* <Fitness /> */}
         <Dashboard
           showProfile={showProfileComponent}
           toggleProfileFunction={toggleProfileComponent}
         />
-        {/* Profile Section */}
+
         {/* <DoctorDashboard /> */}
+
         <AnimatePresence mode="wait">
           {showProfileComponent && (
             <motion.div

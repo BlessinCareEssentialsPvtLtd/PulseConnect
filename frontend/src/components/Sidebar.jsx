@@ -63,12 +63,12 @@ function Sidebar({ toggleProfileFunction }) {
   ];
 
   return (
-    <div className="w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-[#99bbff] shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto ">
+    <div className="hidden md:inline w-[48px] md:w-[80px] lg:w-[20vw] h-screen p-1 md:p-4 bg-[#4885ff] shadow-lg z-[6] fixed overflow-y-scroll lg:overflow-y-auto ">
       <div className="flex flex-col h-full items-center justify-center gap-8 lg:justify-start">
         {/* Left Section: Logo */}
-        <div className="flex lg:items-center justify-center text-blue-800 gap-3 w-full h-20 items-start lg:h-auto">
-          <ActivityIcon className="text-blue-800 w-8 h-8" />
-          <h1 className="font-mono font-semibold text-xl hidden lg:block">
+        <div className="flex lg:items-center justify-center text-white  gap-3 w-full h-20 items-start lg:h-auto">
+          <ActivityIcon className="text-white w-8 h-8" />
+          <h1 className="font-mono  font-semibold text-xl hidden lg:block">
             PulseConnect
           </h1>
         </div>
@@ -93,7 +93,7 @@ function Sidebar({ toggleProfileFunction }) {
         </div>
 
         {/* Navigation */}
-        <ul className="flex flex-col gap-4 w-full text-gray-800 text-sm lg:text-base font-medium justify-center">
+        <ul className="flex flex-col gap-4 w-full text-white text-sm lg:text-base font-medium justify-center">
           {navItems.map((item, index) => (
             <li
               key={index}
@@ -101,14 +101,14 @@ function Sidebar({ toggleProfileFunction }) {
                 item.subMenu ? "overflow-hidden " : ""
               } ${
                 item.label === currentSelected
-                  ? " bg-blue-800 hover:bg-blue-700"
-                  : "hover:bg-[#b3ccff]"
+                  ? " bg-[#b3ccff] hover:bg-[#b3ccff]/80"
+                  : "hover:bg-[#b3ccff] hover:text-gray-900"
               }`}
               onClick={() => setCurrentSelected(item.label)}
             >
               <div
                 className={`flex items-center justify-center lg:justify-start gap-2 w-full ${
-                  item.label === currentSelected ? " text-white" : ""
+                  item.label === currentSelected ? " text-gray-900" : ""
                 } `}
                 onClick={() =>
                   item.subMenu &&
@@ -120,8 +120,8 @@ function Sidebar({ toggleProfileFunction }) {
                 <item.icon
                   size={24}
                   className={
-                    "text-blue-800" +
-                    `${item.label === currentSelected ? " text-white" : ""}`
+                    "text-gray-900" +
+                    `${item.label === currentSelected ? " text-gray-900" : "text-white"}`
                   }
                 />
                 <span className="hidden lg:block">{item.label}</span>
@@ -134,8 +134,8 @@ function Sidebar({ toggleProfileFunction }) {
                         : ""
                     } ${
                       item.label === currentSelected
-                        ? " text-white"
-                        : "text-blue-800"
+                        ? " text-gray-900"
+                        : "text-white"
                     }`}
                   />
                 )}

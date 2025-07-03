@@ -37,9 +37,10 @@ const Appointments = () => {
   const selectedEvents = getEventsForDate(selectedDate);
 
   return (
-    <div className="flex flex-wrap justify-evenly gap-4 ">
+    <div className="flex flex-col md:flex-row justify-evenly gap-4 ">
       {/* Calendar */}
-      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff] p-2 ">
+      <div className="flex md:inline justify-center w-full md:w-max">
+      <section className="md:w-[250px] w-[80%] h-[40vw] md:h-[250px] rounded-lg bg-[#f5fbff] p-2 ">
         <Calendar
           localizer={localizer}
           events={events}
@@ -65,9 +66,10 @@ const Appointments = () => {
           className="compact-calendar"
         />
       </section>
+      </div>
 
       {/* Appointments */}
-      <section className="w-[250px] h-[250px] rounded-lg bg-[#f5fbff]  p-3 overflow-y-auto text-[13px]">
+      <section className="md:w-[250px] md:h-[250px] rounded-lg bg-[#f5fbff]  p-3 overflow-y-auto text-[13px]">
         <h1 className="font-semibold text-base flex items-center gap-1">
           <CalendarCheck size={14} />
           Appointments

@@ -101,7 +101,7 @@ const PulseCard = () => (
         </div>
       </div>
       {/* Quick links */}
-      <div className="h-full w-fill md:w-[15%] bg-white rounded-xl p-2 shadow-lg">
+      <div className="h-full w-full md:w-[15%] bg-white rounded-xl p-2 shadow-lg">
       <div className="flex md:flex-col flex-row justify-evenly items-center gap-4 my-2 h-full ">
         {quickLinks.map(({ icon: Icon, label }) => (
           <button key={label} className="flex flex-col items-center">
@@ -186,20 +186,27 @@ const HistoryCards = () => (
 export default function Dashboard({ showProfile, toggleProfileFunction }) {
   return (
     <Layout>
-      <div className="w-[90%] p-6 grid grid-cols-1 md:grid-cols-2  md:grid-rows-2 gap-6 md:h-[calc(100vh-70px)]">
-        <div className="rounded-xl h-max md:h-full w-full">
-          <PulseCard />
+      {/*By flex*/}
+      <div className="flex flex-col w-[90%] bg-[#e9f8ff] p-2">
+        <div className="flex w-full max-[780px]:flex-col mt-4">
+          <div className="w-full md:w-[48%] ml-4">
+            <PulseCard />
+          </div>
+          <div className="w-full md:w-[48%] ml-4 mt-4 md:mt-0">
+            <Timeline />
+          </div>
         </div>
-        <div className="bg-white rounded-xl h-max md:h-full w-full shadow-lg p-2">
-          <Timeline />
-        </div>
-        <div className="bg-white grid place-items-center rounded-xl shadow-lg p-2 h-max md:h-full w-full">
-          <Appointments />
-        </div>
-        <div className="bg-white rounded-xl p-2 h-max md:h-full w-full shadow-lg ">
-          <HistoryCards />
+        <div className="flex w-full max-[780px]:flex-col mt-4">
+          <div className="w-full md:w-[48%] ml-4">
+            <Appointments />
+          </div>
+          <div className="w-full md:w-[48%] ml-4 mt-4 md:mt-0">
+            <HistoryCards />
+          </div>
         </div>
       </div>
+      {/*By flex*/}
+
 
 
 
