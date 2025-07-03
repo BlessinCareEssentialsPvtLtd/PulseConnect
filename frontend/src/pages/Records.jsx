@@ -153,9 +153,9 @@ const GroupedFileManager = () => {
 
   return (
     <Layout>
-      <div className="w-full bg-gray-50 p-8">
+      <div className="w-full m-4 font-sans bg-[#E9F8FF] p-8">
         {/* Header with Search */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4 mx-4">
           <h2 className="text-3xl font-semibold text-center sm:text-left">
             📁 Patient File Records
           </h2>
@@ -173,7 +173,7 @@ const GroupedFileManager = () => {
 
         {/* Files Section */}
         {hasResults ? (
-          <div className="space-y-10 max-w-7xl mx-auto">
+          <div className="space-y-10 max-w-7xl mx-4">
             {Object.entries(filteredGroupedFiles).map(([date, files]) => (
               <div
                 key={date}
