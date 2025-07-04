@@ -201,7 +201,7 @@ const renderCard = (a) => (
 
       {/* Middle: Appointment metadata */}
       <div className="text-sm text-gray-700 space-y-2">
-        <div><span className="font-medium text-gray-500">📝 Notes:</span> {a.notes || "No notes available."}  </div>
+        <div className="h-25 w-75 rounded-full"><span className="font-medium text-gray-500">📝 Notes:</span> {a.notes || "No notes available."}  </div>
       </div>
 
       {/* Right: Notes */}
