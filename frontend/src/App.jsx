@@ -6,8 +6,10 @@ import "./App.css";
 import { AnimatePresence, motion } from "motion/react";
 import RightSideProfile from "./components/RightSideProfile";
 import DoctorDashboard from "./pages/DoctorDashboard";
-import Fitness from "./components/Fitness";
-import AppointmentSection from "./components/AppointmentSection";
+import Fitness from "./pages/Fitness";
+import AppointmentSection from "./pages/AppointmentSection";
+import HealthNews from "./pages/HealthNews";
+import InsurancePage from "./pages/InsurancePage";
 
 
 function App() {
@@ -26,7 +28,7 @@ function App() {
         {/* <Fitness /> */}
         {/*Appointment*/}
         <div className="ml-[20vw] w-[80vw] px-4 py-6 overflow-y-auto">
-         <AppointmentSection />
+         <InsurancePage/>
         </div>
         {/* Profile Section */}
         {/* <DoctorDashboard /> */}
