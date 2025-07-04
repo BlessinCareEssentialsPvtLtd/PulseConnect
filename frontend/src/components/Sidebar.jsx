@@ -14,6 +14,12 @@ import {
   CalendarClock,
   Clock,
   ActivityIcon,
+  NewspaperIcon,
+  Heart,
+  Shield,
+  ShieldAlertIcon,
+  ShieldAlert,
+  ShieldPlus,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -58,6 +64,16 @@ function Sidebar({ toggleProfileFunction }) {
     {
       label: "Fitness",
       icon: Dumbbell,
+      subMenu: null,
+    },
+    {
+      label: "Insurance",
+      icon: ShieldPlus,
+      subMenu: null,
+    },
+    {
+      label: "PulseNews",
+      icon: NewspaperIcon,
       subMenu: null,
     },
   ];
