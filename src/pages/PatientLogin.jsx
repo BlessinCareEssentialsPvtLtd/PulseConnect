@@ -25,6 +25,7 @@ const PatientLogin = () => {
       });
 
       toast.success(`Welcome ${res.data.patient.name}`);
+      localStorage.setItem("patientData", JSON.stringify(res.data.patient)); 
       navigate("/dashboard/patient", {
         state: {
           patient: res.data.patient,

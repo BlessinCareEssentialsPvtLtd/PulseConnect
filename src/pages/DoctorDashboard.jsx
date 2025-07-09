@@ -1,35 +1,41 @@
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
+import DashboardLayout from "../layout/DashboardLayout";
+import DoctorProfileCard from "../components/DoctorProfileCard";
+import DoctorStats from "../components/DoctorStats";
+import DoctorAppointments from "../components/DoctorAppointments";
+import HistoryTilesD from "../components/HistoryTilesD";
 
 const DoctorDashboard = () => {
   const location = useLocation();
-  const { doctor } = location.state || {};
+  const [doctor, setDoctor] = useState(null);
 
-  console.log("Location state:", location.state);
+  useEffect(() => {
+    const docData = location.state?.doctor;
+    if (docData) {
+      setDoctor(docData);
+      localStorage.setItem("doctorData", JSON.stringify(docData));
+    } else {
+      const stored = localStorage.getItem("doctorData");
+      if (stored) setDoctor(JSON.parse(stored));
+    }
+  }, [location.state]);
 
-  
   if (!doctor) {
-    return <div className="text-center mt-10 text-red-500">No doctor data found.</div>;
+    return <div className="text-center mt-20 text-red-600">No doctor data found.</div>;
   }
 
-  const fieldOrder = [
-    "name", "email", "gender", "specialization", "dob",
-    "uniqueId", "place", "city", "taluka", "district", "state", "nation"
-  ];
-
-
   return (
-   <div className="max-w-2xl mx-auto mt-10 p-8 shadow-lg rounded-xl bg-blue-50">
-      <h1 className="text-2xl font-bold mb-6 text-blue-800 text-center">Doctor Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {fieldOrder.map((field) => (
-          <div key={field} className="bg-white p-4 rounded shadow text-gray-700">
-            <strong className="text-blue-700 capitalize">{field}:</strong>{" "}
-            <span>{doctor[field]}</span>
-          </div>
-        ))}
+    <DashboardLayout patient={doctor}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DoctorProfileCard doctor={doctor} />
+        <DoctorStats doctor={doctor} />
       </div>
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <DoctorAppointments doctorId={doctor.uniqueId} />
+        <HistoryTilesD isDoctor={true} />
+      </div>
+    </DashboardLayout>
   );
 };
 

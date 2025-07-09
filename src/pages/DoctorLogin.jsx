@@ -18,7 +18,7 @@ const DoctorLogin = () => {
   }
 
   try {
-    const res = await axios.post("http://localhost:5000/api/auth/login/doctor", {
+    const res = await axios.post("/api/auth/login/doctor", {
       identifier,
       password,
       method: loginMethod,
@@ -27,6 +27,7 @@ const DoctorLogin = () => {
     // ✅ Check if res.data and res.data.doctor exist before using them
     if (res.data?.doctor) {
       toast.success(`Welcome Dr. ${res.data.doctor.name}`);
+      // console.log(res.data.doctor);
       navigate("/dashboard/doctor", {
         state: {
           doctor: res.data.doctor,

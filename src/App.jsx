@@ -10,6 +10,7 @@ import DoctorDashboard from "./pages/DoctorDashboard"
 import DoctorLogin from "./pages/DoctorLogin";
 import DoctorSignup from "./pages/DoctorSignup";
 import VerifyOTP from "./pages/VerifyOTP";
+import AppointmentRequest from "./pages/AppointmentRequest.jsx"
 // import other pages as needed
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/signup/patient" element={<PatientSignup />} />
         <Route path="/login/patient" element={<PatientLogin />} />
         <Route path="/dashboard/patient" element={<PatientDashboard />} /> 
+        <Route path="/appointment-request" element={<AppointmentRequest />} />
 
         {/* Add other routes here */}
       </Routes>

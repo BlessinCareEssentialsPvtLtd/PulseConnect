@@ -19,6 +19,7 @@ const PatientDashboard = () => {
     gender: location.state.patient.gender,
     place: `${location.state.patient.place}, ${location.state.patient.city},${location.state.patient.district}, ${location.state.patient.state}, ${location.state.patient.nation}`,
     photo: location.state.patient.photo,
+    experience : location.state.patient.experience,
   };
 
   console.log("Full Patient Data:", location.state.patient);

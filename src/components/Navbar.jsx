@@ -3,6 +3,7 @@ import {  Search, LogOut, AlertTriangle, Bell, Sun, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { div } from "framer-motion/client";
+import blueTick from '../assets/image.png';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Navbar = () => {
   }, [query]);
 
   const handleLogout = () => {
-    navigate("/login/patient");
+    navigate("/");
   };
 
  const handleSelectDoctor = (doctor) => {
@@ -115,43 +116,68 @@ const Navbar = () => {
      {/* ================================
           Doctor Info Modal
         ================================= */}
-      {showModal && selectedDoctor && (
-  <div className="fixed inset-0 backdrop-blur-sm bg-white/10 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-xl p-6 w-[90%] sm:w-[400px] relative border border-gray-200">
-      {/* Close button */}
+{showModal && selectedDoctor && (
+  <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-xl shadow-2xl w-[95%] max-w-2xl relative p-6">
+      {/* Close Button */}
       <button
         onClick={() => setShowModal(false)}
-        className="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+        className="absolute top-4 right-4 text-gray-400 hover:text-red-500"
       >
-        <X size={20} />
+        ✕
       </button>
 
-      {/* Doctor Info */}
-
+      {/* Doctor Header */}
+      <div className="flex items-center gap-6 border-b pb-4">
         <img
-                src={selectedDoctor.photo}
-                alt="Patient"
-                className="w-14 h-14 rounded-full object-cover border-2 border-blue-400"
-              />
+          src={selectedDoctor.photo}
+          alt="Doctor"
+          className="w-24 h-24 rounded-lg object-cover border-2 border-blue-500"
+        />
+        <div>
+          <h2 className="text-2xl font-bold text-blue-800">{selectedDoctor.name}  {selectedDoctor.isVerified === true ? (
+    <img
+      src={blueTick}
+      alt="Verified"
+      className="inline-block w-5 h-5 ml-2 align-middle"
+    />
+  ) : (
+    <span
+      className="inline-block w-3 h-3 ml-2 rounded-full bg-red-500 align-middle"
+      title="Not Verified"
+    />
+  )}</h2>
+          <p className="text-sm text-gray-700">{selectedDoctor.degree}</p>
+          <p className="text-sm text-gray-700">{selectedDoctor.email}</p>
+          <p className="text-sm text-gray-700">
+            <strong>Specialization:</strong> {selectedDoctor.specialization || "N/A"}
+          </p>
+        </div>
+      </div>
 
-      <h2 className="text-xl font-semibold text-blue-700 mb-2">
-        {selectedDoctor.name}
-      </h2>
-      <p className="text-gray-700 mb-1">
-        <strong>Specialization:</strong> {selectedDoctor.specialization || "N/A"}
-      </p>
-      <p className="text-gray-700 mb-1">
-        <strong>Doctor ID:</strong> {selectedDoctor.uniqueId}
-      </p>
-      <p className="text-gray-700">
-        <strong>Address:</strong>{" "}
-        {selectedDoctor.place || "Not available"}
-      </p>
+      {/* Details Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 text-center">
+        <div className="bg-blue-50 rounded-md p-3">
+          <p className="text-sm text-gray-500">Experience</p>
+          <p className="font-semibold text-blue-800">{selectedDoctor.experience || "N/A"} years</p>
+        </div>
+        <div className="bg-blue-50 rounded-md p-3">
+          <p className="text-sm text-gray-500">Doctor ID</p>
+          <p className="font-semibold text-blue-800">{selectedDoctor.uniqueId}</p>
+        </div>
+        <div className="bg-blue-50 rounded-md p-3 col-span-2 sm:col-span-2">
+          <p className="text-sm text-gray-500">Address</p>
+          <p className="font-semibold text-blue-800">
+            {selectedDoctor.place}
+          </p>
+        </div>
+      </div>
 
-      <div className="mt-4 text-right">
+      {/* Close Button */}
+      <div className="mt-6 flex justify-end">
         <button
           onClick={() => setShowModal(false)}
-          className="px-4 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm"
+          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
           Close
         </button>
@@ -159,6 +185,7 @@ const Navbar = () => {
     </div>
   </div>
 )}
+
 
     </>
 

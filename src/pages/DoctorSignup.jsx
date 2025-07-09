@@ -19,6 +19,7 @@ const DoctorSignup = () => {
     email: "",
     gender: "",
     specialization: "",
+    degree: "",
     dob: "",
     drId: "",
     password: "",
@@ -28,7 +29,8 @@ const DoctorSignup = () => {
     district: "",
     state: "",
     nation: "India",
-    photo: "", 
+    photo: "",
+    experience: "",
   });
 
   const [districtOptions, setDistrictOptions] = useState([]);
@@ -185,6 +187,26 @@ const convertToBase64 = (file, callback) => {
 
         {step === 2 && (
           <>
+          <select
+  name="degree"
+  value={formData.degree}
+  onChange={handleChange}
+  required
+  className={inputClass}
+>
+  <option value="">Select Degree</option>
+  <option value="MBBS">MBBS</option>
+  <option value="MD">MD</option>
+  <option value="MS">MS</option>
+  <option value="BDS">BDS</option>
+  <option value="MDS">MDS</option>
+  <option value="DM">DM</option>
+  <option value="DNB">DNB</option>
+  <option value="BHMS">BHMS</option>
+  <option value="BAMS">BAMS</option>
+  <option value="Other">Other</option>
+</select>
+
             <input
               type="text"
               name="specialization"
@@ -194,6 +216,23 @@ const convertToBase64 = (file, callback) => {
               required
               className={inputClass}
             />
+          <select
+  name="experience"
+  value={formData.experience}
+  onChange={handleChange}
+  required
+  className={inputClass}
+>
+  <option value="">Select Years of Experience</option>
+  {[...Array(10).keys()].map((year) => (
+    <option key={year} value={year}>
+      {year} year{year !== 1 && 's'}
+    </option>
+  ))}
+  <option value="10+">10+ years</option>
+</select>
+
+
            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
