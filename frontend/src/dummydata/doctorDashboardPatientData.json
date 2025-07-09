@@ -1,41 +1,47 @@
 [
   {
-    "userId": 1,
-    "PatientName": "John Smith",
-    "CheckUpType": "General Checkup",
-    "Time": "10:00 AM",
-    "Age": 45,
-    "ContactNumber": "123-456-7890",
-    "Complain": ["Heart Pain", "High Pressure", "Dizziness", "Fatigue"],
-    "LastCheckup": "24.09.2023",
-    "Prescription": "ghsdhig38yth",
-    "DoctorNotes": "Follow up in 2 weeks",
-    "Documents": ["Document1.pdf", "Document2.pdf", "Document3.pdf"]
-  },
-  {
-    "userId": 2,
-    "PatientName": "Jane Doe",
-    "CheckUpType": "Dental Checkup",
-    "Time": "11:00 AM",
+    "PatientName": "Sarah Johnson",
     "Age": 34,
-    "ContactNumber": "987-654-3210",
-    "Complain": ["Toothache", "Sensitivity"],
-    "LastCheckup": "15.09.2023",
-    "Prescription": "abc123xyz",
-    "DoctorNotes": "Schedule cleaning in 6 months",
-    "Documents": ["Xray1.pdf", "Xray2.pdf"]
+    "Gender": "Female",
+    "Phone": "+1 (555) 123-4567",
+    "Email": "sarah.johnson@email.com",
+    "status": "Active",
+    "LastVisit": "2024-06-15"
   },
   {
-    "userId": 3,
-    "PatientName": "Michael Brown",
-    "CheckUpType": "Eye Examination",
-    "Time": "12:00 PM",
+    "PatientName": "David Lee",
+    "Age": 45,
+    "Gender": "Male",
+    "Phone": "+1 (555) 987-6543",
+    "Email": "david.lee@email.com",
+    "status": "Inactive",
+    "LastVisit": "2023-11-22"
+  },
+  {
+    "PatientName": "Aisha Patel",
     "Age": 29,
-    "ContactNumber": "456-789-1234",
-    "Complain": ["Blurred Vision", "Eye Strain"],
-    "LastCheckup": "10.09.2023",
-    "Prescription": "lens456def",
-    "DoctorNotes": "Use prescribed glasses",
-    "Documents": ["Prescription.pdf"]
+    "Gender": "Female",
+    "Phone": "+1 (555) 321-7890",
+    "Email": "aisha.patel@email.com",
+    "status": "Active",
+    "LastVisit": "2024-12-05"
+  },
+  {
+    "PatientName": "Michael Chen",
+    "Age": 52,
+    "Gender": "Male",
+    "Phone": "+1 (555) 222-3333",
+    "Email": "michael.chen@email.com",
+    "status": "Active",
+    "LastVisit": "2025-01-18"
+  },
+  {
+    "PatientName": "Ritika Sharma",
+    "Age": 38,
+    "Gender": "Female",
+    "Phone": "+91 98765 43210",
+    "Email": "ritika.sharma@email.com",
+    "status": "Inactive",
+    "LastVisit": "2024-08-12"
   }
 ]
