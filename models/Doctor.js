@@ -9,19 +9,38 @@ const doctorSchema = new mongoose.Schema({
   },
   gender: String,
   specialization: String,
+  degree: {
+    type: String,
+    required: true,
+  },
   dob: String,
   drId: String,
   password: String,
-  isVerified: { type: Boolean, default: false },
-  uniqueId: { type: String, unique: true },
-  username: { type: String, unique: true },
+  isVerified: { 
+    type: Boolean, 
+    default: false 
+  },
+  uniqueId: { 
+    type: String, 
+    unique: true 
+  },
+  username: { 
+    type: String, 
+    unique: true 
+  },
   place: String,
   city: String,
   taluka: String,
   district: String,
   state: String,
   nation: String,
-  photo: { type: String }, 
+  photo: { 
+    type: String 
+  },
+  experience: {
+    type: Number,
+    required: true,
+    },
 });
 
 export default mongoose.model("Doctor", doctorSchema);

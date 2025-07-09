@@ -151,6 +151,7 @@ router.post("/login/doctor", async (req, res) => {
 
     if (!doctor.isVerified) return res.status(403).json({ message: "Account not verified" });
 
+    // ✅ Make sure to send all fields needed by the dashboard
     res.status(200).json({
       message: "Login successful",
       doctor: {
@@ -159,6 +160,8 @@ router.post("/login/doctor", async (req, res) => {
         email: doctor.email,
         gender: doctor.gender,
         specialization: doctor.specialization,
+        experience: doctor.experience,
+        degree: doctor.degree,
         dob: doctor.dob,
         place: doctor.place,
         city: doctor.city,
@@ -166,12 +169,15 @@ router.post("/login/doctor", async (req, res) => {
         district: doctor.district,
         state: doctor.state,
         nation: doctor.nation,
+        photo: doctor.photo, // ✅ fixed
+        isVerified: doctor.isVerified, // ✅ for blue tick
       },
     });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 router.post("/login/patient", async (req, res) => {
@@ -203,6 +209,7 @@ router.post("/login/patient", async (req, res) => {
     res.status(200).json({
       message: "Login successful",
        patient: {
+          _id: patient._id,
           name: patient.name,
           username: patient.username,   // <-- ADD THIS
           email: patient.email,
@@ -273,10 +280,14 @@ router.get("/doctors", async (req, res) => {
   const result = doctors.map((doc) => ({
       _id: doc._id,
       name: doc.name,
+      email: doc.email,
+      experience: doc.experience,
       specialization: doc.specialization,
       uniqueId: doc.uniqueId,
       photo: doc.photo,
       place: `${doc.place}, ${doc.city}, ${doc.district}, ${doc.state}, ${doc.nation}`, // 👈 full address
+      degree : doc.degree,
+      isVerified : doc.isVerified,
   }));
 
 
