@@ -80,7 +80,7 @@ export const deleteHealthRecord = async (req, res) => {
     await HealthRecord.findByIdAndDelete(recordId);
 
     res.status(200).json({ success: true, message: 'Record deleted successfully' });
-
+    console.log('Record deleted successfully:', recordId);
   } catch (error) {
     console.error('Delete error:', error.message);
     res.status(500).json({ success: false, error: 'Failed to delete health record' });

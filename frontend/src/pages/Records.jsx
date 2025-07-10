@@ -1,340 +1,278 @@
-import React, { useEffect, useState } from "react";
-import {
-  FileText,
-  FileImage,
-  FileDigit,
-  FileType2,
-  Search,
-  MoreVertical,
-  FileWarning,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { FileText, Search, CheckCircle, XCircle, Clock, UploadCloud } from "lucide-react";
 import moment from "moment";
 import Layout from "../components/layout";
 
-// Sample file data
-const filesData = [
-  {
-    id: 1,
-    fileName: "X-ray Image",
-    type: "jpg",
-    uploadedAt: "2025-07-03T10:15:00",
-    url: "/assets/xray.jpg",
-  },
-  {
-    id: 2,
-    fileName: "Sugar Report.pdf",
-    type: "pdf",
-    uploadedAt: "2025-07-03T11:45:00",
-  },
-  {
-    id: 3,
-    fileName: "Diabetes Test Result.docx",
-    type: "docx",
-    uploadedAt: "2025-07-02T08:30:00",
-  },
-  {
-    id: 4,
-    fileName: "Tuberculosis_Scan.png",
-    type: "png",
-    uploadedAt: "2025-07-02T17:30:00",
-    url: "/assets/tb_scan.png",
-  },
-  {
-    id: 5,
-    fileName: "Blood Test - Hemoglobin.pdf",
-    type: "pdf",
-    uploadedAt: "2025-07-01T09:00:00",
-  },
-  {
-    id: 6,
-    fileName: "notes.txt",
-    type: "txt",
-    uploadedAt: "2025-07-01T14:20:00",
-  },
-  {
-    id: 7,
-    fileName: "Covid19 RT-PCR Result.jpg",
-    type: "jpg",
-    uploadedAt: "2025-06-30T16:40:00",
-    url: "/assets/rtpcr.jpg",
-  },
-  {
-    id: 8,
-    fileName: "Cancer Biopsy Report.pdf",
-    type: "pdf",
-    uploadedAt: "2025-06-29T10:10:00",
-  },
-  {
-    id: 9,
-    fileName: "Heart ECG Report.png",
-    type: "png",
-    uploadedAt: "2025-06-29T12:30:00",
-    url: "/assets/ecg.png",
-  },
-  {
-    id: 10,
-    fileName: "Allergy Test Results.docx",
-    type: "docx",
-    uploadedAt: "2025-06-28T09:15:00",
-  },
-  {
-    id: 11,
-    fileName: "Kidney Function Report.pdf",
-    type: "pdf",
-    uploadedAt: "2025-06-27T11:00:00",
-  },
-  {
-    id: 12,
-    fileName: "Liver Function Test.txt",
-    type: "txt",
-    uploadedAt: "2025-06-26T08:00:00",
-  },
-];
+// Helper to determine group label
+const getGroupLabel = (date) => {
+  const today = moment();
+  const uploaded = moment(date);
 
+  if (uploaded.isSame(today, "day")) return "Today";
+  if (uploaded.isSame(today.clone().subtract(1, "day"), "day")) return "Yesterday";
+  if (uploaded.isAfter(today.clone().subtract(7, "days"))) return "Earlier this week";
+  if (uploaded.isAfter(today.clone().subtract(14, "days"))) return "Last week";
+  if (uploaded.isSame(today, "month")) return "Earlier this month";
+  if (uploaded.isSame(today.clone().subtract(1, "month"), "month")) return "Last month";
+  return "Older";
+};
 
-// Group files by upload date
-const groupFilesByDate = (files) => {
-  const groups = {};
+// Group files by upload label
+const groupFiles = (files) => {
+  const grouped = {};
   files.forEach((file) => {
-    const date = moment(file.uploadedAt).format("YYYY-MM-DD");
-    if (!groups[date]) groups[date] = [];
-    groups[date].push(file);
+    const label = getGroupLabel(file.created_at);
+    if (!grouped[label]) grouped[label] = [];
+    grouped[label].push(file);
   });
-  return groups;
+  return grouped;
 };
 
-// Icon render logic
-const getFileIcon = (file) => {
-  if (["jpg", "jpeg", "png", "gif"].includes(file.type)) {
-    return (
-      <img
-        src={file.url}
-        alt={file.fileName}
-        className="h-12 w-12 object-cover rounded"
-      />
-    );
-  }
-  switch (file.type) {
-    case "pdf":
-      return <FileDigit className="text-red-500 h-12 w-12" />;
-    case "docx":
-      return <FileType2 className="text-blue-500 h-12 w-12" />;
-    case "txt":
-      return <FileText className="text-green-500 h-12 w-12" />;
-    default:
-      return <FileText className="text-gray-400 h-12 w-12" />;
-  }
-};
+const FileExplorerStyle = () => {
+  const [files, setFiles] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [formData, setFormData] = useState({
+    file: null,
+    fileName: "",
+    description: "",
+  });
 
-const GroupedFileManager = () => {
-  const [groupedFiles, setGroupedFiles] = useState({});
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showForm, setshowForm] = useState(false)
+  const PATIENT_ID = "64a4a9f1e3c8fa001234abcd";
 
   useEffect(() => {
-    const sortedFiles = [...filesData].sort(
-      (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
-    );
-    const grouped = groupFilesByDate(sortedFiles);
-    setGroupedFiles(grouped);
+    const fetchFiles = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await fetch(`http://localhost:5000/api/records/patient/${PATIENT_ID}`);
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          setFiles(data.records);
+        } else {
+          throw new Error(data.error || "Failed to fetch records.");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err.message);
+        setError("Error fetching health records.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFiles();
   }, []);
 
-  const [newFile, setNewFile] = useState({
-    fileName: "",
-    type: "",
-    url: "",
-  });
+  const filteredFiles = files.filter((file) =>
+    file.fileName.toLowerCase().includes(search.toLowerCase())
+  );
 
-  const handleChange = (e) => {
-    const { fileName, value } = e.target;
-    setNewFile((prev) => ({ ...prev, [fileName]: value }));
+  const grouped = groupFiles(filteredFiles);
+
+  const handleFormChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "file") {
+      setFormData({ ...formData, file: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleAddFile = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    if (!newFile.fileName || !newFile.type) {
-      alert("Please enter both name and type.");
+    if (!formData.file || !formData.fileName || !formData.description) {
+      alert("Please fill all fields.");
       return;
     }
 
-    const fileToAdd = {
-      id: Date.now(), // Unique ID
-      ...newFile,
-      uploadedAt: new Date().toISOString(),
-    };
+    try {
+      setUploading(true);
+      const data = new FormData();
+      data.append("file", formData.file);
+      data.append("fileName", formData.fileName);
+      data.append("description", formData.description);
+      data.append("patient_id", PATIENT_ID);
+      data.append("uploaded_by", PATIENT_ID); // optional static value
 
-    console.log("🆕 File to Add:", fileToAdd);
-    // 🔁 You can call a prop function or backend API here
+      const res = await fetch("http://localhost:5000/api/records/upload", {
+        method: "POST",
+        body: data,
+      });
 
-    // Clear the form
-    setNewFile({ fileName: "", type: "", url: "" });
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        setFiles((prev) => [...prev, result.record]);
+        setShowForm(false);
+        setFormData({ file: null, fileName: "", description: "" });
+      } else {
+        throw new Error(result.error || "Upload failed.");
+      }
+    } catch (err) {
+      alert("Error uploading file: " + err.message);
+    } finally {
+      setUploading(false);
+    }
   };
-
-  const filteredGroupedFiles = Object.entries(groupedFiles).reduce(
-    (acc, [date, files]) => {
-      const filtered = files.filter((file) =>
-        file.fileName.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      if (filtered.length > 0) acc[date] = filtered;
-      return acc;
-    },
-    {}
-  );
-
-
-const FORM = () => {
-  const handleOverlayClick = () => {
-    setshowForm(false);
-  };
-
-  const stopPropagation = (e) => {
-    e.stopPropagation(); // Prevent form clicks from closing the overlay
-  };
-
-  return (
-    <div
-      className="absolute h-full w-full top-10 left-0 bg-white/65 m-[-2rem] z-[1]"
-      onClick={handleOverlayClick}
-    >
-      <form
-        onClick={stopPropagation}
-        onSubmit={handleAddFile}
-        className="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto my-10 space-y-4"
-      >
-        <h2 className="text-2xl font-bold mb-2">➕ Add New File</h2>
-
-        {/* File Name */}
-        <div>
-          <label className="block text-gray-700">File Name</label>
-          <input
-            type="text"
-            name="name"
-            value={newFile.fileName}
-            onChange={handleChange}
-            className="mt-1 w-full border-2 border-gray-400 rounded px-3 py-2 focus:ring-4 focus:border-none focus:ring-blue-400"
-            placeholder="e.g., Project Report"
-          />
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block text-gray-700">Description</label>
-          <textarea
-            name="description"
-            value={newFile.description}
-            onChange={handleChange}
-            className="mt-1 w-full border-2 border-gray-400 rounded px-3 py-2 focus:ring-4 focus:border-none focus:ring-blue-400"
-            placeholder="Brief about the file..."
-            rows={3}
-          />
-        </div>
-
-
-        {/* File Upload */}
-        <div className="">
-          <label className="block text-gray-700">Upload File</label>
-          <input
-            type="file"
-            name="file"
-            onChange={handleChange}
-            className="mt-1 w-full border-2 cursor-pointer border-gray-400 p-2"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          Add File
-        </button>
-      </form>
-    </div>
-  );
-};
-
-
-  const hasResults = Object.keys(filteredGroupedFiles).length > 0;
 
   return (
     <Layout>
-      <div className="w-full m-4 font-sans bg-[#E9F8FF] p-8 relative flex flex-col items-center">
-            <div>
-              {/* Header with Search */}
-              <div className="flex w-full flex-col sm:flex-row justify-around items-center mb-10 gap-4 mx-4">
-                <h2 className="md:text-3xl text-2xl font-semibold text-center sm:text-left">
-                  📁 Patient File Records
-                </h2>
-                <div className="relative w-full sm:w-80 flex items-center gap-2 justify-around">
-                  <div>
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search files..."
-                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => setshowForm(!showForm)}
-                      className="bg-primary text-white p-2 rounded hover:bg-primary  whitespace-nowrap"
-                    >
-                      Add Files
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Files Section */}
-              {hasResults ? (
-                <div className="space-y-10 max-w-7xl mx-4">
-                  {Object.entries(filteredGroupedFiles).map(([date, files]) => (
-                    <div
-                      key={date}
-                      className="bg-white p-6 rounded-lg shadow-md border border-gray-100"
-                    >
-                      <h3 className="text-xl font-bold text-gray-800 mb-6">
-                        {moment(date).calendar(null, {
-                          sameDay: "[Today]",
-                          lastDay: "[Yesterday]",
-                          lastWeek: "dddd, MMM D",
-                          sameElse: "MMMM D, YYYY",
-                        })}
-                      </h3>
-
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        {files.map((file) => (
-                          <div
-                            key={file.id}
-                            className="aspect-square bg-gray-50 border border-gray-200 rounded-lg p-2 flex flex-col justify-around items-center hover:shadow transition"
-                          >
-                            <div>{getFileIcon(file)}</div>
-                            <section className="flex items-center justify-between w-full">
-                              <div className="text-sm font-medium text-center mt-2 text-gray-800 truncate w-full">
-                                {file.fileName}
-                              </div>
-                              <MoreVertical className="w-4 h-4 text-gray-400 mt-1 cursor-pointer hover:text-gray-600" />
-                            </section>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-[60vh] text-center text-gray-600">
-                  <FileWarning className="w-16 h-16 text-yellow-500 mb-4" />
-                  <h3 className="text-2xl font-semibold mb-2">No Records Found</h3>
-                  <p className="text-gray-500">Try searching with a different name.</p>
-                </div>
-              )}
+      <div className="w-full h-full bg-[#E9F8FF] flex flex-col justify-start md:ml-12 p-6 font-sans">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">📁 File Explorer</h2>
+          <div className="flex gap-2 items-center">
+            <div className="relative w-72">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search files..."
+                className="pl-10 pr-4 py-2 rounded-lg w-full focus:outline-none bg-white focus:ring-2 focus:ring-blue-500"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-            {showForm && <FORM />}
+            <button
+              onClick={() => setShowForm(!showForm)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-2 rounded-md"
+            >
+              <span className="flex justify-between items-center p-2 ">
+              <UploadCloud size={18} className="mr-2" />
+                Add Record
+              </span>
+            </button>
+          </div>
         </div>
+
+        {/* Upload Form */}
+        {showForm && (
+          <form
+            onSubmit={handleFormSubmit}
+            className="bg-white rounded-md shadow-md p-6 mb-6 border border-blue-200"
+          >
+            <div className="flex flex-col md:flex-row gap-4 mb-4">
+              <input
+                type="text"
+                name="fileName"
+                placeholder="Enter file name"
+                value={formData.fileName}
+                onChange={handleFormChange}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none"
+              />
+              <label className="flex-1 border border-gray-300 rounded px-4 py-2 text-center cursor-pointer text-gray-500 bg-white hover:bg-gray-100">
+                {formData.file ? formData.file.name : "Click to upload file"}
+                <input
+                  type="file"
+                  name="file"
+                  accept="*"
+                  onChange={handleFormChange}
+                  className="hidden"
+                />
+              </label>
+              <input
+                type="text"
+                name="description"
+                placeholder="Short description"
+                value={formData.description}
+                onChange={handleFormChange}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={uploading}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded flex items-center gap-2"
+              >
+                <UploadCloud size={18} />
+                {uploading ? "Uploading..." : "Upload"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Loading or Error */}
+        {loading ? (
+          <div className="text-center py-10 text-blue-500 font-medium">Loading records...</div>
+        ) : error ? (
+          <div className="text-center py-10 text-red-500 font-medium">{error}</div>
+        ) : (
+          <div className="overflow-auto bg-[#E9F8FF] ml-2 rounded-lg shadow-sm">
+            <table className="min-w-full text-sm text-left text-white">
+              <thead className="bg-gray-100 text-blue-900">
+                <tr>
+                  <th className="p-3 font-medium w-10"></th>
+                  <th className="p-3 font-medium">Name</th>
+                  <th className="p-3 font-medium">Date Uploaded</th>
+                  <th className="p-3 font-medium">Description</th>
+                  <th className="p-3 font-medium text-right">Size</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(grouped).map((groupLabel) => (
+                  <React.Fragment key={groupLabel}>
+                    <tr className="bg-blue-50">
+                      <td colSpan="5" className="p-2 m-2 text-blue-900 uppercase text-xs tracking-wide">
+                        {groupLabel}
+                      </td>
+                    </tr>
+                    {grouped[groupLabel].map((file) => (
+                      <tr key={file._id}>
+                        <td colSpan="5" className="p-2">
+                          <a
+                            href={file.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center bg-[#E9F8FF] hover:bg-white/40 text-gray-700 px-3 py-3 p-4 rounded transition cursor-pointer"
+                            style={{
+                              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.08)",
+                            }}
+                          >
+                            <div className="w-8 flex justify-center">
+                              <FileText className="w-5 h-5 text-blue-500" />
+                            </div>
+                            <div className="flex-1 flex items-center gap-2 pl-2">
+                              {file.fileName}
+                              {file.isVerified === true && (
+                                <CheckCircle size={18} className="text-green-600" />
+                              )}
+                              {file.isVerified === false && (
+                                <XCircle size={18} className="text-red-600" />
+                              )}
+                              {file.isVerified === undefined && (
+                                <Clock size={18} className="text-blue-600 bg-gray-200 rounded-full p-[2px]" />
+                              )}
+                            </div>
+                            <div className="w-[220px]">
+                              {moment(file.created_at).format("MMM D, YYYY h:mm A")}
+                            </div>
+                            <div className="w-[200px] text-sm">{file.description}</div>
+                            <div className="text-right w-[100px]">-</div>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
+
+                {filteredFiles.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="p-6 text-center text-gray-500">
+                      No files found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </Layout>
   );
 };
 
-export default GroupedFileManager;
+export default FileExplorerStyle;
