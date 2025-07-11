@@ -4,14 +4,13 @@ import HealthRecord from '../backend/models/HealthRecords.js';
 
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI; // make sure this is set in .env
+const MONGO_URI = process.env.MONGO_URI; // Ensure this is set in your .env
 
 const seedHealthRecords = async () => {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('✅ MongoDB connected');
 
-    // Replace with actual ObjectId strings from your DB
     const dummyPatientId = '64a4a9f1e3c8fa001234abcd';
     const dummyUserId = '64a4a9f1e3c8fa00abcd1234';
 
@@ -22,7 +21,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000001/chest-xray.jpg',
         description: 'Chest X-ray to check for infection',
-        isVerified: true,
+        isVerified: 'verified',
       },
       {
         fileName: 'CBC Blood Test',
@@ -30,7 +29,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000002/cbc-report.pdf',
         description: 'Complete blood count test',
-        isVerified: false,
+        isVerified: 'rejected',
       },
       {
         fileName: 'MRI Brain Scan',
@@ -38,7 +37,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000003/mri-brain.jpg',
         description: 'MRI report for neurological check',
-        isVerified: true,
+        isVerified: 'verified',
       },
       {
         fileName: 'Diabetes Report',
@@ -46,7 +45,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000004/diabetes.pdf',
         description: 'Fasting blood sugar levels',
-        isVerified: false,
+        isVerified: 'pending',
       },
       {
         fileName: 'Prescription March 2025',
@@ -54,7 +53,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000005/prescription-march.txt',
         description: 'Dr. Smith’s prescriptions',
-        isVerified: true,
+        isVerified: 'verified',
       },
       {
         fileName: 'Urine Test',
@@ -62,7 +61,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000006/urine-test.pdf',
         description: 'Urinalysis for UTI detection',
-        isVerified: false,
+        isVerified: 'rejected',
       },
       {
         fileName: 'ECG Report',
@@ -70,7 +69,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000007/ecg.jpg',
         description: 'Heart rhythm report',
-        isVerified: true,
+        isVerified: 'verified',
       },
       {
         fileName: 'Eye Report',
@@ -78,7 +77,7 @@ const seedHealthRecords = async () => {
         uploaded_by: dummyUserId,
         file_url: 'https://res.cloudinary.com/demo/image/upload/v1620000008/eye-report.jpg',
         description: 'Retina and vision scan',
-        isVerified: false,
+        isVerified: 'pending',
       },
     ];
 
@@ -92,6 +91,6 @@ const seedHealthRecords = async () => {
     console.error('❌ Error seeding data:', error.message);
     process.exit(1);
   }
-}
+};
 
 seedHealthRecords();

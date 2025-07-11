@@ -22,9 +22,10 @@ const healthRecordSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  isVerified:{
-    type: Boolean,
-    default: false
+  isVerified: {
+    type: String,
+    enum: ["pending", "verified", "rejected"],
+    default: "pending"
   },
   created_at: {
     type: Date,

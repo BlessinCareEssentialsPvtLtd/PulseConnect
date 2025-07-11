@@ -7,17 +7,19 @@ import fs from 'fs';
 // ===============
 export const uploadHealthRecord = async (req, res) => {
   try {
-    const { fileName, description, patient_id,uploaded_by } = req.body;
+    const { fileName, description, patient_id, uploaded_by } = req.body;
 
     if (!req.file) {
       return res.status(400).json({ success: false, error: 'No file uploaded' });
     }
 
     const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: 'auto',
+      resource_type:"auto",
       folder: 'health_records',
+      access_mode:"public"
     });
 
+    console.log('Cloudinary upload result:', result);
     fs.unlinkSync(req.file.path);
 
     const record = new HealthRecord({
