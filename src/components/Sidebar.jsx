@@ -8,11 +8,15 @@ import {
   Dumbbell,
 } from "lucide-react";
 
+import { NavLink } from "react-router-dom";
+
+
+
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard" },
-  { icon: Activity, label: "Healthline" },
-  { icon: FileText, label: "Records" },
-  { icon: CalendarCheck, label: "Appointments" },
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard/patient" },
+  { icon: Activity, label: "Healthline", to: "/healthline" },
+  { icon: FileText, label: "Records", to: "/records" },
+  { icon: CalendarCheck, label: "Appointments", to: "/dashboard/patient/appointments" },
   { icon: Users, label: "Family" },
   { icon: Dumbbell, label: "Fitness" },
 ];
@@ -51,15 +55,20 @@ const Sidebar = ({ patient }) => {
 
           {/* Navigation Items */}
           <nav className="space-y-1">
-            {navItems.map(({ icon: Icon, label }) => (
-              <button
-                key={label}
-                className="flex items-center gap-3 py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-100 text-gray-700 transition w-full"
-              >
-                <Icon size={18} className="text-blue-600" />
-                <span>{label}</span>
-              </button>
-            ))}
+            {navItems.map(({ icon: Icon, label, to }) => (
+  <NavLink
+    to={to}
+    key={label}
+    className={({ isActive }) =>
+      `flex items-center gap-3 py-2 px-4 rounded-md text-sm font-medium w-full ${
+        isActive ? 'bg-blue-200 text-blue-700' : 'text-gray-700 hover:bg-blue-100'
+      }`
+    }
+  >
+    <Icon size={18} className="text-blue-600" />
+    <span>{label}</span>
+  </NavLink>
+))}
           </nav>
         </div>
 

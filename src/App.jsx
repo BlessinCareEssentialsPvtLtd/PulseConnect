@@ -2,6 +2,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Routes, Route } from "react-router-dom";
 
+import Appointments from "./components/Appointments"; // adjust path if different
+import DashboardLayout from "./layout/DashboardLayout";
+
 import PatientDashboard from "./pages/PatientDashboard";
 import PatientLogin from "./pages/PatientLogin.jsx"
 import PatientSignup from "./pages/PatientSignup.jsx";
@@ -25,8 +28,23 @@ function App() {
         <Route path="/dashboard/doctor" element={<DoctorDashboard/>}/>
         <Route path="/signup/patient" element={<PatientSignup />} />
         <Route path="/login/patient" element={<PatientLogin />} />
-        <Route path="/dashboard/patient" element={<PatientDashboard />} /> 
+        <Route path="/dashboard/patient"
+                element={
+                <PatientDashboard patient={JSON.parse(localStorage.getItem("patientData"))} />
+                }
+        />
+
+
         <Route path="/appointment-request" element={<AppointmentRequest />} />
+
+         <Route
+    path="/dashboard/patient/appointments"
+    element={
+      <DashboardLayout patient={JSON.parse(localStorage.getItem('patientData'))}>
+        <Appointments />
+      </DashboardLayout>
+    }
+  />
 
         {/* Add other routes here */}
       </Routes>

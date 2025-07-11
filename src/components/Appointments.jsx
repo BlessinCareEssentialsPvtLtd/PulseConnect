@@ -30,7 +30,7 @@ const Appointments = () => {
   const approvedAppts = appointments.filter((a) => a.status === "approved");
 
   return (
-    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 w-full h-[430px] flex flex-col relative">
+    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 w-full h-[260] flex flex-col relative">
       {/* Floating Request Button */}
       <div className="absolute top-5 right-5 z-10">
         <button
