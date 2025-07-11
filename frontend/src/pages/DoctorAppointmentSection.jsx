@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import avatar from "../assets/user.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import SuggestedTimes from './SuggestedTimes';
 
 
 
@@ -17,22 +16,12 @@ export default function AppointmentSection() {
 useEffect(() => {
   axios.get("http://localhost:8080/api/appointments")
     .then((res) => {
-      const today = new Date().toISOString().split("T")[0];
-
-      const updatedAppointments = res.data.map((appt) => {
-        if (appt.status === "Confirmed" && appt.date < today) {
-          return { ...appt, status: "Completed" };
-        }
-        return appt;
-      });
-
-      setAppointments(updatedAppointments);
+      setAppointments(res.data);
     })
     .catch((err) => {
       console.error("Error fetching appointments:", err);
     });
 }, []);
-
 
 
   const [search, setSearch] = useState("");
@@ -53,16 +42,28 @@ useEffect(() => {
   const generateId = () => "APT" + (appointments.length + 1).toString().padStart(3, "0");
   const generatePId = () => "PULSE" + (appointments.length + 1).toString().padStart(4, "0");
 
-const [selectedDoctor, setSelectedDoctor] = useState("");
-const [selectedDate, setSelectedDate] = useState(null);
-const [selectedTime, setSelectedTime] = useState("");
-
-const formatDateLocal = (date) => {
-  if (!(date instanceof Date)) return "";
-  return date.toLocaleDateString('en-CA'); // yyyy-mm-dd
+  // const getSuggestedTimes = (patientName) => {
+  //   const past = appointments.filter((a) => a.patient === patientName);
+  //   const timeFrequency = {};
+  //   past.forEach((a) => {
+  //     if (!timeFrequency[a.time]) timeFrequency[a.time] = 0;
+  //     timeFrequency[a.time]++;
+  //   });
+  //   const sorted = Object.entries(timeFrequency).sort((a, b) => b[1] - a[1]);
+  //   return sorted.slice(0, 3).map((entry) => entry[0]);
+  // };
+  const getSuggestedTimes = (patientName, doctorName) => {
+  const past = appointments.filter(
+    (a) => a.patient === patientName || a.doctor === doctorName
+  );
+  const timeFrequency = {};
+  past.forEach((a) => {
+    if (!timeFrequency[a.time]) timeFrequency[a.time] = 0;
+    timeFrequency[a.time]++;
+  });
+  const sorted = Object.entries(timeFrequency).sort((a, b) => b[1] - a[1]);
+  return sorted.slice(0, 3).map((entry) => entry[0]);
 };
-
-
 
 const handleAddAppointment = () => {
   const conflictExists = appointments.some(
@@ -70,7 +71,7 @@ const handleAddAppointment = () => {
       a.date === newAppointment.date?.toISOString().split("T")[0] &&
       a.time === (newAppointment.time || "10:00 AM") &&
       a.doctor === newAppointment.doctor &&
-      (!editingAppointment || a._id !== editingAppointment._id) // ✅ Fix here (_id)
+      (!editingAppointment || a.id !== editingAppointment.id)
   );
 
   if (conflictExists) {
@@ -78,50 +79,14 @@ const handleAddAppointment = () => {
     return;
   }
 
-  const dateStr = formatDateLocal(newAppointment.date);
+  const dateStr = newAppointment.date?.toISOString().split("T")[0];
   const defaultTime = newAppointment.time || "10:00 AM";
 
   if (editingAppointment) {
-    // ✅ Updating existing appointment
-    const updatedAppointment = {
-      ...editingAppointment,
-      ...newAppointment,
-      date: dateStr,
-      time: defaultTime,
-      status: "Pending", // ✅ Reset status
-    };
-
-    axios
-      .put(`http://localhost:8080/api/appointments/${editingAppointment._id}`, updatedAppointment)
-      .then((res) => {
-        toast.success("Appointment updated and sent for doctor approval.");
-
-        // ✅ Update locally
-        setAppointments((prev) =>
-          prev.map((a) =>
-            a._id === editingAppointment._id ? { ...res.data, patientAvatar: avatar } : a
-          )
-        );
-
-        setShowModal(false);
-        setEditingAppointment(null);
-        setNewAppointment({
-          patient: "",
-          p_id: "",
-          doctor: "",
-          specialty: "",
-          date: null,
-          time: "",
-          notes: "",
-        });
-      })
-      .catch((err) => {
-        toast.error("Error updating appointment.");
-        console.error("Error updating appointment:", err);
-      });
-
+    // Optional: Add backend PUT/UPDATE logic later
+    toast("Editing appointments not yet supported.");
+    return;
   } else {
-    // ✅ New appointment
     axios
       .post("http://localhost:8080/api/appointments", {
         patient: newAppointment.patient,
@@ -159,10 +124,9 @@ const handleAddAppointment = () => {
 };
 
 
-
   const updateStatus = (id, newStatus) => {
     const updated = appointments.map((a) =>
-      a.id === id ? { ...a, status: newStatus } : a
+      a._id === id ? { ...a, status: newStatus } : a
     );
     setAppointments(updated);
   };
@@ -175,7 +139,7 @@ const handleAddAppointment = () => {
     status === "All" || a.status.toLowerCase() === status.toLowerCase();
 
   const matchesDate = (a) =>
-    !filterDate || a.date === formatDateLocal(filterDate);
+    !filterDate || a.date === filterDate.toISOString().split("T")[0];
 
   const filtered = appointments.filter(
     (a) => matchesSearch(a) && matchesStatus(a) && matchesDate(a)
@@ -205,10 +169,36 @@ const past = sortByDate(
   false
 );
 
+const handleStatusChange = async (id, newStatus) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/appointments/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update status");
+    }
+
+    const updated = await response.json();
+    toast.success("Status updated successfully");
+
+    // Update local state with new status
+    setAppointments((prev) =>
+      prev.map((a) => (a._id === id ? { ...a, status: updated.status } : a))
+    );
+  } catch (error) {
+    console.error("Update error:", error);
+    toast.error("Could not update status");
+  }
+};
+
+
 
 const renderCard = (a) => (
   <div
-    key={a.id}
+    key={a._id}
     className="text-sm bg-white p-4 rounded-lg shadow w-full flex flex-col gap-4 border border-gray-200"
   >
     {/* Top Row */}
@@ -267,13 +257,32 @@ const renderCard = (a) => (
       </div>
 
        {/* Confirmation */}
-        <span className={`text-xs font-semibold mt-1 inline-block px-2 py-1 rounded-full
-          ${a.status === "Confirmed" ? "bg-green-100 text-green-700" :
-            a.status === "Pending" ? "bg-yellow-100 text-yellow-700" :
-            a.status === "Rejected" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700"}
-        `}>
-          {a.status}
-        </span>
+         <div className="flex flex-col items-end gap-2">
+          <span className={`text-xs font-semibold inline-block px-2 py-1 rounded-full
+            ${a.status === "Confirmed" ? "bg-green-100 text-green-700" :
+              a.status === "Pending" ? "bg-yellow-100 text-yellow-700" :
+              a.status === "Rejected" ? "bg-red-100 text-red-700" :
+              "bg-gray-100 text-gray-700"}`}>{a.status}</span>
+
+            
+         {a.status === "Pending" && (
+  <div className="flex gap-4 pt-2 text-sm">
+    <button
+      className="text-green-600 hover:underline"
+      onClick={() => handleStatusChange(a._id, "Confirmed")}
+    >
+      Approve
+    </button>
+    <button
+      className="text-red-600 hover:underline"
+      onClick={() => handleStatusChange(a._id, "Rejected")}
+    >
+      Reject
+    </button>
+  </div>
+)}
+
+        </div> 
     </div>
   </div>
 );
@@ -286,7 +295,7 @@ const renderCard = (a) => (
         <div className="flex flex-col md:flex-row gap-2 md:items-center w-full md:w-auto">
           <input
             type="text"
-            placeholder="Search Doctor"
+            placeholder="Search Patient"
             className="px-3 py-2 rounded border w-full sm:w-auto"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -308,15 +317,15 @@ const renderCard = (a) => (
             <option>Rejected</option>
             <option>Completed</option>
           </select>
-          <button
+          {/* <button
             onClick={() => {
               setShowModal(true);
               setEditingAppointment(null);
             }}
             className="bg-blue-600 text-white px-3 py-2 rounded whitespace-nowrap"
           >
-            + Schedule New
-          </button>
+            +New
+          </button> */}
         </div>
       </div>
 
@@ -350,18 +359,16 @@ const renderCard = (a) => (
           }
           className="w-full px-3 py-2 border rounded"
         />
-        {/* doctor input */}
-        <input
-  type="text"
-  placeholder="Doctor"
-  value={newAppointment.doctor}
-  onChange={(e) => {
-    setNewAppointment({ ...newAppointment, doctor: e.target.value });
-    setSelectedDoctor(e.target.value); // update selectedDoctor
-  }}
-  className="w-full px-3 py-2 border rounded"
-/>
 
+        <input
+          type="text"
+          placeholder="Doctor"
+          value={newAppointment.doctor}
+          onChange={(e) =>
+            setNewAppointment({ ...newAppointment, doctor: e.target.value })
+          }
+          className="w-full px-3 py-2 border rounded"
+        />
 
         <input
           type="text"
@@ -373,33 +380,30 @@ const renderCard = (a) => (
           className="w-full px-3 py-2 border rounded"
         />
 
-       <DatePicker
-  selected={newAppointment.date}
-  onChange={(date) => {
-    setNewAppointment({ ...newAppointment, date });
-    setSelectedDate(date); // update selectedDate
-  }}
-  placeholderText="Select Date"
-  className="w-full px-3 py-2 border rounded"
-/>
+        <DatePicker
+          selected={newAppointment.date}
+          onChange={(date) =>
+            setNewAppointment({ ...newAppointment, date })
+          }
+          placeholderText="Select Date"
+          className="w-full px-3 py-2 border rounded"
+        />
 
+        <input
+          type="text"
+          placeholder="Time (e.g. 3:30 PM)"
+          value={newAppointment.time}
+          onChange={(e) =>
+            setNewAppointment({ ...newAppointment, time: e.target.value })
+          }
+          className="w-full px-3 py-2 border rounded"
+        />
 
-   <SuggestedTimes
-  selectedDoctor={selectedDoctor}
-  selectedDate={selectedDate}
-  appointments={appointments}
-  selectedTime={selectedTime} // ✅ highlight selected
-  onSelect={(slot) => {
-    setSelectedTime(slot);
-    setNewAppointment({ ...newAppointment, time: slot });
-  }}
-/>
-
-   {/* {newAppointment.patient && newAppointment.doctor && (
+        {newAppointment.patient && newAppointment.doctor && (
         <div className="text-sm text-gray-600">
           <p>Suggested Times:</p>
           <ul className="flex flex-wrap gap-2 mt-1">
-            {SuggestedTimes(newAppointment.patient, newAppointment.doctor).map((time) => (
+            {getSuggestedTimes(newAppointment.patient, newAppointment.doctor).map((time) => (
               <li
                 key={time}
                 className="bg-gray-100 px-2 py-1 rounded cursor-pointer hover:bg-gray-200"
@@ -410,8 +414,7 @@ const renderCard = (a) => (
             ))}
           </ul>
         </div>
-      )} */}
-
+      )}
 
 
         <textarea

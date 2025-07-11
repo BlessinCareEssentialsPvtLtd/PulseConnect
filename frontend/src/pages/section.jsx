@@ -17,22 +17,12 @@ export default function AppointmentSection() {
 useEffect(() => {
   axios.get("http://localhost:8080/api/appointments")
     .then((res) => {
-      const today = new Date().toISOString().split("T")[0];
-
-      const updatedAppointments = res.data.map((appt) => {
-        if (appt.status === "Confirmed" && appt.date < today) {
-          return { ...appt, status: "Completed" };
-        }
-        return appt;
-      });
-
-      setAppointments(updatedAppointments);
+      setAppointments(res.data);
     })
     .catch((err) => {
       console.error("Error fetching appointments:", err);
     });
 }, []);
-
 
 
   const [search, setSearch] = useState("");
@@ -70,7 +60,7 @@ const handleAddAppointment = () => {
       a.date === newAppointment.date?.toISOString().split("T")[0] &&
       a.time === (newAppointment.time || "10:00 AM") &&
       a.doctor === newAppointment.doctor &&
-      (!editingAppointment || a._id !== editingAppointment._id) // ✅ Fix here (_id)
+      (!editingAppointment || a.id !== editingAppointment.id)
   );
 
   if (conflictExists) {
@@ -78,50 +68,15 @@ const handleAddAppointment = () => {
     return;
   }
 
-  const dateStr = formatDateLocal(newAppointment.date);
+const dateStr = formatDateLocal(newAppointment.date);
+
   const defaultTime = newAppointment.time || "10:00 AM";
 
   if (editingAppointment) {
-    // ✅ Updating existing appointment
-    const updatedAppointment = {
-      ...editingAppointment,
-      ...newAppointment,
-      date: dateStr,
-      time: defaultTime,
-      status: "Pending", // ✅ Reset status
-    };
-
-    axios
-      .put(`http://localhost:8080/api/appointments/${editingAppointment._id}`, updatedAppointment)
-      .then((res) => {
-        toast.success("Appointment updated and sent for doctor approval.");
-
-        // ✅ Update locally
-        setAppointments((prev) =>
-          prev.map((a) =>
-            a._id === editingAppointment._id ? { ...res.data, patientAvatar: avatar } : a
-          )
-        );
-
-        setShowModal(false);
-        setEditingAppointment(null);
-        setNewAppointment({
-          patient: "",
-          p_id: "",
-          doctor: "",
-          specialty: "",
-          date: null,
-          time: "",
-          notes: "",
-        });
-      })
-      .catch((err) => {
-        toast.error("Error updating appointment.");
-        console.error("Error updating appointment:", err);
-      });
-
+    // Optional: Add backend PUT/UPDATE logic later
+    toast("Editing appointments not yet supported.");
+    return;
   } else {
-    // ✅ New appointment
     axios
       .post("http://localhost:8080/api/appointments", {
         patient: newAppointment.patient,
@@ -157,7 +112,6 @@ const handleAddAppointment = () => {
       });
   }
 };
-
 
 
   const updateStatus = (id, newStatus) => {

@@ -10,6 +10,9 @@ import Fitness from "./pages/Fitness";
 import AppointmentSection from "./pages/AppointmentSection";
 import HealthNews from "./pages/HealthNews";
 import InsurancePage from "./pages/InsurancePage";
+import DoctorAppointmentSection from "./pages/DoctorAppointmentSection" ;
+import PatientAppointmentSection from "./pages/PatientAppointmentSection" ;
+import Section from "./pages/Section" ;
 
 
 function App() {
@@ -28,7 +31,7 @@ function App() {
         {/* <Fitness /> */}
         {/*Appointment*/}
         <div className="ml-[20vw] w-[80vw] px-4 py-6 overflow-y-auto">
-         <InsurancePage/>
+         <AppointmentSection/>
         </div>
         {/* Profile Section */}
         {/* <DoctorDashboard /> */}
