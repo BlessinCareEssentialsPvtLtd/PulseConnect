@@ -1,39 +1,39 @@
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import avatar from "../assets/user.jpg";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+import SuggestedTimes from './SuggestedTimes';
+
 
 
 export default function AppointmentSection() {
   const today = new Date().toISOString().split("T")[0];
 
-  const [appointments, setAppointments] = useState([
-    {
-      id: "APT001",
-      patient: "John The Don",
-      p_id : "PULSE0001" ,
-      doctor: "Dr. Smith",
-      specialty: "Cardiology",
-      date: "2025-07-28",
-      time: "4:00 PM",
-      notes: "Follow-up ECG test",
-      status: "Confirmed",
-      patientAvatar: avatar,
-    },
-    {
-      id: "APT002",
-      patient: "Daku Mangal Singh",
-      p_id : "PULSE0002" ,
-      doctor: "Dr. Aisha",
-      specialty: "Pediatrics",
-      date: "2025-06-22",
-      time: "10:30 AM",
-      notes: "Fever & cough",
-      status: "Completed",
-      patientAvatar: avatar,
-    },
-  ]);
+  const [appointments, setAppointments] = useState([]);
+
+
+useEffect(() => {
+  axios.get("http://localhost:8080/api/appointments")
+    .then((res) => {
+      const today = new Date().toISOString().split("T")[0];
+
+      const updatedAppointments = res.data.map((appt) => {
+        if (appt.status === "Confirmed" && appt.date < today) {
+          return { ...appt, status: "Completed" };
+        }
+        return appt;
+      });
+
+      setAppointments(updatedAppointments);
+    })
+    .catch((err) => {
+      console.error("Error fetching appointments:", err);
+    });
+}, []);
+
+
 
   const [search, setSearch] = useState("");
   const [filterDate, setFilterDate] = useState(null);
@@ -53,40 +53,24 @@ export default function AppointmentSection() {
   const generateId = () => "APT" + (appointments.length + 1).toString().padStart(3, "0");
   const generatePId = () => "PULSE" + (appointments.length + 1).toString().padStart(4, "0");
 
-  // const getSuggestedTimes = (patientName) => {
-  //   const past = appointments.filter((a) => a.patient === patientName);
-  //   const timeFrequency = {};
-  //   past.forEach((a) => {
-  //     if (!timeFrequency[a.time]) timeFrequency[a.time] = 0;
-  //     timeFrequency[a.time]++;
-  //   });
-  //   const sorted = Object.entries(timeFrequency).sort((a, b) => b[1] - a[1]);
-  //   return sorted.slice(0, 3).map((entry) => entry[0]);
-  // };
-  const getSuggestedTimes = (patientName, doctorName) => {
-  const past = appointments.filter(
-    (a) => a.patient === patientName || a.doctor === doctorName
-  );
-  const timeFrequency = {};
-  past.forEach((a) => {
-    if (!timeFrequency[a.time]) timeFrequency[a.time] = 0;
-    timeFrequency[a.time]++;
-  });
-  const sorted = Object.entries(timeFrequency).sort((a, b) => b[1] - a[1]);
-  return sorted.slice(0, 3).map((entry) => entry[0]);
+const [selectedDoctor, setSelectedDoctor] = useState("");
+const [selectedDate, setSelectedDate] = useState(null);
+const [selectedTime, setSelectedTime] = useState("");
+
+const formatDateLocal = (date) => {
+  if (!(date instanceof Date)) return "";
+  return date.toLocaleDateString('en-CA'); // yyyy-mm-dd
 };
 
 
- const handleAddAppointment = () => {
-  const dateStr = newAppointment.date?.toISOString().split("T")[0];
-  const defaultTime = newAppointment.time || "10:00 AM";
 
+const handleAddAppointment = () => {
   const conflictExists = appointments.some(
     (a) =>
-      a.date === dateStr &&
-      a.time === defaultTime &&
+      a.date === newAppointment.date?.toISOString().split("T")[0] &&
+      a.time === (newAppointment.time || "10:00 AM") &&
       a.doctor === newAppointment.doctor &&
-      (!editingAppointment || a.id !== editingAppointment.id)
+      (!editingAppointment || a._id !== editingAppointment._id) // ✅ Fix here (_id)
   );
 
   if (conflictExists) {
@@ -94,56 +78,86 @@ export default function AppointmentSection() {
     return;
   }
 
-  if (editingAppointment) {
-    // When editing: update appointment and reset status to "Pending"
-    const updated = appointments.map((a) =>
-      a.id === editingAppointment.id
-        ? {
-            ...a,
-            ...newAppointment,
-            date: dateStr,
-            time: defaultTime,
-            status: "Pending", // <-- RESET status to Pending
-          }
-        : a
-    );
-    setAppointments(updated);
-    setEditingAppointment(null);
+  const dateStr = formatDateLocal(newAppointment.date);
+  const defaultTime = newAppointment.time || "10:00 AM";
 
-    // Optional: Send PATCH to backend here to update status + fields
-    // axios.patch(`/api/appointments/${editingAppointment.id}`, {
-    //   ...newAppointment,
-    //   date: dateStr,
-    //   time: defaultTime,
-    //   status: "Pending"
-    // });
+  if (editingAppointment) {
+    // ✅ Updating existing appointment
+    const updatedAppointment = {
+      ...editingAppointment,
+      ...newAppointment,
+      date: dateStr,
+      time: defaultTime,
+      status: "Pending", // ✅ Reset status
+    };
+
+    axios
+      .put(`http://localhost:8080/api/appointments/${editingAppointment._id}`, updatedAppointment)
+      .then((res) => {
+        toast.success("Appointment updated and sent for doctor approval.");
+
+        // ✅ Update locally
+        setAppointments((prev) =>
+          prev.map((a) =>
+            a._id === editingAppointment._id ? { ...res.data, patientAvatar: avatar } : a
+          )
+        );
+
+        setShowModal(false);
+        setEditingAppointment(null);
+        setNewAppointment({
+          patient: "",
+          p_id: "",
+          doctor: "",
+          specialty: "",
+          date: null,
+          time: "",
+          notes: "",
+        });
+      })
+      .catch((err) => {
+        toast.error("Error updating appointment.");
+        console.error("Error updating appointment:", err);
+      });
+
   } else {
-    // New appointment creation
-    setAppointments([
-      ...appointments,
-      {
-        ...newAppointment,
-        id: generateId(),
+    // ✅ New appointment
+    axios
+      .post("http://localhost:8080/api/appointments", {
+        patient: newAppointment.patient,
         p_id: generatePId(),
+        doctor: newAppointment.doctor,
+        specialty: newAppointment.specialty,
         date: dateStr,
         time: defaultTime,
+        notes: newAppointment.notes,
         status: "Pending",
         patientAvatar: avatar,
-      },
-    ]);
+      })
+      .then((res) => {
+        toast.success("Appointment added!");
+        setAppointments((prev) => [
+          ...prev,
+          { ...res.data, patientAvatar: avatar },
+        ]);
+        setShowModal(false);
+        setNewAppointment({
+          patient: "",
+          p_id: "",
+          doctor: "",
+          specialty: "",
+          date: null,
+          time: "",
+          notes: "",
+        });
+      })
+      .catch((err) => {
+        toast.error("Failed to add appointment");
+        console.error("Error adding appointment:", err);
+      });
   }
-
-  setShowModal(false);
-  setNewAppointment({
-    patient: "",
-    p_id: "",
-    doctor: "",
-    specialty: "",
-    date: null,
-    time: "",
-    notes: "",
-  });
 };
+
 
 
   const updateStatus = (id, newStatus) => {
@@ -161,7 +175,7 @@ export default function AppointmentSection() {
     status === "All" || a.status.toLowerCase() === status.toLowerCase();
 
   const matchesDate = (a) =>
-    !filterDate || a.date === filterDate.toISOString().split("T")[0];
+    !filterDate || a.date === formatDateLocal(filterDate);
 
   const filtered = appointments.filter(
     (a) => matchesSearch(a) && matchesStatus(a) && matchesDate(a)
@@ -202,7 +216,7 @@ const renderCard = (a) => (
       {/* Left: Patient name & status */}
       <div>
         <img
-            src={a.patientAvatar}
+            src={a.patientAvatar || avatar}
             alt="patient"
             className="h-25 w-25 rounded-full"
           />
@@ -230,20 +244,15 @@ const renderCard = (a) => (
               setNewAppointment({ ...a, date: new Date(a.date) });
             }} className="text-sm text-gray-700 max-w-sm">✏️</button>
           )}
-
       </div>
     </div>
     
     
 
     {/* Bottom Row */}
-    <div className="flex flex-col md:flex-row justify-between items-center gap-4  pt-2">
-
-       {/* <h3 className="text-lg font-semibold">{a.patient}</h3> */}
-     
-        
+    <div className="flex flex-col md:flex-row justify-between items-center gap-4  pt-4">            
       {/* Time/Date Info */}
-      <div className="flex flex-wrap items-center gap-30 text-sm text-gray-700">
+         <div className="flex flex-wrap items-center gap-30 text-sm text-gray-700">
         <div className="flex items-center gap-1">
              <h3 className="text-lg font-semibold">{a.patient}</h3>
           </div>
@@ -258,21 +267,13 @@ const renderCard = (a) => (
       </div>
 
        {/* Confirmation */}
-       
-         <div className="flex flex-col items-end gap-2">
-          <span className={`text-xs font-semibold inline-block px-2 py-1 rounded-full
-            ${a.status === "Confirmed" ? "bg-green-100 text-green-700" :
-              a.status === "Pending" ? "bg-yellow-100 text-yellow-700" :
-              a.status === "Rejected" ? "bg-red-100 text-red-700" :
-              "bg-gray-100 text-gray-700"}`}>{a.status}</span>
-
-          {a.status === "Pending" && (
-            <div className="flex gap-2">
-              <button onClick={() => updateStatus(a.id, "Confirmed")} className="text-green-600 hover:underline text-xs">Approve</button>
-              <button onClick={() => updateStatus(a.id, "Rejected")} className="text-red-600 hover:underline text-xs">Reject</button>
-            </div>
-          )}
-        </div>      
+        <span className={`text-xs font-semibold mt-1 inline-block px-2 py-1 rounded-full
+          ${a.status === "Confirmed" ? "bg-green-100 text-green-700" :
+            a.status === "Pending" ? "bg-yellow-100 text-yellow-700" :
+            a.status === "Rejected" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700"}
+        `}>
+          {a.status}
+        </span>
     </div>
   </div>
 );
@@ -285,7 +286,7 @@ const renderCard = (a) => (
         <div className="flex flex-col md:flex-row gap-2 md:items-center w-full md:w-auto">
           <input
             type="text"
-            placeholder="Search Patient"
+            placeholder="Search Doctor"
             className="px-3 py-2 rounded border w-full sm:w-auto"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -349,16 +350,18 @@ const renderCard = (a) => (
           }
           className="w-full px-3 py-2 border rounded"
         />
-
+        {/* doctor input */}
         <input
-          type="text"
-          placeholder="Doctor"
-          value={newAppointment.doctor}
-          onChange={(e) =>
-            setNewAppointment({ ...newAppointment, doctor: e.target.value })
-          }
-          className="w-full px-3 py-2 border rounded"
-        />
+  type="text"
+  placeholder="Doctor"
+  value={newAppointment.doctor}
+  onChange={(e) => {
+    setNewAppointment({ ...newAppointment, doctor: e.target.value });
+    setSelectedDoctor(e.target.value); // update selectedDoctor
+  }}
+  className="w-full px-3 py-2 border rounded"
+/>
+
 
         <input
           type="text"
@@ -370,42 +373,27 @@ const renderCard = (a) => (
           className="w-full px-3 py-2 border rounded"
         />
 
-        <DatePicker
-          selected={newAppointment.date}
-          onChange={(date) =>
-            setNewAppointment({ ...newAppointment, date })
-          }
-          placeholderText="Select Date"
-          className="w-full px-3 py-2 border rounded"
-        />
+       <DatePicker
+  selected={newAppointment.date}
+  onChange={(date) => {
+    setNewAppointment({ ...newAppointment, date });
+    setSelectedDate(date); // update selectedDate
+  }}
+  placeholderText="Select Date"
+  className="w-full px-3 py-2 border rounded"
+/>
 
-        <input
-          type="text"
-          placeholder="Time (e.g. 3:30 PM)"
-          value={newAppointment.time}
-          onChange={(e) =>
-            setNewAppointment({ ...newAppointment, time: e.target.value })
-          }
-          className="w-full px-3 py-2 border rounded"
-        />
 
-        {newAppointment.patient && newAppointment.doctor && (
-        <div className="text-sm text-gray-600">
-          <p>Suggested Times:</p>
-          <ul className="flex flex-wrap gap-2 mt-1">
-            {getSuggestedTimes(newAppointment.patient, newAppointment.doctor).map((time) => (
-              <li
-                key={time}
-                className="bg-gray-100 px-2 py-1 rounded cursor-pointer hover:bg-gray-200"
-                onClick={() => setNewAppointment({ ...newAppointment, time })}
-              >
-                {time}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
+   <SuggestedTimes
+  selectedDoctor={selectedDoctor}
+  selectedDate={selectedDate}
+  appointments={appointments}
+  selectedTime={selectedTime} // ✅ highlight selected
+  onSelect={(slot) => {
+    setSelectedTime(slot);
+    setNewAppointment({ ...newAppointment, time: slot });
+  }}
+/>
 
         <textarea
           placeholder="Notes"

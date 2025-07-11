@@ -395,25 +395,6 @@ const renderCard = (a) => (
   }}
 />
 
-   {/* {newAppointment.patient && newAppointment.doctor && (
-        <div className="text-sm text-gray-600">
-          <p>Suggested Times:</p>
-          <ul className="flex flex-wrap gap-2 mt-1">
-            {SuggestedTimes(newAppointment.patient, newAppointment.doctor).map((time) => (
-              <li
-                key={time}
-                className="bg-gray-100 px-2 py-1 rounded cursor-pointer hover:bg-gray-200"
-                onClick={() => setNewAppointment({ ...newAppointment, time })}
-              >
-                {time}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )} */}
-
-
-
         <textarea
           placeholder="Notes"
           value={newAppointment.notes}

@@ -31,7 +31,7 @@ function App() {
         {/* <Fitness /> */}
         {/*Appointment*/}
         <div className="ml-[20vw] w-[80vw] px-4 py-6 overflow-y-auto">
-         <AppointmentSection/>
+         <PatientAppointmentSection/>
         </div>
         {/* Profile Section */}
         {/* <DoctorDashboard /> */}
