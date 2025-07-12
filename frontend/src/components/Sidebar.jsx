@@ -164,7 +164,7 @@ function Sidebar({ toggleProfileFunction }) {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                     >
-                      {item.subMenu.map((subItem, subIndex) => (
+                      {/* {item.subMenu.map((subItem, subIndex) => (
                         <li
                           key={subIndex}
                           className={`flex items-center gap-2  p-2 rounded-lg cursor-pointer ${
@@ -183,7 +183,36 @@ function Sidebar({ toggleProfileFunction }) {
                           />
                           {subItem.label}
                         </li>
-                      ))}
+                      ))} */}
+                      {item.subMenu.map((subItem, subIndex) => {
+  const isBookNow = item.label === "Appointment" && subItem.label === "Book Now";
+  return (
+    <li
+      key={subIndex}
+      className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer ${
+        item.label === currentSelected
+          ? "text-white hover:bg-blue-500"
+          : "hover:bg-gray-200"
+      }`}
+      onClick={() => {
+        if (isBookNow && typeof onTriggerNewAppointment === "function") {
+          onTriggerNewAppointment(); // <- call modal
+        } else {
+          setCurrentSelected(item.label);
+        }
+      }}
+    >
+      <subItem.icon
+        size={18}
+        className={`${
+          item.label === currentSelected ? "text-white" : "text-blue-800"
+        }`}
+      />
+      {subItem.label}
+    </li>
+  );
+})}
+
                     </motion.ul>
                   )}
                 </AnimatePresence>

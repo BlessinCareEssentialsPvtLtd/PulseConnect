@@ -35,7 +35,7 @@ function App() {
         </div>
         {/* Profile Section */}
         {/* <DoctorDashboard /> */}
-        <AnimatePresence mode="wait">
+        {/* <AnimatePresence mode="wait">
           {showProfileComponent && (
             <motion.div
               className=" absolute inset-0 z-[3]  w-full h-full bg-black/50"
@@ -50,7 +50,7 @@ function App() {
               />
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
     </div>
   );
