@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function PLogin() {
+  // for login management!
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [form, setForm] = useState({
     loginId: "",
     password: "",
@@ -13,6 +19,15 @@ function PLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(form);
+
+    // After API call
+    const userData = {
+      id: "123",
+      name: "John Doe",
+      role: "patient",
+    };
+    login(userData);
+    navigate("/dashboard");
   };
 
   return (

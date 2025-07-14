@@ -6,6 +6,7 @@ const steps = ["Personal", "Medical"];
 function CompleteProfile() {
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
+    photo: null,
     fullName: "",
     contactNumber: "",
     email: "",
@@ -61,6 +62,7 @@ function CompleteProfile() {
   const validateStep = () => {
     const requiredFieldsByStep = {
       0: [
+        "photo",
         "fullName",
         "dateOfBirth",
         "gender",
@@ -102,6 +104,57 @@ function CompleteProfile() {
       case 0:
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col items-center w-full md:col-span-2">
+              <div className="text-center">
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Photo
+                </label>
+
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="photoInput"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          photo: reader.result,
+                        }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+
+                {/* Show either the file input or the preview */}
+                {!formData.photo ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      document.getElementById("photoInput").click()
+                    }
+                    className="w-full px-4 py-2 border rounded-xl bg-white text-gray-600"
+                  >
+                    Choose Photo
+                  </button>
+                ) : (
+                  <img
+                    src={formData.photo}
+                    alt="Preview"
+                    onClick={() =>
+                      document.getElementById("photoInput").click()
+                    }
+                    className="w-24 h-24 rounded-full object-cover mt-2 mx-auto border-2 border-blue-400 cursor-pointer hover:opacity-90 transition"
+                    title="Click to change photo"
+                  />
+                )}
+              </div>
+            </div>
             <div className="md:col-span-2">
               <label className="block mb-1 text-sm font-medium">
                 Full Name

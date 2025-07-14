@@ -21,6 +21,7 @@ import Layout from "../components/layout";
 import Appointments from "../components/Appointments";
 import { AnimatePresence, motion } from "framer-motion"; // ✅ fixed wrong import
 
+import { useAuth } from "../context/AuthContext";
 /* ───────────────────────── constants ───────────────────────── */
 
 const quickLinks = [
@@ -182,6 +183,7 @@ const HistoryCards = () => (
 /* ───────────────────────── main component ───────────────────────── */
 
 export default function Dashboard({ showProfile, toggleProfileFunction }) {
+  const { user } = useAuth();
   return (
     <Layout>
       {/*By flex*/}
