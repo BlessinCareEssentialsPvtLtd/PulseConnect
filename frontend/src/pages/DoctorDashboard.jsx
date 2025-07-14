@@ -9,26 +9,33 @@ import {
   CalendarCheck, // Import for Appointments Today
   AlertCircle, // Import for Critical Cases (or similar like BellDot, CircleAlert)
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import PatientData from "../dummydata/doctorDashboardPatientData.json";
 import "../App.css";
 import Layout from "../components/layout";
 import Calendar from "react-calendar";
 import PatientCard from "../components/PatientCard";
+import PatientOverlay from "../components/PatientOverlay";
 
 const DoctorDashboard = () => {
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [value, onChange] = useState(new Date());
+  const [showPatientOverlay, setShowPatientOverlay] = useState(false);
 
+  // Fixed useEffect instead of useState for side effect
   useEffect(() => {
-    console.log("Selected Date:", value);
-  }, [value]);
+    if (selectedPatient) {
+      setShowPatientOverlay(true);
+    } else {
+      setShowPatientOverlay(false);
+    }
+  }, [selectedPatient]);
 
   return (
-    <Layout>
+    <>
+      <div className=" w-full h-[70px]" id="navbarPlaceholder"></div>
       <div
-        className="bg-[#F5F5F5] flex flex-col lg:flex-row p-4 my-2 gap-4 rounded-lg border border-gray-200 w-[95%] sm:w-[91%] lg:w-[77%] shadow-lg h-auto lg:h-[88vh] overflow-hidden"
+        className="bg-[#F5F5F5] flex flex-col lg:flex-row p-4 my-2 gap-4 rounded-lg border border-gray-200 w-[95%] sm:w-[91%] lg:w-[98%] shadow-lg h-auto lg:h-[calc(100vh-90px)] overflow-hidden mx-auto"
         id="mainDashboard"
       >
         <div className="w-full h-auto lg:h-full flex flex-col gap-4">
@@ -146,7 +153,11 @@ const DoctorDashboard = () => {
               <div className="w-full h-full flex flex-col gap-2 overflow-y-auto scrollbar_custom">
                 {PatientData.length > 0 ? (
                   PatientData.map((patient, index) => (
-                    <PatientCard patient={patient} key={index} />
+                    <PatientCard
+                      patient={patient}
+                      key={index}
+                      setSelectedPatient={setSelectedPatient}
+                    />
                   ))
                 ) : (
                   <div className="h-full w-full flex items-center justify-center">
@@ -158,7 +169,19 @@ const DoctorDashboard = () => {
           </div>
         </div>
       </div>
-    </Layout>
+
+      {/* Patient Overlay - moved outside the main container */}
+      {showPatientOverlay && selectedPatient && (
+        <PatientOverlay
+          patient={selectedPatient}
+          onClose={() => {
+            setSelectedPatient(null);
+            setShowPatientOverlay(false);
+          }}
+          setPatient={setSelectedPatient}
+        />
+      )}
+    </>
   );
 };
 

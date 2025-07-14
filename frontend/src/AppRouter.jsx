@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dashboard from "./pages/Dashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import Sidebar from "./components/Sidebar";
@@ -7,7 +7,11 @@ import Navbar from "./components/Navbar";
 import { ShowProfileProvider } from "./context/showProfileContext";
 
 const AppRouter = () => {
-  const [isUser, setIsUser] = useState(true); // you can toggle this somehow in real app
+  const [isUser, setIsUser] = useState(); // you can toggle this somehow in real app
+
+  useEffect(() => {
+    setIsUser(true); // Simulating user state, replace with actual logic
+  }, []);
 
   const [showProfileComponent, setShowProfileComponent] = useState(false);
 
@@ -23,7 +27,7 @@ const AppRouter = () => {
       ) : (
         <>
           <Navbar />
-          <Sidebar />
+          {/* <Sidebar /> */}
           <DoctorDashboard />
         </>
       ),
@@ -33,7 +37,7 @@ const AppRouter = () => {
       element: (
         <>
           <Navbar />
-          <Sidebar />
+          {/* <Sidebar /> */}
           <DoctorDashboard />
         </>
       ),

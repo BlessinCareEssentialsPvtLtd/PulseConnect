@@ -2,7 +2,7 @@
 import { Mail, Phone } from "lucide-react";
 import React from "react";
 
-const PatientCard = ({ patient }) => {
+const PatientCard = ({ patient, setSelectedPatient }) => {
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-2 rounded-lg shadow-sm w-full transition-all duration-200 hover:bg-gray-100">
       <div className="flex items-center gap-4 w-full md:w-auto">
@@ -41,7 +41,10 @@ const PatientCard = ({ patient }) => {
         <p className="text-xs text-gray-400 mt-1">
           Last visit: {patient.LastVisit}
         </p>
-        <button className="mt-2 bg-blue-800 hover:bg-blue-700 text-white text-sm px-4 py-1 rounded-md">
+        <button
+          className="mt-2 bg-blue-800 hover:bg-blue-700 text-white text-sm px-4 py-1 rounded-md"
+          onClick={() => setSelectedPatient(patient)}
+        >
           View Details
         </button>
       </div>

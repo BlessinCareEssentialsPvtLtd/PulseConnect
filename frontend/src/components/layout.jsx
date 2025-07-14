@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
   }, [showProfileComponent]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#E9F8FF] ">
+    <div className="flex flex-col bg-[#E9F8FF] ">
       <AnimatePresence mode="wait">
         {showProfileComponent && (
           <motion.div
@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
         )}
       </AnimatePresence>
       <div className="h-16 " id="navbarPlaceholder" />
-      <div className="flex flex-1 justify-center md:justify-start">
+      <div className="flex flex-1 justify-center md:justify-start overflow-hidden">
         <div
           className=" w-[8.33%] lg:w-[21.4%] h-full hidden md:block"
           id="leftplaceholder"
