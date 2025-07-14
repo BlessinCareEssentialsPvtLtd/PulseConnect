@@ -41,6 +41,7 @@ function PLogin() {
   return (
     <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
       <form
+<<<<<<< HEAD
         onSubmit={handleLogin}
         className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md space-y-6"
       >
@@ -113,6 +114,51 @@ function PLogin() {
           >
             {showPassword ? "Hide" : "Show"}
           </button>
+=======
+        onSubmit={handleSubmit}
+        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md space-y-6"
+      >
+        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+
+        <div className="space-y-4">
+          <div className="text-left">
+            <label
+              htmlFor="loginId"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Username or Email
+            </label>
+            <input
+              type="text"
+              id="loginId"
+              name="loginId"
+              placeholder="Enter username or email"
+              value={form.loginId}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+
+          <div className="text-left">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+>>>>>>> 9bccbcb3bf2e84a3c10b3e38c362133bb961bc2e
         </div>
 
         <button
@@ -124,7 +170,11 @@ function PLogin() {
 
         <p className="text-center text-sm text-gray-600">
           Not having an account?{" "}
+<<<<<<< HEAD
           <a href="/signup/patient" className="text-indigo-600 hover:underline">
+=======
+          <a href="/signup" className="text-indigo-600 hover:underline">
+>>>>>>> 9bccbcb3bf2e84a3c10b3e38c362133bb961bc2e
             Sign Up
           </a>
         </p>
