@@ -59,10 +59,13 @@ const generateUniqueId = (name, dob, role) => {
 
 // === Username Generator === (only for doctor)
 const generateUniqueUsername = async (name, dob) => {
-  const base = slugify(`dr.${name.split(" ")[0]}${dob.replace(/-/g, "").slice(2)}`, {
-    lower: true,
-    strict: true,
-  });
+  const base = slugify(
+    `dr.${name.split(" ")[0]}${dob.replace(/-/g, "").slice(2)}`,
+    {
+      lower: true,
+      strict: true,
+    }
+  );
 
   let username = base;
   let counter = 1;
@@ -147,9 +150,11 @@ router.post("/login/doctor", async (req, res) => {
     if (!doctor) return res.status(401).json({ message: "Doctor not found" });
 
     const isMatch = await bcrypt.compare(password, doctor.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid credentials" });
 
-    if (!doctor.isVerified) return res.status(403).json({ message: "Account not verified" });
+    if (!doctor.isVerified)
+      return res.status(403).json({ message: "Account not verified" });
 
     // ✅ Make sure to send all fields needed by the dashboard
     res.status(200).json({
@@ -177,8 +182,6 @@ router.post("/login/doctor", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 router.post("/login/patient", async (req, res) => {
   const { identifier, password, method } = req.body;
@@ -208,31 +211,29 @@ router.post("/login/patient", async (req, res) => {
     // ✅ Return full safe patient info, including `username` and `photo`
     res.status(200).json({
       message: "Login successful",
-       patient: {
-          _id: patient._id,
-          name: patient.name,
-          username: patient.username,   // <-- ADD THIS
-          email: patient.email,
-          uniqueId: patient.uniqueId,
-          phone: patient.phone,
-          gender: patient.gender,
-          dob: patient.dob,
-          place: patient.place,
-          city: patient.city,
-          taluka: patient.taluka,
-          district: patient.district,
-          state: patient.state,
-          nation: patient.nation,
-          photo: patient.photo,         // <-- AND THIS
-        },
-      });
+      patient: {
+        _id: patient._id,
+        name: patient.name,
+        username: patient.username, // <-- ADD THIS
+        email: patient.email,
+        uniqueId: patient.uniqueId,
+        phone: patient.phone,
+        gender: patient.gender,
+        dob: patient.dob,
+        place: patient.place,
+        city: patient.city,
+        taluka: patient.taluka,
+        district: patient.district,
+        state: patient.state,
+        nation: patient.nation,
+        photo: patient.photo, // <-- AND THIS
+      },
+    });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 // === Email Check Route === (Doctor + Patient)
 router.post("/check-email", async (req, res) => {
@@ -262,7 +263,6 @@ router.post("/check-username", async (req, res) => {
   }
 });
 
-
 // === Doctor Search by Name ===
 router.get("/doctors", async (req, res) => {
   const { search } = req.query;
@@ -276,8 +276,8 @@ router.get("/doctors", async (req, res) => {
       name: { $regex: search, $options: "i" }, // case-insensitive match
     }).limit(10); // optional: limit results
 
-  // Return only safe public data
-  const result = doctors.map((doc) => ({
+    // Return only safe public data
+    const result = doctors.map((doc) => ({
       _id: doc._id,
       name: doc.name,
       email: doc.email,
@@ -286,10 +286,9 @@ router.get("/doctors", async (req, res) => {
       uniqueId: doc.uniqueId,
       photo: doc.photo,
       place: `${doc.place}, ${doc.city}, ${doc.district}, ${doc.state}, ${doc.nation}`, // 👈 full address
-      degree : doc.degree,
-      isVerified : doc.isVerified,
-  }));
-
+      degree: doc.degree,
+      isVerified: doc.isVerified,
+    }));
 
     res.status(200).json(result);
   } catch (err) {
@@ -297,8 +296,5 @@ router.get("/doctors", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
-
 
 export default router;

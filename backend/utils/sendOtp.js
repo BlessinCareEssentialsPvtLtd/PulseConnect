@@ -24,7 +24,7 @@ export const sendUniqueID = async (email, uniqueId, username, userType) => {
     service: "Gmail",
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,    // use App Password, not actual password
+      pass: process.env.EMAIL_PASS, // use App Password, not actual password
     },
   });
 
@@ -35,7 +35,9 @@ export const sendUniqueID = async (email, uniqueId, username, userType) => {
     html: `
       <h2>Welcome to Pulse Connect</h2>
       <p>Your account has been verified successfully.</p>
-      <p><strong>Your Unique ${userType === "doctor" ? "Doctor" : "Patient"} ID:</strong> ${uniqueId}</p>
+      <p><strong>Your Unique ${
+        userType === "doctor" ? "Doctor" : "Patient"
+      } ID:</strong> ${uniqueId}</p>
       <p><strong>Username:</strong> ${username}</p>
       <p>Please use this ID to log in to your account.</p>
     `,
