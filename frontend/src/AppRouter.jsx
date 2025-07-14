@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dashboard from "./pages/Dashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import Sidebar from "./components/Sidebar";
@@ -7,33 +7,33 @@ import Navbar from "./components/Navbar";
 import { ShowProfileProvider } from "./context/showProfileContext";
 
 const AppRouter = () => {
-  const [isUser, setIsUser] = useState(); // you can toggle this somehow in real app
+  // const [isUser, setIsUser] = useState(); // you can toggle this somehow in real app
 
-  useEffect(() => {
-    setIsUser(true); // Simulating user state, replace with actual logic
-  }, []);
+  // useEffect(() => {
+  //   setIsUser(true); // Simulating user state, replace with actual logic
+  // }, []);
 
   const [showProfileComponent, setShowProfileComponent] = useState(false);
 
   const router = createBrowserRouter([
+    // {
+    //   path: "/",
+    //   element: isUser ? (
+    //     <>
+    //       <Navbar />
+    //       <Sidebar />
+    //       <Dashboard />
+    //     </>
+    //   ) : (
+    //     <>
+    //       <Navbar />
+    //       {/* <Sidebar /> */}
+    //       <DoctorDashboard />
+    //     </>
+    //   ),
+    // },
     {
       path: "/",
-      element: isUser ? (
-        <>
-          <Navbar />
-          <Sidebar />
-          <Dashboard />
-        </>
-      ) : (
-        <>
-          <Navbar />
-          {/* <Sidebar /> */}
-          <DoctorDashboard />
-        </>
-      ),
-    },
-    {
-      path: "/dashboard",
       element: (
         <>
           <Navbar />
