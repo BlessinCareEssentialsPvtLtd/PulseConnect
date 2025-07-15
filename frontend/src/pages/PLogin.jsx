@@ -23,7 +23,6 @@ function PLogin() {
         {
           identifier,
           password,
-          method: loginMethod,
         }
       );
 
@@ -41,7 +40,6 @@ function PLogin() {
   return (
     <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
       <form
-<<<<<<< HEAD
         onSubmit={handleLogin}
         className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md space-y-6"
       >
@@ -50,7 +48,7 @@ function PLogin() {
         </h2>
 
         {/* Login Method Radio Buttons */}
-        <div className="flex justify-center gap-4">
+        {/* <div className="flex justify-center gap-4">
           {["uniqueId", "email", "username"].map((method) => (
             <label key={method} className="flex items-center gap-2 text-sm">
               <input
@@ -65,7 +63,7 @@ function PLogin() {
                 : method.charAt(0).toUpperCase() + method.slice(1)}
             </label>
           ))}
-        </div>
+        </div> */}
 
         {/* Identifier Field */}
         <div className="text-left">
@@ -73,15 +71,13 @@ function PLogin() {
             htmlFor="identifier"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            {loginMethod === "uniqueId"
-              ? "Unique ID"
-              : loginMethod.charAt(0).toUpperCase() + loginMethod.slice(1)}
+            Username or Email
           </label>
           <input
-            type={loginMethod === "email" ? "email" : "text"}
+            type="text"
             id="identifier"
             name="identifier"
-            placeholder={`Enter your ${loginMethod}`}
+            placeholder={`Enter your Username or Email`}
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
             className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -114,51 +110,6 @@ function PLogin() {
           >
             {showPassword ? "Hide" : "Show"}
           </button>
-=======
-        onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md space-y-6"
-      >
-        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
-
-        <div className="space-y-4">
-          <div className="text-left">
-            <label
-              htmlFor="loginId"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Username or Email
-            </label>
-            <input
-              type="text"
-              id="loginId"
-              name="loginId"
-              placeholder="Enter username or email"
-              value={form.loginId}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              required
-            />
-          </div>
-
-          <div className="text-left">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter password"
-              value={form.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              required
-            />
-          </div>
->>>>>>> 9bccbcb3bf2e84a3c10b3e38c362133bb961bc2e
         </div>
 
         <button
@@ -170,11 +121,7 @@ function PLogin() {
 
         <p className="text-center text-sm text-gray-600">
           Not having an account?{" "}
-<<<<<<< HEAD
           <a href="/signup/patient" className="text-indigo-600 hover:underline">
-=======
-          <a href="/signup" className="text-indigo-600 hover:underline">
->>>>>>> 9bccbcb3bf2e84a3c10b3e38c362133bb961bc2e
             Sign Up
           </a>
         </p>

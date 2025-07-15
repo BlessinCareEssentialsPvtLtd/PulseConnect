@@ -139,14 +139,16 @@ router.post("/verify", async (req, res) => {
 
 // === Doctor Login ===
 router.post("/login/doctor", async (req, res) => {
-  const { identifier, password, method } = req.body;
+  const { identifier, password } = req.body;
 
   try {
-    if (!["email", "uniqueId", "username"].includes(method)) {
-      return res.status(400).json({ message: "Invalid login method" });
+    if (!identifier || !password) {
+      return res.status(400).json({ message: "Invalid login credentials" });
     }
 
-    const doctor = await Doctor.findOne({ [method]: identifier });
+    const doctor = await Doctor.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
     if (!doctor) return res.status(401).json({ message: "Doctor not found" });
 
     const isMatch = await bcrypt.compare(password, doctor.password);
@@ -184,17 +186,16 @@ router.post("/login/doctor", async (req, res) => {
 });
 
 router.post("/login/patient", async (req, res) => {
-  const { identifier, password, method } = req.body;
+  const { identifier, password } = req.body;
 
   try {
-    if (!["email", "uniqueId", "username"].includes(method)) {
-      return res.status(400).json({ message: "Invalid login method" });
+    if (!identifier || !password) {
+      return res.status(400).json({ message: "Invalid login credentials" });
     }
 
-    const query = {};
-    query[method] = identifier;
-
-    const patient = await Patient.findOne(query);
+    const patient = await Patient.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    });
     if (!patient) {
       return res.status(401).json({ message: "Patient not found" });
     }
