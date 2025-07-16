@@ -6,11 +6,11 @@ import slugify from "slugify";
 import bcrypt from "bcrypt";
 
 const router = express.Router();
-const otps = {}; // In-memory temp OTP storage
+const otps = {}; // In-memory OTP store
 
 // === Doctor Signup ===
 router.post("/signup/doctor", async (req, res) => {
-  const { email } = req.body;
+  const email = req.body.email.toLowerCase();
 
   try {
     const existing = await Doctor.findOne({ email });
@@ -19,18 +19,19 @@ router.post("/signup/doctor", async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    otps[email] = { otp, data: req.body };
+    otps[email] = { otp, data: { ...req.body, email } };
 
     await sendOTP(email, otp);
     res.status(200).json({ message: "OTP sent to doctor email" });
   } catch (err) {
+    console.error("Doctor signup error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
 // === Patient Signup ===
 router.post("/signup/patient", async (req, res) => {
-  const { email } = req.body;
+  const email = req.body.email.toLowerCase();
 
   try {
     const existing = await Patient.findOne({ email });
@@ -39,33 +40,32 @@ router.post("/signup/patient", async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    otps[email] = { otp, data: req.body };
+    otps[email] = { otp, data: { ...req.body, email } };
+    console.log("Stored OTP to:", email, otps[email]);
 
     await sendOTP(email, otp);
     res.status(200).json({ message: "OTP sent to patient email" });
   } catch (err) {
+    console.error("Patient signup error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// === Unique ID Generator ===
+// === Generate Unique ID ===
 const generateUniqueId = (name, dob, role) => {
-  const namePrefix = name.slice(0, 2).toUpperCase();
-  const dobYear = dob.slice(2, 4);
+  const namePrefix = name?.slice(0, 2).toUpperCase();
+  const dobYear = dob?.slice(2, 4);
   const roleCode = role === "doctor" ? "DR" : "PT";
   const random = Math.random().toString(36).substring(2, 6).toUpperCase();
   return `${namePrefix}${dobYear}${roleCode}-${random}`;
 };
 
-// === Username Generator === (only for doctor)
+// === Username Generator (Doctor Only) ===
 const generateUniqueUsername = async (name, dob) => {
-  const base = slugify(
-    `dr.${name.split(" ")[0]}${dob.replace(/-/g, "").slice(2)}`,
-    {
-      lower: true,
-      strict: true,
-    }
-  );
+  const base = slugify(`dr.${name.split(" ")[0]}${dob.replace(/-/g, "").slice(2)}`, {
+    lower: true,
+    strict: true,
+  });
 
   let username = base;
   let counter = 1;
@@ -79,9 +79,14 @@ const generateUniqueUsername = async (name, dob) => {
 };
 
 // === OTP Verification Route ===
+console.log("Current keys in OTPs:", Object.keys(otps));
+
 router.post("/verify", async (req, res) => {
-  const { email, otp, type } = req.body;
-  const stored = otps[email];
+  const email = req.body.email.toLowerCase();
+  const { otp, type } = req.body;
+
+  // const stored = otps[email];
+  // console.log("Stored OTP:", stored);
 
   if (!stored || stored.otp != otp) {
     return res.status(400).json({ message: "Invalid OTP" });
@@ -89,10 +94,10 @@ router.post("/verify", async (req, res) => {
 
   const { name, dob } = stored.data;
 
-  // Generate unique ID
+  // Generate Unique ID
   let uniqueId;
   let isUnique = false;
-  for (let attempts = 0; attempts < 5 && !isUnique; attempts++) {
+  for (let i = 0; i < 5 && !isUnique; i++) {
     const tempId = generateUniqueId(name, dob, type);
     const exists =
       type === "doctor"
@@ -113,6 +118,7 @@ router.post("/verify", async (req, res) => {
     const hashedPassword = await bcrypt.hash(stored.data.password, 10);
     const userData = {
       ...stored.data,
+      email,
       password: hashedPassword,
       isVerified: true,
       uniqueId,
@@ -137,28 +143,21 @@ router.post("/verify", async (req, res) => {
   }
 });
 
-// === Doctor Login ===
+// === Login Routes (Doctor + Patient) ===
 router.post("/login/doctor", async (req, res) => {
   const { identifier, password } = req.body;
 
   try {
-    if (!identifier || !password) {
-      return res.status(400).json({ message: "Invalid login credentials" });
-    }
-
     const doctor = await Doctor.findOne({
-      $or: [{ email: identifier }, { username: identifier }],
+      $or: [{ email: identifier.toLowerCase() }, { username: identifier }],
     });
+
     if (!doctor) return res.status(401).json({ message: "Doctor not found" });
 
     const isMatch = await bcrypt.compare(password, doctor.password);
-    if (!isMatch)
-      return res.status(401).json({ message: "Invalid credentials" });
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    if (!doctor.isVerified) return res.status(403).json({ message: "Account not verified" });
 
-    if (!doctor.isVerified)
-      return res.status(403).json({ message: "Account not verified" });
-
-    // ✅ Make sure to send all fields needed by the dashboard
     res.status(200).json({
       message: "Login successful",
       doctor: {
@@ -176,11 +175,12 @@ router.post("/login/doctor", async (req, res) => {
         district: doctor.district,
         state: doctor.state,
         nation: doctor.nation,
-        photo: doctor.photo, // ✅ fixed
-        isVerified: doctor.isVerified, // ✅ for blue tick
+        photo: doctor.photo,
+        isVerified: doctor.isVerified,
       },
     });
   } catch (err) {
+    console.error("Doctor login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -189,33 +189,22 @@ router.post("/login/patient", async (req, res) => {
   const { identifier, password } = req.body;
 
   try {
-    if (!identifier || !password) {
-      return res.status(400).json({ message: "Invalid login credentials" });
-    }
-
     const patient = await Patient.findOne({
-      $or: [{ email: identifier }, { username: identifier }],
+      $or: [{ email: identifier.toLowerCase() }, { username: identifier }],
     });
-    if (!patient) {
-      return res.status(401).json({ message: "Patient not found" });
-    }
+
+    if (!patient) return res.status(401).json({ message: "Patient not found" });
 
     const isMatch = await bcrypt.compare(password, patient.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    if (!patient.isVerified) return res.status(403).json({ message: "Account not verified" });
 
-    if (!patient.isVerified) {
-      return res.status(403).json({ message: "Account not verified" });
-    }
-
-    // ✅ Return full safe patient info, including `username` and `photo`
     res.status(200).json({
       message: "Login successful",
       patient: {
         _id: patient._id,
         name: patient.name,
-        username: patient.username, // <-- ADD THIS
+        username: patient.username,
         email: patient.email,
         uniqueId: patient.uniqueId,
         phone: patient.phone,
@@ -227,26 +216,24 @@ router.post("/login/patient", async (req, res) => {
         district: patient.district,
         state: patient.state,
         nation: patient.nation,
-        photo: patient.photo, // <-- AND THIS
+        photo: patient.photo,
       },
     });
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("Patient login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// === Email Check Route === (Doctor + Patient)
+// === Email & Username Checks ===
 router.post("/check-email", async (req, res) => {
-  const { email, type } = req.body;
+  const email = req.body.email.toLowerCase();
+  const { type } = req.body;
 
   try {
     let exists = false;
-    if (type === "doctor") {
-      exists = !!(await Doctor.findOne({ email }));
-    } else if (type === "patient") {
-      exists = !!(await Patient.findOne({ email }));
-    }
+    if (type === "doctor") exists = !!(await Doctor.findOne({ email }));
+    if (type === "patient") exists = !!(await Patient.findOne({ email }));
 
     res.json({ exists });
   } catch {
@@ -267,17 +254,13 @@ router.post("/check-username", async (req, res) => {
 // === Doctor Search by Name ===
 router.get("/doctors", async (req, res) => {
   const { search } = req.query;
-
-  if (!search) {
-    return res.status(400).json({ message: "Search query is required" });
-  }
+  if (!search) return res.status(400).json({ message: "Search query is required" });
 
   try {
     const doctors = await Doctor.find({
-      name: { $regex: search, $options: "i" }, // case-insensitive match
-    }).limit(10); // optional: limit results
+      name: { $regex: search, $options: "i" },
+    }).limit(10);
 
-    // Return only safe public data
     const result = doctors.map((doc) => ({
       _id: doc._id,
       name: doc.name,
@@ -286,7 +269,7 @@ router.get("/doctors", async (req, res) => {
       specialization: doc.specialization,
       uniqueId: doc.uniqueId,
       photo: doc.photo,
-      place: `${doc.place}, ${doc.city}, ${doc.district}, ${doc.state}, ${doc.nation}`, // 👈 full address
+      place: `${doc.place}, ${doc.city}, ${doc.district}, ${doc.state}, ${doc.nation}`,
       degree: doc.degree,
       isVerified: doc.isVerified,
     }));
