@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const doctorSchema = new mongoose.Schema({
-  name: String,
+  fullName: String,
   email: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   gender: String,
   specialization: String,
@@ -16,17 +16,17 @@ const doctorSchema = new mongoose.Schema({
   dob: String,
   drId: String,
   password: String,
-  isVerified: { 
-    type: Boolean, 
-    default: false 
+  isVerified: {
+    type: Boolean,
+    default: false,
   },
-  uniqueId: { 
-    type: String, 
-    unique: true 
+  uniqueId: {
+    type: String,
+    unique: true,
   },
-  username: { 
-    type: String, 
-    unique: true 
+  username: {
+    type: String,
+    unique: true,
   },
   place: String,
   city: String,
@@ -34,13 +34,13 @@ const doctorSchema = new mongoose.Schema({
   district: String,
   state: String,
   nation: String,
-  photo: { 
-    type: String 
+  photo: {
+    type: String,
   },
   experience: {
     type: Number,
     required: true,
-    },
+  },
 });
 
 export default mongoose.model("Doctor", doctorSchema);

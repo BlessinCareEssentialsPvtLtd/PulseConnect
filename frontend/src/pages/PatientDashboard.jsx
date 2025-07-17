@@ -10,7 +10,8 @@ const PatientDashboard = () => {
   const location = useLocation();
 
   // ✅ Get patient data from location.state or fallback to localStorage
-  const patientData = location.state?.patient || JSON.parse(localStorage.getItem("patientData"));
+  const patientData =
+    location.state?.patient || JSON.parse(localStorage.getItem("patientData"));
 
   if (!patientData) {
     return (
@@ -21,14 +22,14 @@ const PatientDashboard = () => {
   }
 
   const patient = {
-    name: patientData.name,
+    fullName: patientData.fullName,
     uniqueId: patientData.uniqueId,
     email: patientData.email,
     phone: patientData.phone,
     userName: patientData.username,
     dob: patientData.dob,
     gender: patientData.gender,
-    place: `${patientData.place}, ${patientData.city}, ${patientData.district}, ${patientData.state}, ${patientData.nation}`,
+    place: `${patientData.address}, ${patientData.district}, ${patientData.state}, ${patientData.pinCode}`,
     photo: patientData.photo,
     experience: patientData.experience,
   };

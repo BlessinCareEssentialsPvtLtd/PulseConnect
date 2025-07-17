@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import appointment from "./routes/appointments.js";
+import patientProfile from "./routes/patientProfile.js";
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointment);
+app.use("/api/patient", patientProfile);
 
 mongoose
   .connect(process.env.MONGO_URI, {

@@ -19,7 +19,8 @@ router.post("/signup/doctor", async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    otps[email] = { otp, data: { ...req.body, email } };
+    otps[email] = { otp, data: { ...req.body, email, type: "doctor" } };
+    // console.log("OTP stored:", otps[email]);
 
     await sendOTP(email, otp);
     res.status(200).json({ message: "OTP sent to doctor email" });
@@ -31,6 +32,7 @@ router.post("/signup/doctor", async (req, res) => {
 
 // === Patient Signup ===
 router.post("/signup/patient", async (req, res) => {
+  //  photo: "",  fullName: "",email: "",username: "",  password: "",  confirmPassword: "",  otp: "",
   const email = req.body.email.toLowerCase();
 
   try {
@@ -40,8 +42,8 @@ router.post("/signup/patient", async (req, res) => {
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-    otps[email] = { otp, data: { ...req.body, email } };
-    console.log("Stored OTP to:", email, otps[email]);
+    otps[email] = { otp, data: { ...req.body, email, type: "patient" } };
+    // console.log("OTP stored:", otps[email]);
 
     await sendOTP(email, otp);
     res.status(200).json({ message: "OTP sent to patient email" });
@@ -62,10 +64,13 @@ const generateUniqueId = (name, dob, role) => {
 
 // === Username Generator (Doctor Only) ===
 const generateUniqueUsername = async (name, dob) => {
-  const base = slugify(`dr.${name.split(" ")[0]}${dob.replace(/-/g, "").slice(2)}`, {
-    lower: true,
-    strict: true,
-  });
+  const base = slugify(
+    `dr.${name.split(" ")[0]}${dob.replace(/-/g, "").slice(2)}`,
+    {
+      lower: true,
+      strict: true,
+    }
+  );
 
   let username = base;
   let counter = 1;
@@ -79,26 +84,23 @@ const generateUniqueUsername = async (name, dob) => {
 };
 
 // === OTP Verification Route ===
-console.log("Current keys in OTPs:", Object.keys(otps));
-
 router.post("/verify", async (req, res) => {
   const email = req.body.email.toLowerCase();
-  const { otp, type } = req.body;
-
-  // const stored = otps[email];
+  const { otp } = req.body;
+  const stored = otps[email];
   // console.log("Stored OTP:", stored);
 
   if (!stored || stored.otp != otp) {
     return res.status(400).json({ message: "Invalid OTP" });
   }
 
-  const { name, dob } = stored.data;
+  const { fullName, dob, type } = stored.data;
 
   // Generate Unique ID
   let uniqueId;
   let isUnique = false;
   for (let i = 0; i < 5 && !isUnique; i++) {
-    const tempId = generateUniqueId(name, dob, type);
+    const tempId = generateUniqueId(fullName, dob, type);
     const exists =
       type === "doctor"
         ? await Doctor.findOne({ uniqueId: tempId })
@@ -125,12 +127,14 @@ router.post("/verify", async (req, res) => {
     };
 
     if (type === "doctor") {
-      const username = await generateUniqueUsername(name, dob);
+      const username = await generateUniqueUsername(fullName, dob);
       const doctor = new Doctor({ ...userData, username });
       await doctor.save();
+      console.log("Doctor saved:", doctor);
       await sendUniqueID(email, uniqueId, username, "doctor");
     } else {
       const patient = new Patient({ ...userData });
+      console.log("Patient saved:", patient);
       await patient.save();
       await sendUniqueID(email, uniqueId, "", "patient");
     }
@@ -149,19 +153,25 @@ router.post("/login/doctor", async (req, res) => {
 
   try {
     const doctor = await Doctor.findOne({
-      $or: [{ email: identifier.toLowerCase() }, { username: identifier }],
+      $or: [
+        { email: identifier.toLowerCase() },
+        { username: identifier },
+        { uniqueId: identifier },
+      ],
     });
 
     if (!doctor) return res.status(401).json({ message: "Doctor not found" });
 
     const isMatch = await bcrypt.compare(password, doctor.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
-    if (!doctor.isVerified) return res.status(403).json({ message: "Account not verified" });
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid credentials" });
+    if (!doctor.isVerified)
+      return res.status(403).json({ message: "Account not verified" });
 
     res.status(200).json({
       message: "Login successful",
       doctor: {
-        name: doctor.name,
+        fullName: doctor.fullName,
         uniqueId: doctor.uniqueId,
         email: doctor.email,
         gender: doctor.gender,
@@ -190,20 +200,26 @@ router.post("/login/patient", async (req, res) => {
 
   try {
     const patient = await Patient.findOne({
-      $or: [{ email: identifier.toLowerCase() }, { username: identifier }],
+      $or: [
+        { email: identifier.toLowerCase() },
+        { username: identifier },
+        { uniqueId: identifier },
+      ],
     });
 
     if (!patient) return res.status(401).json({ message: "Patient not found" });
 
     const isMatch = await bcrypt.compare(password, patient.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
-    if (!patient.isVerified) return res.status(403).json({ message: "Account not verified" });
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid credentials" });
+    if (!patient.isVerified)
+      return res.status(403).json({ message: "Account not verified" });
 
     res.status(200).json({
       message: "Login successful",
       patient: {
         _id: patient._id,
-        name: patient.name,
+        fullName: patient.fullName,
         username: patient.username,
         email: patient.email,
         uniqueId: patient.uniqueId,
@@ -254,16 +270,17 @@ router.post("/check-username", async (req, res) => {
 // === Doctor Search by Name ===
 router.get("/doctors", async (req, res) => {
   const { search } = req.query;
-  if (!search) return res.status(400).json({ message: "Search query is required" });
+  if (!search)
+    return res.status(400).json({ message: "Search query is required" });
 
   try {
     const doctors = await Doctor.find({
-      name: { $regex: search, $options: "i" },
+      fullName: { $regex: search, $options: "i" },
     }).limit(10);
 
     const result = doctors.map((doc) => ({
       _id: doc._id,
-      name: doc.name,
+      fullName: doc.fullName,
       email: doc.email,
       experience: doc.experience,
       specialization: doc.specialization,

@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 
 export async function sendOTP(email, otp) {
+  // console.log("Sending OTP to:", email);
+  // console.log("OTP:", otp);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -35,7 +37,8 @@ export const sendUniqueID = async (email, uniqueId, username, userType) => {
     html: `
       <h2>Welcome to Pulse Connect</h2>
       <p>Your account has been verified successfully.</p>
-      <p><strong>Your Unique ${userType === "doctor" ? "Doctor" : "Patient"
+      <p><strong>Your Unique ${
+        userType === "doctor" ? "Doctor" : "Patient"
       } ID:</strong> ${uniqueId}</p>
       <p><strong>Username:</strong> ${username}</p>
       <p>Please use this ID to log in to your account.</p>

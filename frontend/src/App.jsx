@@ -7,13 +7,14 @@ import DashboardLayout from "./layout/DashboardLayout";
 
 import PatientDashboard from "./pages/PatientDashboard";
 import PLogin from "./pages/PLogin.jsx";
-import PSignUp from "./pages/PSignUp.jsx";
+import PSignup from "./pages/PSignup.jsx";
+import CompleteProfile from "./pages/CompleteProfile.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import DoctorDashboard from "./pages/DoctorDashboard";
-import DoctorLogin from "./pages/DoctorLogin";
-import DoctorSignup from "./pages/DoctorSignup";
-import VerifyOTP from "./pages/VerifyOTP";
+// import VerifyOTP from "./pages/VerifyOTP";
 import AppointmentRequest from "./pages/AppointmentRequest.jsx";
+import DSignup from "./pages/DSignup.jsx";
+import DLogin from "./pages/DLogin.jsx";
 // import other pages as needed
 
 function App() {
@@ -21,9 +22,9 @@ function App() {
     <>
       <ToastContainer position="top-center" autoClose={3000} />
       <Routes>
-        <Route path="/signup/doctor" element={<DoctorSignup />} />
-        <Route path="/login/doctor" element={<DoctorLogin />} />
-        <Route path="/verify-otp" element={<VerifyOTP />} />
+        <Route path="/signup/doctor" element={<DSignup />} />
+        <Route path="/login/doctor" element={<DLogin />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/dashboard/doctor" element={<DoctorDashboard />} />
         <Route
           path="/dashboard/patient"
@@ -48,7 +49,7 @@ function App() {
         {/* mine */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login/patient" element={<PLogin />} />
-        <Route path="/signup/patient" element={<PSignUp />} />
+        <Route path="/signup/patient" element={<PSignup />} />
         {/* mine */}
       </Routes>
     </>

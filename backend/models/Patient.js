@@ -1,26 +1,30 @@
 import mongoose from "mongoose";
 
 const patientSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  uniqueId: String,
-  username: { type: String, unique: true },
-  phone: String,
-  gender: String,
-  dob: String,
-  password: String,
+  fullName: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  uniqueId: { type: String, required: true, unique: true },
+  phone: { type: String },
+  dob: { type: String },
+  gender: { type: String },
+  photo: { type: String },
+  state: { type: String },
+  district: { type: String },
+  address: { type: String },
+  pinCode: { type: String },
+  emergencyContact: { type: String },
+  bloodGroup: { type: String },
+  height: { type: String },
+  weight: { type: String },
+  pastDiseases: { type: String },
+  chronicDiseases: { type: String },
+  familyMedHistory: { type: String },
+  lifestyleHabits: { type: String },
+  allergies: { type: String },
   isVerified: { type: Boolean, default: false },
-
-
-
-  // Add these fields for address info
-  place: String,
-  city: String,
-  taluka: String,
-  district: String,
-  state: String,
-  nation: String,
-  photo: { type: String }, 
+  isCompleted: { type: Boolean, default: false },
 });
 
 export default mongoose.model("Patient", patientSchema);

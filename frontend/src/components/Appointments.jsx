@@ -35,7 +35,7 @@ const Appointments = () => {
       <div className="absolute top-5 right-5 z-10">
         <button
           onClick={() => setShowPopup(true)}
-          className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm shadow"
+          className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm shadow cursor-pointer"
         >
           + Request Appointment
         </button>
@@ -82,7 +82,10 @@ const Appointments = () => {
           Appointments
         </h2>
         <span className="text-sm text-gray-500">
-          {new Date().toLocaleString("default", { month: "long", year: "numeric" })}
+          {new Date().toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          })}
         </span>
       </div>
 
@@ -103,11 +106,13 @@ const Appointments = () => {
 
             <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
               <div className="grid grid-cols-7 gap-2 text-center text-xs text-gray-700">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <span key={day} className="font-bold text-blue-700">
-                    {day}
-                  </span>
-                ))}
+                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                  (day) => (
+                    <span key={day} className="font-bold text-blue-700">
+                      {day}
+                    </span>
+                  )
+                )}
                 {[...Array(31)].map((_, i) => {
                   const date = i + 1;
                   const isToday = date === today;
@@ -131,7 +136,9 @@ const Appointments = () => {
 
         {view === "pending" && (
           <div>
-            <h3 className="text-blue-600 font-medium text-sm mb-2">Pending Requests</h3>
+            <h3 className="text-blue-600 font-medium text-sm mb-2">
+              Pending Requests
+            </h3>
             {pendingAppts.length === 0 ? (
               <p className="text-gray-600 text-sm">No pending appointments.</p>
             ) : (
@@ -142,7 +149,9 @@ const Appointments = () => {
                     className="text-sm border-l-4 border-yellow-400 pl-3 py-1 bg-yellow-50 rounded"
                   >
                     <p>Dr. {appt.doctorName}</p>
-                    <p className="text-xs text-gray-600">{new Date(appt.date).toLocaleString()}</p>
+                    <p className="text-xs text-gray-600">
+                      {new Date(appt.date).toLocaleString()}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -152,7 +161,9 @@ const Appointments = () => {
 
         {view === "approved" && (
           <div>
-            <h3 className="text-green-600 font-medium text-sm mb-2">Approved Appointments</h3>
+            <h3 className="text-green-600 font-medium text-sm mb-2">
+              Approved Appointments
+            </h3>
             {approvedAppts.length === 0 ? (
               <p className="text-gray-600 text-sm">No approved appointments.</p>
             ) : (
@@ -163,7 +174,9 @@ const Appointments = () => {
                     className="text-sm border-l-4 border-green-500 pl-3 py-1 bg-green-50 rounded"
                   >
                     <p>Dr. {appt.doctorName}</p>
-                    <p className="text-xs text-gray-600">{new Date(appt.date).toLocaleString()}</p>
+                    <p className="text-xs text-gray-600">
+                      {new Date(appt.date).toLocaleString()}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -182,7 +195,7 @@ const Appointments = () => {
             >
               &times;
             </button>
-            <h2 className="text-xl font-bold mb-4">Request Appointment</h2>
+            <h2 className="text-xl font-bold mb-4 ">Request Appointment</h2>
             <div className="max-h-[75vh] overflow-y-auto pr-2">
               <AppointmentRequest />
             </div>

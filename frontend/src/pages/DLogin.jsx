@@ -3,45 +3,43 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-
-const DoctorLogin = () => {
+const DLogin = () => {
   const navigate = useNavigate();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!identifier || !password) {
-    return toast.error("Please enter all fields.");
-  }
-
-  try {
-    const res = await axios.post("/api/auth/login/doctor", {
-      identifier,
-      password,
-    });
-
-    // ✅ Check if res.data and res.data.doctor exist before using them
-    if (res.data?.doctor) {
-      toast.success(`Welcome Dr. ${res.data.doctor.name}`);
-      // console.log(res.data.doctor);
-      navigate("/dashboard/doctor", {
-        state: {
-          doctor: res.data.doctor,
-        },
-      });
-    } else {
-      toast.error("Login response was invalid.");
+    if (!identifier || !password) {
+      return toast.error("Please enter all fields.");
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    const errorMessage = err.response?.data?.message || "Login failed";
-    toast.error(errorMessage);
-  }
-};
 
+    try {
+      const res = await axios.post("/api/auth/login/doctor", {
+        identifier,
+        password,
+      });
+
+      // ✅ Check if res.data and res.data.doctor exist before using them
+      if (res.data?.doctor) {
+        toast.success(`Welcome Dr. ${res.data.doctor.name}`);
+        // console.log(res.data.doctor);
+        navigate("/dashboard/doctor", {
+          state: {
+            doctor: res.data.doctor,
+          },
+        });
+      } else {
+        toast.error("Login response was invalid.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      const errorMessage = err.response?.data?.message || "Login failed";
+      toast.error(errorMessage);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
@@ -136,4 +134,4 @@ const DoctorLogin = () => {
   );
 };
 
-export default DoctorLogin;
+export default DLogin;

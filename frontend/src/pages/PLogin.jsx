@@ -5,7 +5,7 @@ import axios from "axios";
 
 function PLogin() {
   const navigate = useNavigate();
-  const [loginMethod, setLoginMethod] = useState("uniqueId");
+  // const [loginMethod, setLoginMethod] = useState("uniqueId");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,8 +26,9 @@ function PLogin() {
         }
       );
 
-      toast.success(`Welcome ${res.data.patient.name}`);
+      toast.success(`Welcome ${res.data.patient.fullName}`);
       localStorage.setItem("patientData", JSON.stringify(res.data.patient));
+      console.log(res.data.patient);
       navigate("/dashboard/patient", {
         state: { patient: res.data.patient },
       });

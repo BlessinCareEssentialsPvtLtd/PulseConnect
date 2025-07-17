@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const PSignup = () => {
   const [formData, setFormData] = useState({
-    photo: "",
+    dob: "",
     fullName: "",
     email: "",
     username: "",
@@ -34,10 +34,13 @@ const PSignup = () => {
     }
     const timeout = setTimeout(async () => {
       try {
-        const res = await axios.post("http://localhost:5000/api/auth/check-email", {
-          email: formData.email,
-          type: "patient",
-        });
+        const res = await axios.post(
+          "http://localhost:5000/api/auth/check-email",
+          {
+            email: formData.email,
+            type: "patient",
+          }
+        );
         setEmailValid(!res.data.exists);
       } catch {
         setEmailValid(false);
@@ -54,9 +57,12 @@ const PSignup = () => {
     }
     const timeout = setTimeout(async () => {
       try {
-        const res = await axios.post("http://localhost:5000/api/auth/check-username", {
-          username: formData.username,
-        });
+        const res = await axios.post(
+          "http://localhost:5000/api/auth/check-username",
+          {
+            username: formData.username,
+          }
+        );
         setUsernameValid(!res.data.exists);
       } catch {
         setUsernameValid(false);
@@ -76,20 +82,12 @@ const PSignup = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({ ...prev, photo: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSendOtp = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/signup/patient", formData);
+      await axios.post(
+        "http://localhost:5000/api/auth/signup/patient",
+        formData
+      );
       toast.success("OTP sent to your email");
       setOtpSent(true);
     } catch (err) {
@@ -112,7 +110,7 @@ const PSignup = () => {
         type: "patient",
       });
       toast.success("Signup verified!");
-      navigate("/login");
+      navigate("/login/patient");
     } catch (err) {
       toast.error(err.response?.data?.message || "OTP verification failed");
     } finally {
@@ -140,29 +138,15 @@ const PSignup = () => {
         onSubmit={handleSubmit}
         className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md space-y-6"
       >
-        <h2 className="text-2xl font-bold text-center text-gray-800">Create an Account</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-800">
+          Create an Account
+        </h2>
 
         <div className="space-y-4">
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Profile Photo</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className="w-full p-2 border border-blue-300 rounded bg-white"
-              disabled={isSubmitting}
-            />
-            {formData.photo && (
-              <img
-                src={formData.photo}
-                alt="Preview"
-                className="w-20 h-20 rounded-full object-cover mt-2 mx-auto border border-blue-400"
-              />
-            )}
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Full Name</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Full Name
+            </label>
             <input
               type="text"
               name="fullName"
@@ -176,7 +160,9 @@ const PSignup = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Username</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Username
+            </label>
             <input
               type="text"
               name="username"
@@ -185,22 +171,46 @@ const PSignup = () => {
               onChange={handleChange}
               required
               disabled={isSubmitting}
-              className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 ${usernameValid === null
-                ? "focus:ring-indigo-500"
-                : usernameValid
+              className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 ${
+                usernameValid === null
+                  ? "focus:ring-indigo-500"
+                  : usernameValid
                   ? "focus:ring-green-500 border-green-400"
                   : "focus:ring-red-500 border-red-400"
-                }`}
+              }`}
             />
             {usernameValid !== null && (
-              <p className={`text-sm mt-1 ${usernameValid ? "text-green-600" : "text-red-600"}`}>
+              <p
+                className={`text-sm mt-1 ${
+                  usernameValid ? "text-green-600" : "text-red-600"
+                }`}
+              >
                 {usernameValid ? "Username available" : "Username taken"}
               </p>
             )}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              name="dob"
+              max={new Date().toISOString().split("T")[0]}
+              placeholder="Date of Birth"
+              value={formData.dob}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -209,22 +219,29 @@ const PSignup = () => {
               onChange={handleChange}
               required
               disabled={isSubmitting}
-              className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 ${emailValid === null
-                ? "focus:ring-indigo-500"
-                : emailValid
+              className={`w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 ${
+                emailValid === null
+                  ? "focus:ring-indigo-500"
+                  : emailValid
                   ? "focus:ring-green-500 border-green-400"
                   : "focus:ring-red-500 border-red-400"
-                }`}
+              }`}
             />
             {emailValid !== null && (
-              <p className={`text-sm mt-1 ${emailValid ? "text-green-600" : "text-red-600"}`}>
+              <p
+                className={`text-sm mt-1 ${
+                  emailValid ? "text-green-600" : "text-red-600"
+                }`}
+              >
                 {emailValid ? "Email available" : "Email taken"}
               </p>
             )}
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -245,7 +262,9 @@ const PSignup = () => {
           </div>
 
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Confirm Password</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Confirm Password
+            </label>
             <input
               type="password"
               name="confirmPassword"
@@ -256,14 +275,19 @@ const PSignup = () => {
               disabled={isSubmitting}
               className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-              <p className="text-sm text-red-600 mt-1">Passwords do not match</p>
-            )}
+            {formData.confirmPassword &&
+              formData.password !== formData.confirmPassword && (
+                <p className="text-sm text-red-600 mt-1">
+                  Passwords do not match
+                </p>
+              )}
           </div>
 
           {otpSent && (
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">OTP</label>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                OTP
+              </label>
               <input
                 type="text"
                 name="otp"
@@ -280,18 +304,20 @@ const PSignup = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting || (otpSent ? !formData.otp : !emailValid || !usernameValid)}
-          className={`w-full py-2 px-4 cursor-pointer text-white rounded-xl transition ${isSubmitting
-            ? "bg-blue-400"
-            : "bg-indigo-600 hover:bg-indigo-700"
-            }`}
+          disabled={
+            isSubmitting ||
+            (otpSent ? !formData.otp : !emailValid || !usernameValid)
+          }
+          className={`w-full py-2 px-4 cursor-pointer text-white rounded-xl transition ${
+            isSubmitting ? "bg-blue-400" : "bg-indigo-600 hover:bg-indigo-700"
+          }`}
         >
           {isSubmitting ? "Processing..." : otpSent ? "Verify" : "Send OTP"}
         </button>
 
         <p className="text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <a href="/login" className="text-indigo-600 hover:underline">
+          Already have an account?{" "}
+          <a href="/login/patient" className="text-indigo-600 hover:underline">
             Log In
           </a>
         </p>
