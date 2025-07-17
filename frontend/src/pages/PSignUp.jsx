@@ -197,9 +197,13 @@ const PSignup = () => {
             <input
               type="date"
               name="dob"
-              max={new Date().toISOString().split("T")[0]}
               placeholder="Date of Birth"
               value={formData.dob}
+              max={
+                new Date(new Date().setFullYear(new Date().getFullYear() - 18))
+                  .toISOString()
+                  .split("T")[0]
+              }
               onChange={handleChange}
               required
               disabled={isSubmitting}

@@ -29,9 +29,13 @@ function PLogin() {
       toast.success(`Welcome ${res.data.patient.fullName}`);
       localStorage.setItem("patientData", JSON.stringify(res.data.patient));
       console.log(res.data.patient);
-      navigate("/dashboard/patient", {
-        state: { patient: res.data.patient },
-      });
+      if (res.data.patient.isCompleted) {
+        navigate("/dashboard/patient", {
+          state: { patient: res.data.patient },
+        });
+      } else {
+        navigate("/complete-profile");
+      }
     } catch (err) {
       const errorMsg = err.response?.data?.message || "Login failed";
       toast.error(errorMsg);

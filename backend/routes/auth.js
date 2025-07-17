@@ -233,6 +233,7 @@ router.post("/login/patient", async (req, res) => {
         state: patient.state,
         nation: patient.nation,
         photo: patient.photo,
+        isCompleted: patient.isCompleted,
       },
     });
   } catch (err) {

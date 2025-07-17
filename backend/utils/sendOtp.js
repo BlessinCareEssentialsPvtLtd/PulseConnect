@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 export async function sendOTP(email, otp) {
   // console.log("Sending OTP to:", email);
-  // console.log("OTP:", otp);
+  console.log("OTP:", otp);
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {

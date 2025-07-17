@@ -8,7 +8,7 @@ router.put("/profile/:id", async (req, res) => {
   try {
     const updatedPatient = await Patient.findByIdAndUpdate(
       req.params.id,
-      { $set: req.body },
+      { $set: { ...req.body, isCompleted: true } },
       { new: true }
     );
     if (!updatedPatient) {
