@@ -5,40 +5,48 @@ import DoctorDashboard from "./pages/DoctorDashboard";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import { ShowProfileProvider } from "./context/showProfileContext";
+import PatientPage from "./components/PatientPage";
 
 const AppRouter = () => {
-  // const [isUser, setIsUser] = useState(); // you can toggle this somehow in real app
-
-  // useEffect(() => {
-  //   setIsUser(true); // Simulating user state, replace with actual logic
-  // }, []);
-
   const [showProfileComponent, setShowProfileComponent] = useState(false);
 
   const router = createBrowserRouter([
-    // {
-    //   path: "/",
-    //   element: isUser ? (
-    //     <>
-    //       <Navbar />
-    //       <Sidebar />
-    //       <Dashboard />
-    //     </>
-    //   ) : (
-    //     <>
-    //       <Navbar />
-    //       {/* <Sidebar /> */}
-    //       <DoctorDashboard />
-    //     </>
-    //   ),
-    // },
     {
-      path: "/",
+      path: "/dashboard",
+      element: (
+        <>
+          <Navbar />
+          <Sidebar />
+          <Dashboard />
+        </>
+      ),
+    },
+    {
+      path: "/doctorDashboard",
       element: (
         <>
           <Navbar />
           {/* <Sidebar /> */}
           <DoctorDashboard />
+        </>
+      ),
+    },
+    {
+      path: "/",
+
+      element: (
+        <>
+          <Navbar />
+          <PatientPage />
+        </>
+      ),
+    },
+    {
+      path: "pulsescan/user/:userId",
+      element: (
+        <>
+          <Navbar />
+          <PatientPage />
         </>
       ),
     },
