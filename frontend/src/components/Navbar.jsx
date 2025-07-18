@@ -1,7 +1,10 @@
 import { AlarmClock, Bell, ToggleLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 
 const Navbar = () => {
+  const navigate = useNavigate(); // ✅ Step 1: Use navigation
+
   return (
     <nav className="flex max-w-full h-14 md:h-16 fixed z-[5] w-screen bg-white border-b border-blue-800">
       {/* Left Section: Placeholder */}
@@ -24,10 +27,16 @@ const Navbar = () => {
           <AlarmClock size={28} />
           <span className="hidden md:block">Alert</span>
         </section>
-        <section className="flex flex-col items-center text-sm hover:text-blue-300 cursor-pointer">
+
+        {/* ✅ Notification button with navigate */}
+        <section
+          className="flex flex-col items-center text-sm hover:text-blue-300 cursor-pointer"
+          onClick={() => navigate("/notifications")} // Step 2: Handle click
+        >
           <Bell size={28} />
           <span className="hidden md:block">Notifications</span>
         </section>
+
         <section className="flex flex-col items-center text-sm hover:text-blue-300 cursor-pointer">
           <ToggleLeft size={28} />
           <span className="hidden md:block">Theme</span>

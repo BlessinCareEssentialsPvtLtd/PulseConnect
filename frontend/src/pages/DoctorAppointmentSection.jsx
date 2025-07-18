@@ -325,6 +325,7 @@ const renderCard = (a) => (
 
 
   return (
+        <div className="ml-[20vw] w-[80vw] px-4 py-6 overflow-y-auto">
     <div className="p-15 space-y-6 bg-gray-50 w-full max-w-7xl mx-auto overflow-x-hidden">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <h2 className="text-2xl font-bold">Appointments</h2>
@@ -475,6 +476,7 @@ const renderCard = (a) => (
   <div className="p-15 space-y-6 bg-gray-50 w-full max-w-7xl mx-auto overflow-x-hidden">
   </div>
 </>
+    </div>
     </div>
   );
 }
