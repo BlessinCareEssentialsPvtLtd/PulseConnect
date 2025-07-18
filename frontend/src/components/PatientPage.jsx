@@ -13,14 +13,14 @@ import {
 
 const PatientPage = () => {
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
+    <div className=" h-auto lg:h-screen bg-gray-50 overflow-hidden">
       {/* Navbar */}
       <div className="w-full h-16 bg-white shadow-sm border-b border-gray-200 flex items-center px-6">
         <h1 className="text-xl font-bold text-blue-800">HealthCare Portal</h1>
       </div>
 
       {/* Main Container */}
-      <div className="h-[calc(100vh-4rem)] p-4">
+      <div className=" h-auto lg:h-[calc(100vh-4rem)] p-4">
         <div className="bg-white rounded-xl shadow-lg border border-blue-100 h-full overflow-hidden">
           <div className="p-4 h-full">
             <div className="flex flex-col lg:flex-row gap-4 h-full">
