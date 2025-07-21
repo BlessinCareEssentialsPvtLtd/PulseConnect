@@ -24,7 +24,7 @@ const DLogin = () => {
 
       // ✅ Check if res.data and res.data.doctor exist before using them
       if (res.data?.doctor) {
-        toast.success(`Welcome Dr. ${res.data.doctor.name}`);
+        toast.success(`Welcome Dr. ${res.data.doctor.fullName}`);
         // console.log(res.data.doctor);
         navigate("/dashboard/doctor", {
           state: {

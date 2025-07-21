@@ -5,6 +5,7 @@ import DoctorProfileCard from "../components/DoctorProfileCard";
 import DoctorStats from "../components/DoctorStats";
 import DoctorAppointments from "../components/DoctorAppointments";
 import HistoryTilesD from "../components/HistoryTilesD";
+import PatientRequests from "../components/PatientRequests";
 
 const DoctorDashboard = () => {
   const location = useLocation();
@@ -33,7 +34,7 @@ const DoctorDashboard = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <DoctorAppointments doctorId={doctor.uniqueId} />
-        <HistoryTilesD isDoctor={true} />
+        <PatientRequests doctor={doctor} />
       </div>
     </DashboardLayout>
   );

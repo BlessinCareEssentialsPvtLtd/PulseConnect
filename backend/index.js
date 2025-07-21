@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import appointment from "./routes/appointments.js";
 import patientProfile from "./routes/patientProfile.js";
+import accessRoutes from "./routes/access.js";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointment);
 app.use("/api/patient", patientProfile);
+app.use("/api/access", accessRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {

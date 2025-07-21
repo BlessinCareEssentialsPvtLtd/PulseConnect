@@ -2,6 +2,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import tickImg from "../assets/image.png"
 const DoctorProfileCard = ({ doctor }) => {
+  console.log(doctor);
   return (
     <div className="bg-white p-6 rounded-lg shadow border border-blue-200">
       <div className="flex items-center gap-4">
@@ -14,7 +15,7 @@ const DoctorProfileCard = ({ doctor }) => {
           <h2 className="text-xl font-semibold text-blue-700 flex items-center gap-2">
             {doctor.name}
             {doctor.isVerified ? (
-              <img src={tickImg} width={20}/>
+              <img src={tickImg} width={20} />
             ) : (
               <MdCancel className="text-red-500" title="Not Verified" />
             )}

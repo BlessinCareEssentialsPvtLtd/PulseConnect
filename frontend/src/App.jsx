@@ -15,6 +15,7 @@ import DoctorDashboard from "./pages/DoctorDashboard";
 import AppointmentRequest from "./pages/AppointmentRequest.jsx";
 import DSignup from "./pages/DSignup.jsx";
 import DLogin from "./pages/DLogin.jsx";
+import Diagnose from "./pages/Diagnose.jsx";
 // import other pages as needed
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/login/doctor" element={<DLogin />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/dashboard/doctor" element={<DoctorDashboard />} />
+        <Route path="/diagnose" element={<Diagnose />} />
         <Route
           path="/dashboard/patient"
           element={

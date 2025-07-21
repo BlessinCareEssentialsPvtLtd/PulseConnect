@@ -47,7 +47,7 @@ const Sidebar = ({ patient }) => {
               </div>
             )}
             <div className="flex flex-col">
-              <h2 className="font-semibold text-base">{patient?.name || "John Doe"}</h2>
+              <h2 className="font-semibold text-base">{patient?.fullName || "John Doe"}</h2>
               <p className="text-xs text-gray-500">Age: {calculateAge(patient?.dob || "2000-01-01")}</p>
               <p className="text-xs text-gray-500">Gender: {patient?.gender || "M"}</p>
             </div>
@@ -56,19 +56,18 @@ const Sidebar = ({ patient }) => {
           {/* Navigation Items */}
           <nav className="space-y-1">
             {navItems.map(({ icon: Icon, label, to }) => (
-  <NavLink
-    to={to}
-    key={label}
-    className={({ isActive }) =>
-      `flex items-center gap-3 py-2 px-4 rounded-md text-sm font-medium w-full ${
-        isActive ? 'bg-blue-200 text-blue-700' : 'text-gray-700 hover:bg-blue-100'
-      }`
-    }
-  >
-    <Icon size={18} className="text-blue-600" />
-    <span>{label}</span>
-  </NavLink>
-))}
+              <NavLink
+                to={to}
+                key={label}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 py-2 px-4 rounded-md text-sm font-medium w-full ${isActive ? 'bg-blue-200 text-blue-700' : 'text-gray-700 hover:bg-blue-100'
+                  }`
+                }
+              >
+                <Icon size={18} className="text-blue-600" />
+                <span>{label}</span>
+              </NavLink>
+            ))}
           </nav>
         </div>
 

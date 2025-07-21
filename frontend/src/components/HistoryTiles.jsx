@@ -1,18 +1,42 @@
 import { NotebookPen } from "lucide-react";
-
-const data = [
-  { title: "Records", subtitle: "History", desc: "3 new doctors added" },
-  { title: "Medicines", subtitle: "Know Medicines", desc: "2 prescriptions saved" },
-  { title: "Family", subtitle: "Records", desc: "1 family member linked" },
-  { title: "Fitness", subtitle: "Get Diet", desc: "Workout goal updated" },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const HistoryTiles = () => {
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const patientData = JSON.parse(localStorage.getItem("patientData"));
+    if (!patientData?.uniqueId) {
+      setError("Patient not found");
+      setLoading(false);
+      return;
+    }
+    axios.get(`/api/access/treatment-entries/${patientData.uniqueId}`)
+      .then(res => {
+        setEntries(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load treatment history");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div className="text-center text-blue-600">Loading history...</div>;
+  if (error) return <div className="text-center text-red-600">{error}</div>;
+
+  if (entries.length === 0) {
+    return <div className="text-center text-gray-500">No treatment history found.</div>;
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 w-full">
-      {data.map((item, idx) => (
+      {entries.map((item, idx) => (
         <div
-          key={idx}
+          key={item._id || idx}
           className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition duration-300"
         >
           <div className="flex items-start gap-4">
@@ -23,9 +47,16 @@ const HistoryTiles = () => {
 
             {/* Info */}
             <div className="flex-1">
-              <h3 className="text-base font-semibold text-gray-800">{item.title}</h3>
-              <p className="text-xs text-gray-400">{item.subtitle}</p>
-              <p className="text-sm text-gray-600 mt-1">{item.desc}</p>
+              <h3 className="text-base font-semibold text-gray-800">Diagnosis: {item.diagnosis}</h3>
+              <p className="text-xs text-gray-400">Doctor: {item.doctorId}</p>
+              <p className="text-sm text-gray-600 mt-1">
+                {item.prescription && item.prescription.length > 0 && (
+                  <span>
+                    <b>Prescription:</b> {item.prescription.map((p, i) => `${p.drug} (${p.dosage}, ${p.times}/day)`).join(", ")}
+                  </span>
+                )}
+              </p>
+              <p className="text-xs text-gray-500 mt-2">{new Date(item.createdAt).toLocaleString()}</p>
             </div>
           </div>
         </div>
