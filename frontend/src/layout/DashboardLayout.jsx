@@ -8,11 +8,10 @@ const DashboardLayout = ({ children, patient }) => {
       <Sidebar patient={patient} />
       <div className="flex-1 flex flex-col">
         <Navbar patient={patient} />
-        <main className="p-4 overflow-y-auto">{children}</main>
+        <main className="p-2 overflow-y-auto">{children}</main>
       </div>
     </div>
   );
 };
-
 
 export default DashboardLayout;
