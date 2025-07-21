@@ -110,8 +110,8 @@ const DoctorDashboard = () => {
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Search by UID, email, or name"
-                  className="rounded-lg px-4 py-2 w-full sm:w-64 text-sm text-blue-800 font-bold
+                  placeholder="Request access to a patient by Unique ID"
+                  className="rounded-lg px-4 py-2 w-full sm:w-80 text-sm text-blue-800 font-bold
                     bg-gray-200 placeholder-blue-500 border border-white/30
                     shadow-sm focus:ring-2 focus:ring-white/70 focus:outline-none
                     transition duration-200"
