@@ -15,10 +15,14 @@ import {
 const DoctorDashboard = () => {
   const location = useLocation();
   const [doctor, setDoctor] = useState(null);
+
   const [searchPatientData, setSearchPatientData] = useState([]);
+  const [searchPatientInput, setSearchPatientInput] = useState("");
+
   const [searchInput, setSearchInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [showPatientOverlay, setShowPatientOverlay] = useState(false);
 
@@ -74,6 +78,40 @@ const DoctorDashboard = () => {
   const handleRequestAccess = (patientId) => {
     console.log("Requesting access for:", patientId);
     // TODO: implement backend API call
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchPatientInput(value);
+  };
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (searchPatientInput.length > 2) {
+        fetchPatientSuggestions(searchPatientInput);
+      } else {
+        setSearchPatientData([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [searchPatientInput]);
+
+  useEffect(() => {
+    console.log("Search patient data updated:", searchPatientData);
+  }, [searchPatientData]);
+
+  const fetchPatientSuggestions = async (searchTerm) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/patient/profile/getProfileSuggestions/${searchTerm}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch suggestions");
+      const data = await response.json();
+      console.log("Patient suggestions:", data);
+      setSearchPatientData(data);
+    } catch (error) {
+      console.error("Error fetching patient suggestions:", error);
+    }
   };
 
   if (!doctor) {
@@ -211,13 +249,8 @@ const DoctorDashboard = () => {
                     placeholder-blue-800 border border-blue-800/50
                     shadow-sm focus:ring-2 focus:border-blue-800/100 focus:outline-none
                     transition duration-200"
+                  onChange={(e) => handleSearchChange(e.target.value)}
                 />
-                <button
-                  className="rounded-lg px-4 py-2 bg-blue-800 text-white text-sm font-bold shadow-md hover:bg-blue-700 transition duration-200"
-                  onClick={() => console.log("Search button clicked")}
-                >
-                  Search
-                </button>
               </div>
               <div className="flex items-center gap-2 p-2 border border-blue-800 rounded-md mt-2 sm:mt-0">
                 <CalendarDays size={20} className="text-blue-800" />
@@ -229,8 +262,8 @@ const DoctorDashboard = () => {
 
             <div className="flex gap-4 h-auto lg:h-[85%]">
               <div className="w-full h-full flex flex-col gap-2 overflow-y-auto scrollbar_custom">
-                {PatientData.length > 0 ? (
-                  PatientData.map((patient, index) => (
+                {searchPatientData.length > 0 ? (
+                  searchPatientData.map((patient, index) => (
                     <PatientCard
                       patient={patient}
                       key={index}
@@ -238,8 +271,10 @@ const DoctorDashboard = () => {
                     />
                   ))
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center">
-                    <p className="text-gray-500">No appointments today.</p>
+                  <div className="h-full w-full flex items-center justify-center text-lg font-bold">
+                    <p className="text-blue-800">
+                      Search Patient Data will appear here.
+                    </p>
                   </div>
                 )}
               </div>

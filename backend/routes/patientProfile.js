@@ -41,5 +41,31 @@ router.get("/profile/uniqueId/:uniqueId", async (req, res) => {
 });
 
 
+router.get("/profile/getProfileSuggestions/:searchTerm", async (req, res) => {
+
+  const searchTerm = req.params.searchTerm;
+
+  try {
+    const patients = await Patient.find({
+      $or: [
+        { fullName: { $regex: searchTerm, $options: "i" } },
+        { uniqueId: { $regex: searchTerm, $options: "i" } },
+        { username: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } }
+      ]
+    }).select("fullName username email uniqueId dob gender photo emergencyContact");
+
+    if (patients.length === 0) {
+      return res.status(404).json({ message: "No matching patients found" });
+    }
+
+    res.status(200).json(patients);
+  } catch (err) {
+    console.error("Error fetching patient suggestions:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+})
+
+
 
 export default router;

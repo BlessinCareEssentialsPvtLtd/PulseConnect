@@ -5,12 +5,12 @@ const router = express.Router();
 
 
 // Example GET route
-router.get("/request/access", async (req, res) => {
+router.post("/request/access", async (req, res) => {
 
     const { patientUID, patientName, doctorID, doctorName } = req.body;
 
     const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 6); // Set expiration to 24 hours from now
+    expiresAt.setHours(expiresAt.getHours() + 3); // Set expiration to 24 hours from now
 
     try {
 
@@ -36,7 +36,7 @@ router.get("/request/access", async (req, res) => {
 
 });
 
-router.post("/request", async (req, res) => {
+router.post("/request/access/:requestId/approve", async (req, res) => {
 
 })
 
