@@ -1,0 +1,47 @@
+[
+  {
+    "PatientName": "Sarah Johnson",
+    "Age": 34,
+    "Gender": "Female",
+    "Phone": "+1 (555) 123-4567",
+    "Email": "sarah.johnson@email.com",
+    "status": "Active",
+    "LastVisit": "2024-06-15"
+  },
+  {
+    "PatientName": "David Lee",
+    "Age": 45,
+    "Gender": "Male",
+    "Phone": "+1 (555) 987-6543",
+    "Email": "david.lee@email.com",
+    "status": "Inactive",
+    "LastVisit": "2023-11-22"
+  },
+  {
+    "PatientName": "Aisha Patel",
+    "Age": 29,
+    "Gender": "Female",
+    "Phone": "+1 (555) 321-7890",
+    "Email": "aisha.patel@email.com",
+    "status": "Active",
+    "LastVisit": "2024-12-05"
+  },
+  {
+    "PatientName": "Michael Chen",
+    "Age": 52,
+    "Gender": "Male",
+    "Phone": "+1 (555) 222-3333",
+    "Email": "michael.chen@email.com",
+    "status": "Active",
+    "LastVisit": "2025-01-18"
+  },
+  {
+    "PatientName": "Ritika Sharma",
+    "Age": 38,
+    "Gender": "Female",
+    "Phone": "+91 98765 43210",
+    "Email": "ritika.sharma@email.com",
+    "status": "Inactive",
+    "LastVisit": "2024-08-12"
+  }
+]
