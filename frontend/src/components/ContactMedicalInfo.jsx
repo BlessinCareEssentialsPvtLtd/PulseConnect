@@ -1,7 +1,7 @@
 import React from "react";
 import { Phone, Mail, MapPin, User } from "lucide-react";
 
-const ContactMedicalInfo = () => {
+const ContactMedicalInfo = ({ patient }) => {
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -19,7 +19,7 @@ const ContactMedicalInfo = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-1">Phone</p>
-                <p className="text-gray-900">+1 (555) 123-4567</p>
+                <p className="text-gray-900">{patient.emergencyContact}</p>
               </div>
             </div>
 
@@ -30,7 +30,7 @@ const ContactMedicalInfo = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-1">Email</p>
-                <p className="text-gray-900">sarah.johnson@email.com</p>
+                <p className="text-gray-900">{patient.email}</p>
               </div>
             </div>
 
@@ -43,7 +43,7 @@ const ContactMedicalInfo = () => {
                 <p className="text-sm font-medium text-gray-700 mb-1">
                   Address
                 </p>
-                <p className="text-gray-900">123 Main St, New York, NY 10001</p>
+                <p className="text-gray-900">{patient.address}</p>
               </div>
             </div>
           </div>
@@ -65,9 +65,7 @@ const ContactMedicalInfo = () => {
                 <p className="text-sm font-medium text-gray-700 mb-1">
                   Emergency Contact
                 </p>
-                <p className="text-gray-900">
-                  John Johnson - +1 (555) 123-4568
-                </p>
+                <p className="text-gray-900">{patient.emergencyContact}</p>
               </div>
             </div>
           </div>
@@ -82,7 +80,9 @@ const ContactMedicalInfo = () => {
               {/* Blood Type */}
               <div className="flex justify-between items-center">
                 <span className="text-gray-700">Blood Type:</span>
-                <span className="text-gray-900 font-medium">A+</span>
+                <span className="text-gray-900 font-medium">
+                  {patient.bloodGroup}
+                </span>
               </div>
 
               {/* Status */}

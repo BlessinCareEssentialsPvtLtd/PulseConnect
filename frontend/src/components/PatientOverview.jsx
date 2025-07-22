@@ -8,7 +8,7 @@ import {
   Mail,
 } from "lucide-react";
 
-const PatientOverview = () => {
+const PatientOverview = ({ patient }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Column - Patient Info */}
@@ -26,11 +26,17 @@ const PatientOverview = () => {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-gray-500 mb-1">Age</p>
-                <p className="text-base font-medium text-gray-900">34 years</p>
+                <p className="text-base font-medium text-gray-900">
+                  {new Date().getFullYear() -
+                    new Date(patient.dob).getFullYear()}{" "}
+                  years
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 mb-1">Blood Type</p>
-                <p className="text-base font-medium text-gray-900">A+</p>
+                <p className="text-base font-medium text-gray-900">
+                  {patient.bloodGroup}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 mb-2">Allergies</p>
@@ -49,7 +55,9 @@ const PatientOverview = () => {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-gray-500 mb-1">Gender</p>
-                <p className="text-base font-medium text-gray-900">Female</p>
+                <p className="text-base font-medium text-gray-900">
+                  {patient.gender}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 mb-1">Last Visit</p>
@@ -57,55 +65,6 @@ const PatientOverview = () => {
                   2024-06-15
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Medical Records */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">
-            Recent Medical Records
-          </h2>
-
-          <div className="space-y-4">
-            {/* Record 1 */}
-            <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900 mb-1">Hypertension</h3>
-                <p className="text-sm text-gray-600 mb-2">
-                  Prescribed Lisinopril 10mg daily
-                </p>
-                <p className="text-xs text-gray-500">Rx Dr. Smith</p>
-              </div>
-              <span className="text-xs text-gray-400">2024-06-15</span>
-            </div>
-
-            {/* Record 2 */}
-            <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900 mb-1">
-                  Annual Checkup
-                </h3>
-                <p className="text-sm text-gray-600 mb-2">
-                  Routine blood work ordered
-                </p>
-                <p className="text-xs text-gray-500">Rx Dr. Smith</p>
-              </div>
-              <span className="text-xs text-gray-400">2024-05-20</span>
-            </div>
-
-            {/* Record 3 */}
-            <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-900 mb-1">
-                  Upper Respiratory Infection
-                </h3>
-                <p className="text-sm text-gray-600 mb-2">
-                  Prescribed Amoxicillin 500mg
-                </p>
-                <p className="text-xs text-gray-500">Rx Dr. Johnson</p>
-              </div>
-              <span className="text-xs text-gray-400">2024-03-10</span>
             </div>
           </div>
         </div>

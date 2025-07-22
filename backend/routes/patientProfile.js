@@ -53,7 +53,7 @@ router.get("/profile/getProfileSuggestions/:searchTerm", async (req, res) => {
         { username: { $regex: searchTerm, $options: "i" } },
         { email: { $regex: searchTerm, $options: "i" } }
       ]
-    }).select("fullName username email uniqueId dob gender photo emergencyContact");
+    }).select("fullName username email uniqueId dob gender photo emergencyContact bloodGroup");
 
     if (patients.length === 0) {
       return res.status(404).json({ message: "No matching patients found" });

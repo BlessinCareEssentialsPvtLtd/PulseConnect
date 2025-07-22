@@ -5,10 +5,11 @@ import MedicalRecord from "./MedicalRecord";
 import AppointmentHistory from "./AppointmentHistory";
 import ContactMedicalInfo from "./ContactMedicalInfo";
 
-const PatientOverlay = ({ setPatient }) => {
+const PatientOverlay = ({ setPatient, patient }) => {
   const [activeTab, setActiveTab] = useState("Overview");
 
   const tabs = ["Overview", "Medical Records", "Appointments", "Personal Info"];
+  console.log(patient);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -23,13 +24,17 @@ const PatientOverlay = ({ setPatient }) => {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-4">
-              <div className="bg-blue-600 rounded-full p-3">
-                <User className="w-6 h-6" />
-              </div>
+              <img
+                src={patient.photo}
+                alt=""
+                className=" w-16 h-16 rounded-full"
+              />
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold">Sarah Johnson</h1>
+                <h1 className="text-lg sm:text-2xl font-bold">
+                  {patient.fullName}
+                </h1>
                 <p className="text-blue-100 text-sm sm:text-base">
-                  Patient ID: #0001
+                  Patient ID: {patient.uniqueId}
                 </p>
               </div>
             </div>
@@ -58,13 +63,13 @@ const PatientOverlay = ({ setPatient }) => {
         {/* Main Content */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           {activeTab === "Overview" ? (
-            <PatientOverview />
+            <PatientOverview patient={patient} />
           ) : activeTab === "Medical Records" ? (
             <MedicalRecord />
           ) : activeTab === "Appointments" ? (
             <AppointmentHistory />
           ) : activeTab === "Personal Info" ? (
-            <ContactMedicalInfo />
+            <ContactMedicalInfo patient={patient} />
           ) : null}
         </div>
       </div>
