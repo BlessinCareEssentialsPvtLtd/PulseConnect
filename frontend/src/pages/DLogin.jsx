@@ -1,13 +1,21 @@
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/Authcontext";
 
 const DLogin = () => {
   const navigate = useNavigate();
+  const { token, role, login } = useAuth();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (token && role === "doctor") {
+      navigate("/dashboard/doctor");
+    }
+  }, [navigate, token, role]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,20 +25,15 @@ const DLogin = () => {
     }
 
     try {
-      const res = await axios.post("/api/auth/login/doctor", {
+      const res = await api.post("/auth/login/doctor", {
         identifier,
         password,
       });
 
-      // ✅ Check if res.data and res.data.doctor exist before using them
       if (res.data?.doctor) {
+        login(res.data.token, "doctor", res.data.doctor);
         toast.success(`Welcome Dr. ${res.data.doctor.fullName}`);
-        // console.log(res.data.doctor);
-        navigate("/dashboard/doctor", {
-          state: {
-            doctor: res.data.doctor,
-          },
-        });
+        navigate("/dashboard/doctor");
       } else {
         toast.error("Login response was invalid.");
       }
@@ -50,25 +53,6 @@ const DLogin = () => {
         <h2 className="text-2xl font-bold text-center text-gray-800">
           Doctor Login
         </h2>
-
-        {/* Login Method Radio Buttons */}
-        {/* <div className="flex justify-center gap-4">
-          {["uniqueId", "email", "username"].map((method) => (
-            <label key={method} className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                name="loginMethod"
-                value={method}
-                checked={loginMethod === method}
-                onChange={(e) => setLoginMethod(e.target.value)}
-              />
-              {method === "uniqueId"
-                ? "Unique ID"
-                : method.charAt(0).toUpperCase() + method.slice(1)}
-            </label>
-          ))}
-        </div> */}
-
         {/* Identifier Field */}
         <div className="text-left">
           <label
@@ -88,7 +72,6 @@ const DLogin = () => {
             required
           />
         </div>
-
         {/* Password Field */}
         <div className="text-left relative">
           <label
@@ -115,14 +98,12 @@ const DLogin = () => {
             {showPassword ? "Hide" : "Show"}
           </button>
         </div>
-
         <button
           type="submit"
           className="w-full py-2 px-4 cursor-pointer bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition"
         >
           Log In
         </button>
-
         <p className="text-center text-sm text-gray-600">
           Not having an account?{" "}
           <a href="/signup/doctor" className="text-indigo-600 hover:underline">

@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../api/axios";
+import { useAuth } from "../context/Authcontext";
 
 function PLogin() {
   const navigate = useNavigate();
-  // const [loginMethod, setLoginMethod] = useState("uniqueId");
+  const { token, role, login } = useAuth();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (token && role === "patient") {
+      navigate("/dashboard/patient");
+    }
+  }, [navigate, token, role]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,21 +25,15 @@ function PLogin() {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login/patient",
-        {
-          identifier,
-          password,
-        }
-      );
+      const res = await api.post("/auth/login/patient", {
+        identifier,
+        password,
+      });
 
       toast.success(`Welcome ${res.data.patient.fullName}`);
-      localStorage.setItem("patientData", JSON.stringify(res.data.patient));
-      console.log(res.data.patient);
+      login(res.data.token, "patient", res.data.patient);
       if (res.data.patient.isCompleted) {
-        navigate("/dashboard/patient", {
-          state: { patient: res.data.patient },
-        });
+        navigate("/dashboard/patient");
       } else {
         navigate("/complete-profile");
       }
@@ -51,25 +52,6 @@ function PLogin() {
         <h2 className="text-2xl font-bold text-center text-gray-800">
           Patient Login
         </h2>
-
-        {/* Login Method Radio Buttons */}
-        {/* <div className="flex justify-center gap-4">
-          {["uniqueId", "email", "username"].map((method) => (
-            <label key={method} className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                name="loginMethod"
-                value={method}
-                checked={loginMethod === method}
-                onChange={(e) => setLoginMethod(e.target.value)}
-              />
-              {method === "uniqueId"
-                ? "Unique ID"
-                : method.charAt(0).toUpperCase() + method.slice(1)}
-            </label>
-          ))}
-        </div> */}
-
         {/* Identifier Field */}
         <div className="text-left">
           <label
@@ -89,7 +71,6 @@ function PLogin() {
             required
           />
         </div>
-
         {/* Password Field */}
         <div className="text-left relative">
           <label
@@ -116,14 +97,12 @@ function PLogin() {
             {showPassword ? "Hide" : "Show"}
           </button>
         </div>
-
         <button
           type="submit"
           className="w-full py-2 px-4 cursor-pointer bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition"
         >
           Log In
         </button>
-
         <p className="text-center text-sm text-gray-600">
           Not having an account?{" "}
           <a href="/signup/patient" className="text-indigo-600 hover:underline">

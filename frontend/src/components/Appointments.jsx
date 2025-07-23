@@ -1,20 +1,22 @@
 // src/components/Appointments.jsx
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { CalendarDays } from "lucide-react";
 import AppointmentRequest from "../pages/AppointmentRequest"; // adjust if path differs
 import { toast } from "react-toastify";
+import { useAuth } from "../context/Authcontext";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [view, setView] = useState("calendar");
   const [showPopup, setShowPopup] = useState(false);
-  const patient = JSON.parse(localStorage.getItem("patientData"));
+  const { user } = useAuth();
   const today = new Date().getDate();
 
   const fetchAppointments = async () => {
     try {
-      const res = await axios.get(`/api/appointments/patient/${patient._id}`);
+      if (!user?._id) return;
+      const res = await api.get(`/appointments/patient/${user._id}`);
       setAppointments(res.data);
     } catch {
       toast.error("Failed to load appointments");
@@ -23,8 +25,8 @@ const Appointments = () => {
   };
 
   useEffect(() => {
-    if (patient?._id) fetchAppointments();
-  }, [patient]);
+    if (user?._id) fetchAppointments();
+  }, [user]);
 
   const pendingAppts = appointments.filter((a) => a.status === "pending");
   const approvedAppts = appointments.filter((a) => a.status === "approved");
@@ -45,31 +47,28 @@ const Appointments = () => {
       <div className="flex gap-3 mb-4">
         <button
           onClick={() => setView("calendar")}
-          className={`px-3 py-1 rounded text-sm ${
-            view === "calendar"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-800 hover:bg-blue-100"
-          }`}
+          className={`px-3 py-1 rounded text-sm ${view === "calendar"
+            ? "bg-blue-600 text-white"
+            : "bg-gray-100 text-gray-800 hover:bg-blue-100"
+            }`}
         >
           📅 Calendar
         </button>
         <button
           onClick={() => setView("approved")}
-          className={`px-3 py-1 rounded text-sm ${
-            view === "approved"
-              ? "bg-green-600 text-white"
-              : "bg-gray-100 text-gray-800 hover:bg-green-100"
-          }`}
+          className={`px-3 py-1 rounded text-sm ${view === "approved"
+            ? "bg-green-600 text-white"
+            : "bg-gray-100 text-gray-800 hover:bg-green-100"
+            }`}
         >
           ✅ Approved
         </button>
         <button
           onClick={() => setView("pending")}
-          className={`px-3 py-1 rounded text-sm ${
-            view === "pending"
-              ? "bg-yellow-500 text-white"
-              : "bg-gray-100 text-gray-800 hover:bg-yellow-100"
-          }`}
+          className={`px-3 py-1 rounded text-sm ${view === "pending"
+            ? "bg-yellow-500 text-white"
+            : "bg-gray-100 text-gray-800 hover:bg-yellow-100"
+            }`}
         >
           ⏳ Pending
         </button>
@@ -119,11 +118,10 @@ const Appointments = () => {
                   return (
                     <span
                       key={date}
-                      className={`py-1 rounded-full ${
-                        isToday
-                          ? "bg-blue-600 text-white font-semibold"
-                          : "hover:bg-blue-100 cursor-pointer"
-                      }`}
+                      className={`py-1 rounded-full ${isToday
+                        ? "bg-blue-600 text-white font-semibold"
+                        : "hover:bg-blue-100 cursor-pointer"
+                        }`}
                     >
                       {date}
                     </span>

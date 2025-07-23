@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import PatientData from "../dummydata/doctorDashboardPatientData.json";
 import "../App.css";
-import Layout from "../components/layout";
+import Layout from "../components/Layout";
 import Calendar from "react-calendar";
 import PatientCard from "../components/PatientCard";
 import PatientOverlay from "../components/PatientOverlay";

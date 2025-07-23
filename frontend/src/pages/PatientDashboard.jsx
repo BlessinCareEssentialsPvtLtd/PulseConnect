@@ -6,32 +6,26 @@ import HistoryTiles from "../components/HistoryTiles";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-import { useLocation } from "react-router-dom";
+import { useAuth } from "../context/Authcontext";
 
 const PatientDashboard = () => {
-  const location = useLocation();
-
-  // ✅ Get patient data from location.state or fallback to localStorage
-  const patientData =
-    location.state?.patient || JSON.parse(localStorage.getItem("patientData"));
-
+  const { user } = useAuth();
   const [accessRequests, setAccessRequests] = useState([]);
   const [loadingRequests, setLoadingRequests] = useState(false);
   const [actionStatus, setActionStatus] = useState("");
   const [doctorInfos, setDoctorInfos] = useState({});
 
   useEffect(() => {
-    if (patientData?.uniqueId) {
+    if (user?.uniqueId) {
       fetchRequests();
     }
     // eslint-disable-next-line
-  }, [patientData?.uniqueId]);
+  }, [user?.uniqueId]);
 
   const fetchRequests = async () => {
     setLoadingRequests(true);
     try {
-      const { data } = await axios.get(`/api/access/requests/${patientData.uniqueId}`);
+      const { data } = await axios.get(`/api/access/requests/${user.uniqueId}`);
       const pending = data.filter(r => r.status === "pending");
       setAccessRequests(pending);
       // Fetch doctor info for each request
@@ -64,7 +58,7 @@ const PatientDashboard = () => {
     }
   };
 
-  if (!patientData) {
+  if (!user) {
     return (
       <div className="text-center mt-10 text-red-600">
         Patient data not found. Please login again.
@@ -73,16 +67,16 @@ const PatientDashboard = () => {
   }
 
   const patient = {
-    fullName: patientData.fullName,
-    uniqueId: patientData.uniqueId,
-    email: patientData.email,
-    phone: patientData.phone,
-    userName: patientData.username,
-    dob: patientData.dob,
-    gender: patientData.gender,
-    place: `${patientData.address}, ${patientData.district}, ${patientData.state}, ${patientData.pinCode}`,
-    photo: patientData.photo,
-    experience: patientData.experience,
+    fullName: user.fullName,
+    uniqueId: user.uniqueId,
+    email: user.email,
+    phone: user.phone,
+    userName: user.username,
+    dob: user.dob,
+    gender: user.gender,
+    place: `${user.address}, ${user.district}, ${user.state}, ${user.pinCode}`,
+    photo: user.photo,
+    experience: user.experience,
   };
 
   return (

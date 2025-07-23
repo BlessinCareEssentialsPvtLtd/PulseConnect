@@ -9,8 +9,7 @@ import {
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
-
-
+import { useAuth } from "../context/Authcontext";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard/patient" },
@@ -21,7 +20,8 @@ const navItems = [
   { icon: Dumbbell, label: "Fitness" },
 ];
 
-const Sidebar = ({ patient }) => {
+const Sidebar = () => {
+  const { user } = useAuth();
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const diff = Date.now() - birthDate.getTime();
@@ -35,9 +35,9 @@ const Sidebar = ({ patient }) => {
         <div>
           {/* Profile Section */}
           <div className="flex items-center space-x-4 mb-10">
-            {patient?.photo ? (
+            {user?.photo ? (
               <img
-                src={patient.photo}
+                src={user.photo}
                 alt="Patient"
                 className="w-14 h-14 rounded-full object-cover border-2 border-blue-400"
               />
@@ -47,9 +47,9 @@ const Sidebar = ({ patient }) => {
               </div>
             )}
             <div className="flex flex-col">
-              <h2 className="font-semibold text-base">{patient?.fullName || "John Doe"}</h2>
-              <p className="text-xs text-gray-500">Age: {calculateAge(patient?.dob || "2000-01-01")}</p>
-              <p className="text-xs text-gray-500">Gender: {patient?.gender || "M"}</p>
+              <h2 className="font-semibold text-base">{user?.fullName}</h2>
+              <p className="text-xs text-gray-500">Age: {calculateAge(user?.dob)}</p>
+              <p className="text-xs text-gray-500">Gender: {user?.gender}</p>
             </div>
           </div>
 

@@ -1,15 +1,16 @@
 // src/pages/AppointmentRequest.jsx
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/Authcontext";
 
 const AppointmentRequest = () => {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const [dateInputs, setDateInputs] = useState({});
-  const patient = JSON.parse(localStorage.getItem("patientData"));
+  const { user } = useAuth();
 
-  if (!patient) {
+  if (!user) {
     return (
       <p className="text-red-500">Login required to request appointments</p>
     );
@@ -18,7 +19,7 @@ const AppointmentRequest = () => {
   const handleSearch = async () => {
     if (!search.trim()) return;
     try {
-      const res = await axios.get(`/api/auth/doctors?search=${search}`);
+      const res = await api.get(`/auth/doctors?search=${search}`);
       setResults(res.data);
     } catch {
       toast.error("Failed to search doctors");
@@ -30,12 +31,11 @@ const AppointmentRequest = () => {
     if (!date) return toast.error("Please select a date");
 
     try {
-      // console.log("Patient from localStorage:", patient);
-      await axios.post("http://localhost:5000/api/appointments/request", {
+      await api.post("/appointments/request", {
         doctorName: doctor.fullName,
         doctorId: doctor.uniqueId,
-        patientId: patient._id,
-        patientName: patient.fullName,
+        patientId: user._id,
+        patientName: user.fullName,
         date: date,
       });
       toast.success("Appointment requested!");
@@ -51,7 +51,6 @@ const AppointmentRequest = () => {
       <h2 className="text-2xl font-semibold mb-4">
         Search and Request Appointment
       </h2>
-
       <div className="flex gap-2 mb-4">
         <input
           type="text"
@@ -67,7 +66,6 @@ const AppointmentRequest = () => {
           Search
         </button>
       </div>
-
       {results.length > 0 && (
         <div className="space-y-4">
           {results.map((doc) => (

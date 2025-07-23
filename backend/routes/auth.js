@@ -4,6 +4,7 @@ import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
 import slugify from "slugify";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 const otps = {}; // In-memory OTP store
@@ -168,8 +169,16 @@ router.post("/login/doctor", async (req, res) => {
     if (!doctor.isVerified)
       return res.status(403).json({ message: "Account not verified" });
 
+    // Generate JWT
+    const token = jwt.sign(
+      { id: doctor._id, role: "doctor" },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
     res.status(200).json({
       message: "Login successful",
+      token,
       doctor: {
         fullName: doctor.fullName,
         uniqueId: doctor.uniqueId,
@@ -215,8 +224,16 @@ router.post("/login/patient", async (req, res) => {
     if (!patient.isVerified)
       return res.status(403).json({ message: "Account not verified" });
 
+    // Generate JWT
+    const token = jwt.sign(
+      { id: patient._id, role: "patient" },
+      process.env.JWT_SECRET,
+      { expiresIn: "6h" }
+    );
+
     res.status(200).json({
       message: "Login successful",
+      token,
       patient: {
         _id: patient._id,
         fullName: patient.fullName,

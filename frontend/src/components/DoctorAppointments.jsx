@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import axios from "axios";
+import api from "../api/axios";
 
 const localizer = momentLocalizer(moment);
 
@@ -33,7 +33,7 @@ const DoctorAppointments = ({ doctorId }) => {
 
   const fetchAppointments = async () => {
     try {
-      const { data } = await axios.get(`/api/appointments/doctor/${doctorId}`);
+      const { data } = await api.get(`/appointments/doctor/${doctorId}`);
       setPending(data.pending || []);
       setApproved(data.approved || []);
     } catch {
@@ -47,7 +47,7 @@ const DoctorAppointments = ({ doctorId }) => {
 
   const approve = async (id) => {
     try {
-      await axios.put(`/api/appointments/${id}/approve`);
+      await api.put(`/appointments/${id}/approve`);
       toast.success("Appointment approved");
       fetchAppointments();
     } catch {
@@ -57,7 +57,7 @@ const DoctorAppointments = ({ doctorId }) => {
 
   const reject = async (id) => {
     try {
-      await axios.delete(`/api/appointments/${id}`);
+      await api.delete(`/appointments/${id}`);
       toast.success("Appointment rejected");
       fetchAppointments();
     } catch {
@@ -78,31 +78,28 @@ const DoctorAppointments = ({ doctorId }) => {
       <div className="flex justify-center gap-4 mb-6">
         <button
           onClick={() => setView("calendar")}
-          className={`px-4 py-2 rounded font-semibold ${
-            view === "calendar"
+          className={`px-4 py-2 rounded font-semibold ${view === "calendar"
               ? "bg-blue-600 text-white"
               : "bg-gray-100 text-gray-800 hover:bg-blue-100"
-          }`}
+            }`}
         >
           Calendar View
         </button>
         <button
           onClick={() => setView("pending")}
-          className={`px-4 py-2 rounded font-semibold ${
-            view === "pending"
+          className={`px-4 py-2 rounded font-semibold ${view === "pending"
               ? "bg-yellow-500 text-white"
               : "bg-gray-100 text-gray-800 hover:bg-yellow-100"
-          }`}
+            }`}
         >
           Pending Requests
         </button>
         <button
           onClick={() => setView("approved")}
-          className={`px-4 py-2 rounded font-semibold ${
-            view === "approved"
+          className={`px-4 py-2 rounded font-semibold ${view === "approved"
               ? "bg-green-600 text-white"
               : "bg-gray-100 text-gray-800 hover:bg-green-100"
-          }`}
+            }`}
         >
           Approved Appointments
         </button>
@@ -110,89 +107,89 @@ const DoctorAppointments = ({ doctorId }) => {
 
       {/* View Area */}
       {view === "calendar" && (
-  <div className="h-[260px] sm:h-[320px] overflow-hidden">
-    <Calendar
-      localizer={localizer}
-      events={combinedEvents}
-      startAccessor="start"
-      endAccessor="end"
-      defaultView="month"
-      components={{ toolbar: CustomToolbar }}
-      onSelectEvent={(event) =>
-        alert(`${event.title}\n${event.desc}`)
-      }
-      style={{ height: "100%" }}
-    />
-  </div>
-)}
+        <div className="h-[260px] sm:h-[320px] overflow-hidden">
+          <Calendar
+            localizer={localizer}
+            events={combinedEvents}
+            startAccessor="start"
+            endAccessor="end"
+            defaultView="month"
+            components={{ toolbar: CustomToolbar }}
+            onSelectEvent={(event) =>
+              alert(`${event.title}\n${event.desc}`)
+            }
+            style={{ height: "100%" }}
+          />
+        </div>
+      )}
 
 
       {view === "pending" && (
-  <div className="h-[260px] sm:h-[320px] overflow-hidden">
-    <h2 className="text-lg font-semibold mb-3">⏳ Pending Requests</h2>
-    {pending.length === 0 ? (
-      <p className="text-sm text-gray-600">No pending requests.</p>
-    ) : (
-      <div className="overflow-y-auto h-[210px] sm:h-[270px] pr-2">
-        <ul className="space-y-3">
-          {pending.map((a) => (
-            <li
-              key={a._id}
-              className="flex items-center justify-between border-l-4 border-yellow-500 pl-4 pr-2 py-3 bg-yellow-50 rounded-md"
-            >
-              <div>
-                <p className="font-semibold">{a.patientName}</p>
-                <p className="text-sm text-gray-600">
-                  {new Date(a.date).toLocaleString()}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => approve(a._id)}
-                  className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => reject(a._id)}
-                  className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded"
-                >
-                  Reject
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-  </div>
-)}
+        <div className="h-[260px] sm:h-[320px] overflow-hidden">
+          <h2 className="text-lg font-semibold mb-3">⏳ Pending Requests</h2>
+          {pending.length === 0 ? (
+            <p className="text-sm text-gray-600">No pending requests.</p>
+          ) : (
+            <div className="overflow-y-auto h-[210px] sm:h-[270px] pr-2">
+              <ul className="space-y-3">
+                {pending.map((a) => (
+                  <li
+                    key={a._id}
+                    className="flex items-center justify-between border-l-4 border-yellow-500 pl-4 pr-2 py-3 bg-yellow-50 rounded-md"
+                  >
+                    <div>
+                      <p className="font-semibold">{a.patientName}</p>
+                      <p className="text-sm text-gray-600">
+                        {new Date(a.date).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => approve(a._id)}
+                        className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => reject(a._id)}
+                        className="bg-red-600 hover:bg-red-700 text-white text-sm px-3 py-1 rounded"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
 
       {view === "approved" && (
-  <div className="h-[260px] sm:h-[320px] overflow-hidden">
-    <h2 className="text-lg font-semibold mb-3">✅ Approved Appointments</h2>
-    {approved.length === 0 ? (
-      <p className="text-sm text-gray-600">No approved appointments.</p>
-    ) : (
-      <div className="overflow-y-auto h-[210px] sm:h-[270px] pr-2">
-        <ul className="space-y-3">
-          {approved.map((a) => (
-            <li
-              key={a._id}
-              className="border-l-4 border-blue-500 pl-4 py-3 bg-blue-50 rounded-md"
-            >
-              <p className="font-semibold">{a.patientName}</p>
-              <p className="text-sm text-gray-600">
-                {new Date(a.date).toLocaleString()}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
-  </div>
-)}
+        <div className="h-[260px] sm:h-[320px] overflow-hidden">
+          <h2 className="text-lg font-semibold mb-3">✅ Approved Appointments</h2>
+          {approved.length === 0 ? (
+            <p className="text-sm text-gray-600">No approved appointments.</p>
+          ) : (
+            <div className="overflow-y-auto h-[210px] sm:h-[270px] pr-2">
+              <ul className="space-y-3">
+                {approved.map((a) => (
+                  <li
+                    key={a._id}
+                    className="border-l-4 border-blue-500 pl-4 py-3 bg-blue-50 rounded-md"
+                  >
+                    <p className="font-semibold">{a.patientName}</p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(a.date).toLocaleString()}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

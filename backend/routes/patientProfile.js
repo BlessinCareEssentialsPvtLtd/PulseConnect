@@ -1,10 +1,10 @@
 import express from "express";
 import Patient from "../models/Patient.js";
-
+import { authenticateJWT } from "../middleware/auth.js";
 const router = express.Router();
 
 // Update or complete patient profile
-router.put("/profile/:id", async (req, res) => {
+router.put("/profile/:id", authenticateJWT, async (req, res) => {
   try {
     const updatedPatient = await Patient.findByIdAndUpdate(
       req.params.id,
