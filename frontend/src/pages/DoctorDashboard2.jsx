@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import PatientData from "../dummydata/doctorDashboardPatientData.json";
 import "../App.css";
-import Layout from "../components/Layout";
+// import Layout from "../components/Layout";
 import Calendar from "react-calendar";
 import PatientCard from "../components/PatientCard";
 import PatientOverlay from "../components/PatientOverlay";
@@ -51,7 +51,7 @@ const DoctorDashboard2 = () => {
 
     return (
         <>
-            <DashboardLayout patient={doctor}>
+          
                 {/* <div className=" w-full h-[70px]" id="navbarPlaceholder"></div> */}
                 <div
                     className="bg-[#F5F5F5] flex flex-col lg:flex-row p-4 my-2 gap-4 rounded-lg border border-gray-200 w-[95%] sm:w-[91%] lg:w-[98%] shadow-lg h-auto lg:h-[calc(100vh-90px)] overflow-hidden mx-auto"
@@ -204,7 +204,7 @@ const DoctorDashboard2 = () => {
                         setPatient={setSelectedPatient}
                     />
                 )}
-            </DashboardLayout>
+                
         </>
     );
 };

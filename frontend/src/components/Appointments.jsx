@@ -34,14 +34,9 @@ const Appointments = () => {
   return (
     <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 w-full h-[260] flex flex-col relative">
       {/* Floating Request Button */}
-      <div className="absolute top-5 right-5 z-10">
-        <button
-          onClick={() => setShowPopup(true)}
-          className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm shadow cursor-pointer"
-        >
-          + Request Appointment
-        </button>
-      </div>
+      {/* <div className="absolute top-5 right-5 z-10">
+       
+      </div> */}
 
       {/* View Toggle Buttons */}
       <div className="flex gap-3 mb-4">
@@ -80,12 +75,22 @@ const Appointments = () => {
           <CalendarDays className="text-blue-600" />
           Appointments
         </h2>
+
+
         <span className="text-sm text-gray-500">
           {new Date().toLocaleString("default", {
             month: "long",
             year: "numeric",
           })}
         </span>
+        <div>
+          <button
+            onClick={() => setShowPopup(true)}
+            className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm shadow cursor-pointer"
+          >
+            New Appointment
+          </button>
+        </div>
       </div>
 
       {/* View Content */}

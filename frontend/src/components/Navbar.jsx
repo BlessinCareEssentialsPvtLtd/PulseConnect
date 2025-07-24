@@ -59,17 +59,17 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="w-full h-auto bg-white flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 border-b shadow-sm sticky top-0 z-50 py-2">
+      <header className="w-full max-w-full bg-white flex flex-col sm:flex-row items-center justify-between px-2 sm:px-6 border-b shadow-sm sticky top-0 z-50 py-2 sm:py-3">
         {/* Search bar */}
-        <div className="relative w-full sm:w-1/2 max-w-md mb-2 sm:mb-0">
+        <div className="relative w-full max-w-full sm:w-1/2 max-w-md mb-1 sm:mb-0 min-w-0">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search doctor by name..."
-            className="bg-blue-50 pl-10 pr-4 py-2 rounded-full text-sm w-full border border-blue-100 focus:ring-2 ring-blue-200 outline-none placeholder:text-sm"
+            className="bg-blue-50 pl-9 pr-3 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm w-full min-w-0 border border-blue-100 focus:ring-2 ring-blue-200 outline-none placeholder:text-xs sm:placeholder:text-sm"
           />
-          <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+          <Search className="absolute left-2 top-2 text-gray-400" size={16} />
           {/* Dropdown */}
           {showDropdown && (
             <ul className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-auto">
@@ -78,33 +78,33 @@ const Navbar = () => {
                   <li
                     key={doctor._id}
                     onClick={() => handleSelectDoctor(doctor)}
-                    className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm"
+                    className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-xs sm:text-sm"
                   >
                     {doctor.name}
                   </li>
                 ))
               ) : (
-                <li className="px-4 py-2 text-gray-500 text-sm">No doctors found</li>
+                <li className="px-4 py-2 text-gray-500 text-xs sm:text-sm">No doctors found</li>
               )}
             </ul>
           )}
         </div>
         {/* Right icons */}
-        <div className="flex items-center space-x-4 sm:space-x-6 mt-1 sm:mt-0">
-          <button title="Alerts" className="text-blue-700 hover:text-blue-900 transition">
-            <AlertTriangle size={20} />
+        <div className="flex items-center flex-nowrap space-x-2 sm:space-x-6 mt-1 sm:mt-0 min-w-0 overflow-x-auto scrollbar-hide">
+          <button title="Alerts" className="text-blue-700 hover:text-blue-900 transition p-1 sm:p-0">
+            <AlertTriangle size={18} />
           </button>
-          <button title="Notifications" className="text-blue-700 hover:text-blue-900 transition">
-            <Bell size={20} />
+          <button title="Notifications" className="text-blue-700 hover:text-blue-900 transition p-1 sm:p-0">
+            <Bell size={18} />
           </button>
-          <button title="Toggle Theme" className="text-blue-700 hover:text-blue-900 transition">
-            <Sun size={20} />
+          <button title="Toggle Theme" className="text-blue-700 hover:text-blue-900 transition p-1 sm:p-0">
+            <Sun size={18} />
           </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition"
+            className="flex items-center gap-1 bg-red-100 hover:bg-red-200 text-red-600 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition"
           >
-            <LogOut size={16} />
+            <LogOut size={14} />
             <span className="hidden sm:inline">Logout</span>
           </button>
         </div>

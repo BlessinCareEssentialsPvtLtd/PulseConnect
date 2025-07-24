@@ -13,18 +13,27 @@ import DLogin from "./pages/DLogin";
 import DSignup from "./pages/DSignup";
 import CompleteProfile from "./pages/CompleteProfile";
 import PatientDashboard from "./pages/PatientDashboard";
-import DoctorDashboard from "./pages/DoctorDashboard";
+// import DoctorDashboard from "./pages/DoctorDashboard";
 import DoctorDashboard2 from "./pages/DoctorDashboard2";
 import Diagnose from "./pages/Diagnose";
 import AppointmentRequest from "./pages/AppointmentRequest";
+import Fitness from "./pages/Fitness";
 import Appointments from "./components/Appointments";
+
 
 // Optional: 403 error page
 import Unauthorized from "./pages/Unauthorized"; // create this
+import CurPatDash from "./pages/CurPatDash";
+import Family from "./pages/Family";
+import Records from "./pages/Records";
+import { ShowProfileProvider } from "./context/showProfileContext";
+import React, { useState } from "react";
+import Healthline from "./pages/Healthline";
 
 function App() {
+  const [showProfileComponent, setShowProfileComponent] = useState(false);
   return (
-    <>
+    <ShowProfileProvider value={{ showProfileComponent, setShowProfileComponent }}>
       <ToastContainer position="top-center" autoClose={3000} />
       <Routes>
         {/* Public Routes */}
@@ -34,6 +43,7 @@ function App() {
         <Route path="/login/doctor" element={<DLogin />} />
         <Route path="/signup/doctor" element={<DSignup />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/dashboard/patient/curpatdash" element={<CurPatDash />} />
 
         {/* Patient Protected Routes */}
         <Route path="/complete-profile" element={
@@ -45,20 +55,28 @@ function App() {
           path="/dashboard/patient"
           element={
             <PrivateRoute allowedRoles={["patient"]}>
-              <PatientDashboard
-                patient={JSON.parse(localStorage.getItem("patientData"))}
-              />
+              <DashboardLayout>
+                <PatientDashboard />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />
         <Route
-          path="/dashboard/patient/appointments"
+          path="/patient/appointments"
           element={
             <PrivateRoute allowedRoles={["patient"]}>
-              <DashboardLayout
-                patient={JSON.parse(localStorage.getItem("patientData"))}
-              >
+              <DashboardLayout>
                 <Appointments />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/family"
+          element={
+            <PrivateRoute allowedRoles={["patient"]}>
+              <DashboardLayout>
+                <Family />
               </DashboardLayout>
             </PrivateRoute>
           }
@@ -67,7 +85,39 @@ function App() {
           path="/appointment-request"
           element={
             <PrivateRoute allowedRoles={["patient"]}>
-              <AppointmentRequest />
+              <DashboardLayout>
+                <AppointmentRequest />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/records"
+          element={
+            <PrivateRoute allowedRoles={["patient"]}>
+              <DashboardLayout>
+                <Records />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/fitness"
+          element={
+            <PrivateRoute allowedRoles={["patient"]}>
+              <DashboardLayout>
+                <Fitness />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/healthline"
+          element={
+            <PrivateRoute allowedRoles={["patient"]}>
+              <DashboardLayout>
+                <Healthline />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />
@@ -77,7 +127,9 @@ function App() {
           path="/dashboard/doctor"
           element={
             <PrivateRoute allowedRoles={["doctor"]}>
-              <DoctorDashboard2 />
+              <DashboardLayout>
+                <DoctorDashboard2 />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />
@@ -85,7 +137,9 @@ function App() {
           path="/doctor-dashboard"
           element={
             <PrivateRoute allowedRoles={["doctor"]}>
-              <DoctorDashboard2 />
+              <DashboardLayout>
+                <DoctorDashboard2 />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />
@@ -93,12 +147,14 @@ function App() {
           path="/diagnose"
           element={
             <PrivateRoute allowedRoles={["doctor"]}>
-              <Diagnose />
+              <DashboardLayout>
+                <Diagnose />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />
       </Routes>
-    </>
+    </ShowProfileProvider>
   );
 }
 

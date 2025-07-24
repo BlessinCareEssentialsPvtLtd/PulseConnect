@@ -1,20 +1,21 @@
 import { NotebookPen } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/Authcontext";
 import axios from "axios";
 
 const HistoryTiles = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
-    const patientData = JSON.parse(localStorage.getItem("patientData"));
-    if (!patientData?.uniqueId) {
+    if (!user?.uniqueId) {
       setError("Patient not found");
       setLoading(false);
       return;
     }
-    axios.get(`/api/access/treatment-entries/${patientData.uniqueId}`)
+    axios.get(`/api/access/treatment-entries/${user.uniqueId}`)
       .then(res => {
         setEntries(res.data);
         setLoading(false);
@@ -33,7 +34,7 @@ const HistoryTiles = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 w-full">
+    <div className="sm:grid-cols-2 lg:grid-cols-2 gap-6 w-full mb-12 pb-5">
       {entries.map((item, idx) => (
         <div
           key={item._id || idx}

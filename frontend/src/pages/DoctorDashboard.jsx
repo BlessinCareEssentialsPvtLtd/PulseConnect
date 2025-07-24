@@ -3,7 +3,6 @@ import DashboardLayout from "../layout/DashboardLayout";
 import DoctorProfileCard from "../components/DoctorProfileCard";
 import DoctorStats from "../components/DoctorStats";
 import DoctorAppointments from "../components/DoctorAppointments";
-import HistoryTilesD from "../components/HistoryTilesD";
 import PatientRequests from "../components/PatientRequests";
 import { useAuth } from "../context/Authcontext";
 

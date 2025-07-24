@@ -2,12 +2,12 @@
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
-const DashboardLayout = ({ children, patient }) => {
+const DashboardLayout = ({ children }) => {
   return (
     <div className="flex md:flex-row h-screen bg-[#e9f8ff]">
-      <Sidebar patient={patient} />
+      <Sidebar />
       <div className="flex-1 flex flex-col">
-        <Navbar patient={patient} />
+        <Navbar />
         <main className="p-4 overflow-y-auto">{children}</main>
       </div>
     </div>
