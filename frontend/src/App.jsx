@@ -28,7 +28,7 @@ import Family from "./pages/Family";
 import Records from "./pages/Records";
 import { ShowProfileProvider } from "./context/showProfileContext";
 import React, { useState } from "react";
-import Healthline from "./pages/Healthline";
+import HealthLine from "./pages/HealthLine";
 
 function App() {
   const [showProfileComponent, setShowProfileComponent] = useState(false);
@@ -116,7 +116,7 @@ function App() {
           element={
             <PrivateRoute allowedRoles={["patient"]}>
               <DashboardLayout>
-                <Healthline />
+                <HealthLine />
               </DashboardLayout>
             </PrivateRoute>
           }
