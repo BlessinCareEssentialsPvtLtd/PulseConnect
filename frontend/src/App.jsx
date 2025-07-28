@@ -13,13 +13,12 @@ import DLogin from "./pages/DLogin";
 import DSignup from "./pages/DSignup";
 import CompleteProfile from "./pages/CompleteProfile";
 import PatientDashboard from "./pages/PatientDashboard";
-// import DoctorDashboard from "./pages/DoctorDashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
 import DoctorDashboard2 from "./pages/DoctorDashboard2";
 import Diagnose from "./pages/Diagnose";
 import AppointmentRequest from "./pages/AppointmentRequest";
 import Fitness from "./pages/Fitness";
 import Appointments from "./components/Appointments";
-
 
 // Optional: 403 error page
 import Unauthorized from "./pages/Unauthorized"; // create this
@@ -29,11 +28,14 @@ import Records from "./pages/Records";
 import { ShowProfileProvider } from "./context/showProfileContext";
 import React, { useState } from "react";
 import HealthLine from "./pages/HealthLine";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [showProfileComponent, setShowProfileComponent] = useState(false);
   return (
-    <ShowProfileProvider value={{ showProfileComponent, setShowProfileComponent }}>
+    <ShowProfileProvider
+      value={{ showProfileComponent, setShowProfileComponent }}
+    >
       <ToastContainer position="top-center" autoClose={3000} />
       <Routes>
         {/* Public Routes */}
@@ -46,11 +48,14 @@ function App() {
         <Route path="/dashboard/patient/curpatdash" element={<CurPatDash />} />
 
         {/* Patient Protected Routes */}
-        <Route path="/complete-profile" element={
-          <PrivateRoute allowedRoles={["patient"]}>
-            <CompleteProfile />
-          </PrivateRoute>
-        } />
+        <Route
+          path="/complete-profile"
+          element={
+            <PrivateRoute allowedRoles={["patient"]}>
+              <CompleteProfile />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/dashboard/patient"
           element={
@@ -138,7 +143,7 @@ function App() {
           element={
             <PrivateRoute allowedRoles={["doctor"]}>
               <DashboardLayout>
-                <DoctorDashboard2 />
+                <DoctorDashboard />
               </DashboardLayout>
             </PrivateRoute>
           }
@@ -153,6 +158,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </ShowProfileProvider>
   );

@@ -26,6 +26,7 @@ const Navbar = () => {
           .then((res) => {
             if (Array.isArray(res.data)) {
               setResults(res.data);
+              console.log(res.data);
             } else {
               setResults([]);
               console.error("Expected array but got:", res.data);
@@ -80,7 +81,7 @@ const Navbar = () => {
                     onClick={() => handleSelectDoctor(doctor)}
                     className="px-4 py-2 hover:bg-blue-50 cursor-pointer text-xs sm:text-sm"
                   >
-                    {doctor.name}
+                    <p className="font-bold inline">{doctor.fullName}</p> &nbsp; ({doctor.specialization})
                   </li>
                 ))
               ) : (
@@ -102,7 +103,7 @@ const Navbar = () => {
           </button>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 bg-red-100 hover:bg-red-200 text-red-600 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition"
+            className="flex items-center gap-1 cursor-pointer bg-red-100 hover:bg-red-200 text-red-600 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium transition"
           >
             <LogOut size={14} />
             <span className="hidden sm:inline">Logout</span>
